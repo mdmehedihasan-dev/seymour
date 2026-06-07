@@ -18,6 +18,7 @@ import UploadVideo from "../Pages/VideoManager/UploadVideo";
 import SubscriptionManagement from "../Pages/SubscriptionManagement/SubscriptionManagement";
 import Settings from "../Pages/Settings/Settings";
 import ChildrenPage from "../Pages/Children/Children";
+import AIMonitoringPage from "../Pages/AIMonitoring/AIMonitoring";
 
 export const router = createBrowserRouter([
   {
@@ -46,6 +47,7 @@ export const router = createBrowserRouter([
           { path: "/", element: <Dashboard /> },
           { path: "/dashboard", element: <Dashboard /> },
           { path: "/children", element: <ChildrenPage /> },
+          { path: "/ai-monitoring", element: <AIMonitoringPage /> },
           { path: "/protocol-manager", element: <ProtocolManager /> },
           { path: "/user-management", element: <UserManagement /> },
           { path: "/user-management/:id", element: <UserDetails /> },
