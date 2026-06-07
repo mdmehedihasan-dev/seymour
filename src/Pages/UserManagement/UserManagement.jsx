@@ -285,6 +285,13 @@ const UserManagementPage = () => {
   // ADMIN DASHBOARD
   // ==========================================
 
+  const dashItemsPerPage = 6;
+  const dashTotalItems = dashFilteredUsers.length;
+  const dashTotalPages = Math.ceil(dashTotalItems / dashItemsPerPage) || 1;
+  const dashStartIndex = (dashPage - 1) * dashItemsPerPage;
+  const dashEndIndex = dashStartIndex + dashItemsPerPage;
+  const currentDashUsers = dashFilteredUsers.slice(dashStartIndex, dashEndIndex);
+
   return (
     <div className="min-h-screen bg-[#f8fafc] p-6 lg:p-10 font-sans text-[#1e293b]">
       <div className="max-w-[1400px] mx-auto animate-in fade-in duration-500">
@@ -331,7 +338,10 @@ const UserManagementPage = () => {
               type="text"
               placeholder="Search by name, email, or phone..."
               value={dashSearch}
-              onChange={(e) => setDashSearch(e.target.value)}
+              onChange={(e) => {
+                setDashSearch(e.target.value);
+                setDashPage(1);
+              }}
               className="w-full pl-10 pr-4 py-2.5 bg-[#f8fafc] border border-gray-100 rounded-full text-[13px] focus:outline-none focus:ring-1 focus:ring-gray-200 transition-colors"
             />
           </div>
@@ -340,7 +350,10 @@ const UserManagementPage = () => {
             <div className="relative">
               <select 
                 value={dashRole}
-                onChange={(e) => setDashRole(e.target.value)}
+                onChange={(e) => {
+                  setDashRole(e.target.value);
+                  setDashPage(1);
+                }}
                 className="pl-4 pr-10 py-2.5 bg-[#f8fafc] border border-gray-100 rounded-full text-[13px] font-medium text-[#475569] appearance-none focus:outline-none focus:ring-1 focus:ring-gray-200 cursor-pointer min-w-[140px]"
               >
                 <option value="All Roles">All Roles</option>
@@ -355,7 +368,10 @@ const UserManagementPage = () => {
             <div className="relative">
               <select 
                 value={dashStatus}
-                onChange={(e) => setDashStatus(e.target.value)}
+                onChange={(e) => {
+                  setDashStatus(e.target.value);
+                  setDashPage(1);
+                }}
                 className="pl-4 pr-10 py-2.5 bg-[#f8fafc] border border-gray-100 rounded-full text-[13px] font-medium text-[#475569] appearance-none focus:outline-none focus:ring-1 focus:ring-gray-200 cursor-pointer min-w-[140px]"
               >
                 <option value="All Status">All Status</option>
@@ -386,93 +402,113 @@ const UserManagementPage = () => {
           </div>
 
           <div className="divide-y divide-gray-100">
-            {dashFilteredUsers.map((user) => (
-              <div key={user.id} className="grid grid-cols-12 gap-4 p-4 items-center hover:bg-gray-50 transition-colors">
-                
-                {/* User Column */}
-                <div className="col-span-3 flex items-center gap-3 pl-2">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-[13px] ${user.color}`}>
-                    {user.initials}
-                  </div>
-                  <div>
-                    <h4 className="text-[14px] font-bold text-[#1e293b]">{user.name}</h4>
-                    <p className="text-[12px] text-[#94a3b8]">ID: {user.id}</p>
-                  </div>
-                </div>
-
-                {/* Contact Column */}
-                <div className="col-span-3 space-y-1">
-                  <div className="flex items-center gap-2 text-[12px] text-[#475569]">
-                    <Mail size={12} className="text-[#94a3b8]" />
-                    {user.email}
-                  </div>
-                  <div className="flex items-center gap-2 text-[12px] text-[#475569]">
-                    <Phone size={12} className="text-[#94a3b8]" />
-                    {user.phone}
-                  </div>
-                </div>
-
-                {/* Role Column */}
-                <div className="col-span-2 flex items-center">
-                  <span className={`text-[11px] font-medium px-2.5 py-1 rounded-full ${user.roleColor}`}>
-                    {user.role}
-                  </span>
-                </div>
-
-                {/* Status Column */}
-                <div className="col-span-1 flex items-center">
-                  {user.status === 'Active' ? (
-                    <div className="flex items-center gap-1.5 text-[12px] font-medium text-[#10b981]">
-                      <UserCheck size={14} /> Active
+            {currentDashUsers.length > 0 ? (
+              currentDashUsers.map((user) => (
+                <div key={user.id} className="grid grid-cols-12 gap-4 p-4 items-center hover:bg-gray-50 transition-colors">
+                  
+                  {/* User Column */}
+                  <div className="col-span-3 flex items-center gap-3 pl-2">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-[13px] ${user.color}`}>
+                      {user.initials}
                     </div>
-                  ) : (
-                    <div className="flex items-center gap-1.5 text-[12px] font-medium text-[#64748b]">
-                      <UserX size={14} /> Inactive
+                    <div>
+                      <h4 className="text-[14px] font-bold text-[#1e293b]">{user.name}</h4>
+                      <p className="text-[12px] text-[#94a3b8]">ID: {user.id}</p>
                     </div>
-                  )}
-                </div>
+                  </div>
 
-                {/* Activity Column */}
-                <div className="col-span-1">
-                  <div className="text-[12px] text-[#1e293b]">{user.children} Children</div>
-                  <div className="text-[11px] text-[#94a3b8]">{user.observations} Observations</div>
-                </div>
+                  {/* Contact Column */}
+                  <div className="col-span-3 space-y-1">
+                    <div className="flex items-center gap-2 text-[12px] text-[#475569]">
+                      <Mail size={12} className="text-[#94a3b8]" />
+                      {user.email}
+                    </div>
+                    <div className="flex items-center gap-2 text-[12px] text-[#475569]">
+                      <Phone size={12} className="text-[#94a3b8]" />
+                      {user.phone}
+                    </div>
+                  </div>
 
-                {/* Join Date Column */}
-                <div className="col-span-1 flex items-center gap-2 text-[12px] text-[#475569]">
-                  <Calendar size={12} className="text-[#94a3b8]" />
-                  {user.joinDate}
-                </div>
+                  {/* Role Column */}
+                  <div className="col-span-2 flex items-center">
+                    <span className={`text-[11px] font-medium px-2.5 py-1 rounded-full ${user.roleColor}`}>
+                      {user.role}
+                    </span>
+                  </div>
 
-                {/* Actions Column */}
-                <div className="col-span-1 flex items-center justify-end gap-3 pr-2 text-[#94a3b8]">
-                  <button className="hover:text-[#06b6d4] transition-colors"><Edit size={16} /></button>
-                  <button className="hover:text-[#1e293b] transition-colors"><MoreVertical size={16} /></button>
-                </div>
+                  {/* Status Column */}
+                  <div className="col-span-1 flex items-center">
+                    {user.status === 'Active' ? (
+                      <div className="flex items-center gap-1.5 text-[12px] font-medium text-[#10b981]">
+                        <UserCheck size={14} /> Active
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-1.5 text-[12px] font-medium text-[#64748b]">
+                        <UserX size={14} /> Inactive
+                      </div>
+                    )}
+                  </div>
 
+                  {/* Activity Column */}
+                  <div className="col-span-1">
+                    <div className="text-[12px] text-[#1e293b]">{user.children} Children</div>
+                    <div className="text-[11px] text-[#94a3b8]">{user.observations} Observations</div>
+                  </div>
+
+                  {/* Join Date Column */}
+                  <div className="col-span-1 flex items-center gap-2 text-[12px] text-[#475569]">
+                    <Calendar size={12} className="text-[#94a3b8]" />
+                    {user.joinDate}
+                  </div>
+
+                  {/* Actions Column */}
+                  <div className="col-span-1 flex items-center justify-end gap-3 pr-2 text-[#94a3b8]">
+                    <button className="hover:text-[#06b6d4] transition-colors"><Edit size={16} /></button>
+                    <button className="hover:text-[#1e293b] transition-colors"><MoreVertical size={16} /></button>
+                  </div>
+
+                </div>
+              ))
+            ) : (
+              <div className="py-8 text-center text-[13px] font-medium text-[#64748b]">
+                No users found matching your search and filter criteria.
               </div>
-            ))}
+            )}
           </div>
 
           {/* Pagination Footer */}
           <div className="p-4 border-t border-gray-100 flex items-center justify-between">
             <span className="text-[12px] text-[#64748b]">
-              Showing 1 to 6 of 1,247 users
+              Showing {dashTotalItems > 0 ? dashStartIndex + 1 : 0} to {Math.min(dashEndIndex, dashTotalItems)} of {dashTotalItems} users
             </span>
             <div className="flex items-center gap-2">
-              <button className="px-4 py-1.5 text-[13px] font-medium text-[#64748b] bg-white border border-gray-200 rounded-full hover:bg-gray-50 transition-colors">
+              <button 
+                onClick={() => setDashPage(prev => Math.max(prev - 1, 1))}
+                disabled={dashPage === 1}
+                className="px-4 py-1.5 text-[13px] font-medium text-[#64748b] bg-white border border-gray-200 rounded-full hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
                 Previous
               </button>
-              <button className="w-8 h-8 rounded-full bg-[#06b6d4] text-white text-[13px] font-medium flex items-center justify-center">
-                1
-              </button>
-              <button className="w-8 h-8 rounded-full bg-white border border-gray-200 text-[#475569] text-[13px] font-medium flex items-center justify-center hover:bg-gray-50 transition-colors">
-                2
-              </button>
-              <button className="w-8 h-8 rounded-full bg-white border border-gray-200 text-[#475569] text-[13px] font-medium flex items-center justify-center hover:bg-gray-50 transition-colors">
-                3
-              </button>
-              <button className="px-4 py-1.5 text-[13px] font-medium text-[#64748b] bg-white border border-gray-200 rounded-full hover:bg-gray-50 transition-colors">
+              
+              {Array.from({ length: dashTotalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setDashPage(page)}
+                  className={`w-8 h-8 rounded-full text-[13px] font-medium flex items-center justify-center transition-colors ${
+                    dashPage === page 
+                      ? 'bg-[#06b6d4] text-white' 
+                      : 'bg-white border border-gray-200 text-[#475569] hover:bg-gray-50'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+
+              <button 
+                onClick={() => setDashPage(prev => Math.min(prev + 1, dashTotalPages))}
+                disabled={dashPage === dashTotalPages || dashTotalPages === 0}
+                className="px-4 py-1.5 text-[13px] font-medium text-[#64748b] bg-white border border-gray-200 rounded-full hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
                 Next
               </button>
             </div>
