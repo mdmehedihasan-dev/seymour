@@ -20,6 +20,7 @@ import Settings from "../Pages/Settings/Settings";
 import ChildrenPage from "../Pages/Children/Children";
 import AIMonitoringPage from "../Pages/AIMonitoring/AIMonitoring";
 import ReportsPage from "../Pages/Reports/Reports";
+import ObservationsPage from "../Pages/Observations/Observations";
 
 export const router = createBrowserRouter([
   {
@@ -48,6 +49,7 @@ export const router = createBrowserRouter([
           { path: "/", element: <Dashboard /> },
           { path: "/dashboard", element: <Dashboard /> },
           { path: "/children", element: <ChildrenPage /> },
+          { path: "/observations", element: <ObservationsPage /> },
           { path: "/ai-monitoring", element: <AIMonitoringPage /> },
           { path: "/reports", element: <ReportsPage /> },
           { path: "/protocol-manager", element: <ProtocolManager /> },
