@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { LogOut, Loader2 } from 'lucide-react';
 
 const SettingsPage = () => {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   const [activeTab, setActiveTab] = useState('Admin Profile');
@@ -216,7 +218,10 @@ const SettingsPage = () => {
                       <h3 className="text-[10px] font-bold tracking-[0.1em] uppercase text-black mb-1.5">SESSION MANAGEMENT</h3>
                       <p className="text-[11px] text-gray-600">End your current administrative session and lock the terminal.</p>
                     </div>
-                    <button className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-[0.15em] uppercase px-6 py-3 flex items-center gap-2 transition-colors">
+                    <button 
+                      onClick={() => navigate('/sign-in')}
+                      className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-[0.15em] uppercase px-6 py-3 flex items-center gap-2 transition-colors"
+                    >
                       <LogOut size={14} />
                       LOGOUT
                     </button>
