@@ -1,176 +1,248 @@
-import React, { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { User, Camera, Bell, Shield, CheckCircle2 } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { LogOut, Loader2 } from 'lucide-react';
 
-const Settings = () => {
-  const navigate = useNavigate();
-  // Account Profile State
-  const [profileImage, setProfileImage] = useState(null);
-  const [fullName, setFullName] = useState('Alex Rivera');
-  const [email, setEmail] = useState('alex.rivera@bodyaxis.io');
-  const fileInputRef = useRef(null);
+const SettingsPage = () => {
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(null);
+  const [activeTab, setActiveTab] = useState('Admin Profile');
+  const [darkMode, setDarkMode] = useState(true);
 
-  // Notifications State
-  const [emailNotif, setEmailNotif] = useState(true);
-  const [subAlerts, setSubAlerts] = useState(true);
+  // Form State
+  const [adminName, setAdminName] = useState('');
+  const [adminEmail, setAdminEmail] = useState('');
+  const [signature, setSignature] = useState('');
 
-  // Security State
-  const [twoFactor, setTwoFactor] = useState(true);
-  const [recentLogin, setRecentLogin] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
 
-  const handleImageUpload = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      const imgUrl = URL.createObjectURL(e.target.files[0]);
-      setProfileImage(imgUrl);
-    }
+  const tabs = [
+    'Admin Profile',
+    'System Preferences',
+    'Security & Access',
+    'Global Alerts'
+  ];
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      setLoading(true);
+      try {
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        const mockData = {
+          uid: 'KP-992-X-ADMIN',
+          name: 'System Administrator Zero',
+          email: 'admin@kidport.internal',
+          signature: '',
+          darkMode: true,
+          ipAddress: '192.168.1.104',
+          sessionId: 'CID_8841_998'
+        };
+
+        setData(mockData);
+        setAdminName(mockData.name);
+        setAdminEmail(mockData.email);
+        setSignature(mockData.signature);
+        setDarkMode(mockData.darkMode);
+
+      } catch (error) {
+        console.error("Error fetching settings:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchSettings();
+  }, []);
+
+  const handleUpdateProfile = () => {
+    setIsSaving(true);
+    // Simulate API call to save settings
+    setTimeout(() => {
+      setIsSaving(false);
+      // In a real app, you would show a toast notification here
+      alert("Profile updated successfully!");
+    }, 1000);
   };
 
-  // Toggle Component
-  const ToggleSwitch = ({ checked, onChange }) => (
-    <div
-      className={`w-10 h-5 flex items-center rounded-full p-1 cursor-pointer transition-colors ${checked ? 'bg-[#0F766E]' : 'bg-[#1E293B]'}`}
-      onClick={onChange}
-    >
-      <div
-        className={`w-3.5 h-3.5 rounded-full shadow-sm transform transition-transform duration-300 ${checked ? 'translate-x-4.5 bg-[#2DD4BF]' : 'translate-x-0 bg-[#94A3B8]'}`}
-        style={{ transform: checked ? 'translateX(18px)' : 'translateX(0)' }}
-      ></div>
-    </div>
-  );
+  if (loading || !data) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4 text-gray-400">
+          <Loader2 className="animate-spin" size={32} />
+          <p className="text-[10px] font-bold tracking-widest uppercase">Initializing Settings...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen p-8 bg-[#0A0D14] text-white font-sans">
-      <div className="max-w-[1200px] mx-auto animate-in fade-in duration-500">
+    <div className="min-h-screen p-12 bg-[#fafafa] font-sans text-[#111]">
+      <div className="mx-auto max-w-6xl animate-in fade-in zoom-in duration-500">
 
-        <h1 className="text-[28px] font-bold tracking-tight mb-8">Settings</h1>
-
-        {/* Account Profile Card */}
-        <div className="bg-[#131B2F] rounded-2xl p-8 border border-[#1E293B] shadow-sm mb-6">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="w-10 h-10 rounded-xl bg-[#1E293B] flex items-center justify-center text-[#94A3B8]">
-              <User size={20} />
-            </div>
-            <h2 className="text-white text-xl font-medium">Account Profile</h2>
-          </div>
-
-          <div className="flex flex-col md:flex-row gap-10">
-            {/* Avatar Section */}
-            <div className="relative shrink-0">
-              <div className="w-32 h-32 rounded-3xl bg-[#0A0D14] border border-[#1E293B] overflow-hidden flex items-center justify-center">
-                {profileImage ? (
-                  <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
-                ) : (
-                  <User size={48} className="text-[#334155]" />
-                )}
-              </div>
-              <button
-                onClick={() => fileInputRef.current.click()}
-                className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full bg-[#2DD4BF] flex items-center justify-center text-[#042F2E] hover:scale-110 transition-transform shadow-lg border-[4px] border-[#131B2F]"
-              >
-                <Camera size={18} strokeWidth={2.5} />
-              </button>
-              <input
-                type="file"
-                ref={fileInputRef}
-                onChange={handleImageUpload}
-                accept="image/*"
-                className="hidden"
-              />
-            </div>
-
-            {/* Form Fields */}
-            <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div>
-                <label className="block text-[#94A3B8] text-[13px] font-medium mb-2">Full Name</label>
-                <input
-                  type="text"
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                  className="w-full bg-[#0A0D14] border border-[#1E293B] rounded-xl px-4 py-3 text-[14px] text-white outline-none focus:border-[#38BDF8] transition-colors"
-                />
-              </div>
-              <div>
-                <label className="block text-[#94A3B8] text-[13px] font-medium mb-2">Email Address</label>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="w-full bg-[#0A0D14] border border-[#1E293B] rounded-xl px-4 py-3 text-[14px] text-white outline-none focus:border-[#38BDF8] transition-colors"
-                />
-              </div>
-            </div>
-          </div>
+        {/* Header Section */}
+        <div className="mb-12">
+          <p className="text-[9px] font-bold text-gray-500 tracking-[0.2em] uppercase mb-2">SYSTEM MANAGEMENT</p>
+          <h1 className="text-4xl font-light tracking-tight">Settings</h1>
         </div>
 
-        {/* Bottom Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-          {/* Notifications Card */}
-          <div className="bg-[#131B2F] rounded-2xl p-8 border border-[#1E293B] shadow-sm">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 rounded-xl bg-[#0F766E]/20 flex items-center justify-center text-[#2DD4BF]">
-                <Bell size={20} />
-              </div>
-              <h2 className="text-white text-xl font-medium">Notifications</h2>
-            </div>
-
-            <div className="space-y-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-white text-[15px] font-medium mb-1">Email Notifications</p>
-                  <p className="text-[#64748B] text-[12px]">Receive weekly summary reports</p>
-                </div>
-                <ToggleSwitch checked={emailNotif} onChange={() => setEmailNotif(!emailNotif)} />
-              </div>
-              <div className="h-[1px] w-full bg-[#1E293B]"></div>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-white text-[15px] font-medium mb-1">Subscription Alerts</p>
-                  <p className="text-[#64748B] text-[12px]">Alerts for plan renewals & changes</p>
-                </div>
-                <ToggleSwitch checked={subAlerts} onChange={() => setSubAlerts(!subAlerts)} />
-              </div>
-            </div>
+        <div className="flex gap-16">
+          {/* Left Navigation */}
+          <div className="w-56 flex-shrink-0">
+            <nav className="flex flex-col relative before:content-[''] before:absolute before:left-0 before:top-0 before:bottom-0 before:w-px before:bg-gray-200 pl-4">
+              {tabs.map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`text-left py-3 text-[13px] transition-all relative ${activeTab === tab
+                      ? 'font-bold text-black'
+                      : 'font-medium text-gray-500 hover:text-black'
+                    }`}
+                >
+                  {/* Active Indicator Line */}
+                  {activeTab === tab && (
+                    <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-[3px] h-6 bg-black"></div>
+                  )}
+                  {tab}
+                </button>
+              ))}
+            </nav>
           </div>
 
-          {/* Security Card */}
-          <div className="bg-[#131B2F] rounded-2xl p-8 border border-[#1E293B] shadow-sm">
-            <div className="flex items-center gap-3 mb-8">
-              <div className="w-10 h-10 rounded-xl bg-[#9F1239]/20 flex items-center justify-center text-[#FB7185]">
-                <Shield size={20} />
+          {/* Right Content Area */}
+          <div className="flex-1 max-w-3xl">
+
+            {activeTab === 'Admin Profile' && (
+              <>
+                {/* Admin Profile Section */}
+                <div className="mb-16 animate-in fade-in duration-300">
+                  <div className="flex justify-between items-end border-b border-gray-300 pb-3 mb-8">
+                    <h2 className="text-xl font-bold tracking-tight">Admin Profile Information</h2>
+                    <span className="text-[9px] font-mono text-gray-500 tracking-widest uppercase">
+                      UID: {data.uid}
+                    </span>
+                  </div>
+
+                  <div className="flex gap-6 mb-8">
+                    <div className="flex-1">
+                      <label className="block text-[9px] font-bold text-gray-500 tracking-[0.1em] uppercase mb-3">
+                        FULL ADMINISTRATIVE NAME
+                      </label>
+                      <input
+                        type="text"
+                        value={adminName}
+                        onChange={(e) => setAdminName(e.target.value)}
+                        className="w-full bg-white p-4 text-[13px] text-black focus:outline-none focus:ring-1 focus:ring-black transition-all shadow-sm border border-transparent focus:border-gray-200"
+                      />
+                    </div>
+                    <div className="flex-1">
+                      <label className="block text-[9px] font-bold text-gray-500 tracking-[0.1em] uppercase mb-3">
+                        MASTER EMAIL ADDRESS
+                      </label>
+                      <input
+                        type="email"
+                        value={adminEmail}
+                        onChange={(e) => setAdminEmail(e.target.value)}
+                        className="w-full bg-white p-4 text-[13px] text-black focus:outline-none focus:ring-1 focus:ring-black transition-all shadow-sm border border-transparent focus:border-gray-200"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="mb-8">
+                    <label className="block text-[9px] font-bold text-gray-500 tracking-[0.1em] uppercase mb-3">
+                      TERMINAL SIGNATURE (PLACEHOLDER)
+                    </label>
+                    <textarea
+                      placeholder="Enter administrative signature used for reports..."
+                      value={signature}
+                      onChange={(e) => setSignature(e.target.value)}
+                      className="w-full bg-white p-4 h-28 text-[13px] text-black placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-black transition-all resize-none shadow-sm border border-transparent focus:border-gray-200"
+                    ></textarea>
+                  </div>
+
+                  <div className="flex justify-end">
+                    <button
+                      onClick={handleUpdateProfile}
+                      disabled={isSaving}
+                      className="bg-black hover:bg-gray-800 text-white text-[11px] font-bold px-8 py-3.5 transition-colors tracking-wide disabled:bg-gray-500 flex items-center justify-center min-w-[160px]"
+                    >
+                      {isSaving ? <Loader2 className="animate-spin" size={16} /> : 'Update Profile'}
+                    </button>
+                  </div>
+                </div>
+
+                {/* System Preferences Section */}
+                <div className="mb-16 animate-in fade-in duration-300 delay-100">
+                  <div className="border-b border-gray-300 pb-3 mb-8">
+                    <h2 className="text-xl font-bold tracking-tight">System Preferences</h2>
+                  </div>
+
+                  <div className="bg-[#f4f4f4] p-8 shadow-sm">
+                    {/* Dark Mode Toggle */}
+                    <div className="flex justify-between items-center mb-8">
+                      <div>
+                        <h3 className="text-[12px] font-bold text-black mb-1">Dark Mode Activation</h3>
+                        <p className="text-[11px] text-gray-600">Toggle system-wide terminal interface theme.</p>
+                      </div>
+                      <button
+                        onClick={() => setDarkMode(!darkMode)}
+                        className="w-11 h-6 bg-[#333] relative flex items-center px-1 border border-[#333]"
+                      >
+                        <div className={`w-4 h-4 bg-white transition-transform duration-300 ${darkMode ? 'translate-x-5' : 'translate-x-0 bg-gray-400'}`}></div>
+                      </button>
+                    </div>
+
+                    {/* Auto-Archive Reports Toggle (Disabled) */}
+                    <div className="flex justify-between items-center pb-8 border-b border-gray-200 mb-6">
+                      <div className="opacity-50">
+                        <h3 className="text-[12px] font-bold text-gray-500 mb-1">Auto-Archive Reports</h3>
+                        <p className="text-[11px] text-gray-400">Automatically move 30-day old reports to deep storage.</p>
+                      </div>
+                      <div className="w-11 h-6 bg-gray-200 relative flex items-center px-1 opacity-50 cursor-not-allowed">
+                        <div className="w-4 h-4 bg-gray-400"></div>
+                      </div>
+                    </div>
+
+                    <p className="text-[10px] text-gray-500 italic leading-relaxed">
+                      Placeholder: Additional system-level configurations including API key management, webhook integrations, and regional monitoring parameters will be populated here during the final integration phase.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Session Management Section */}
+                <div className="mb-16 animate-in fade-in duration-300 delay-200">
+                  <div className="h-1 w-full bg-black mb-8 mt-12"></div>
+
+                  <div className="bg-[#f4f4f4] p-8 flex justify-between items-center shadow-sm">
+                    <div>
+                      <h3 className="text-[10px] font-bold tracking-[0.1em] uppercase text-black mb-1.5">SESSION MANAGEMENT</h3>
+                      <p className="text-[11px] text-gray-600">End your current administrative session and lock the terminal.</p>
+                    </div>
+                    <button className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-[0.15em] uppercase px-6 py-3 flex items-center gap-2 transition-colors">
+                      <LogOut size={14} />
+                      LOGOUT
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+
+            {/* Empty State for other tabs */}
+            {activeTab !== 'Admin Profile' && (
+              <div className="flex flex-col items-center justify-center py-24 text-gray-400 animate-in fade-in duration-300">
+                <p className="text-[11px] font-bold tracking-widest uppercase mb-2">RESTRICTED AREA</p>
+                <p className="text-[13px] text-gray-500 text-center max-w-sm">
+                  The {activeTab} panel is currently locked or under development in this phase.
+                </p>
               </div>
-              <h2 className="text-white text-xl font-medium">Security</h2>
+            )}
+
+            {/* Footer */}
+            <div className="text-center pt-4 border-t border-gray-200 mt-8">
+              <span className="text-[9px] font-mono text-gray-500 tracking-widest uppercase">
+                IP: {data.ipAddress} | SESSION_ID: {data.sessionId}
+              </span>
             </div>
 
-            <div className="bg-[#042F2E]/30 border border-[#0F766E]/50 rounded-xl p-4 flex items-center justify-between mb-8">
-              <div className="flex items-center gap-3">
-                <CheckCircle2 size={18} className="text-[#2DD4BF]" />
-                <p className="text-white text-[14px] font-medium">Two-Factor Authentication</p>
-              </div>
-              <ToggleSwitch checked={twoFactor} onChange={() => setTwoFactor(!twoFactor)} />
-            </div>
-
-            <div>
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="text-white text-[13px] font-medium">Recent Login Activity</h3>
-                <ToggleSwitch checked={recentLogin} onChange={() => {
-                  setRecentLogin(!recentLogin);
-                  navigate("/sign-in");
-                }} />
-              </div>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between relative pl-4">
-                  <p className="text-[#94A3B8] text-[12px]">Chrome on MacOS</p>
-                  <p className="text-[#94A3B8] text-[11px]">Today, 10:45 AM</p>
-                </div>
-                <div className="flex items-center justify-between relative pl-4">
-                  <p className="text-[#64748B] text-[12px]">iPhone 15 Pro</p>
-                  <p className="text-[#64748B] text-[11px]">Yesterday, 08:22 PM</p>
-                </div>
-              </div>
-            </div>
           </div>
-
         </div>
 
       </div>
@@ -178,4 +250,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default SettingsPage;

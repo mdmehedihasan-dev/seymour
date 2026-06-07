@@ -19,6 +19,7 @@ import SubscriptionManagement from "../Pages/SubscriptionManagement/Subscription
 import Settings from "../Pages/Settings/Settings";
 import ChildrenPage from "../Pages/Children/Children";
 import AIMonitoringPage from "../Pages/AIMonitoring/AIMonitoring";
+import ReportsPage from "../Pages/Reports/Reports";
 
 export const router = createBrowserRouter([
   {
@@ -48,6 +49,7 @@ export const router = createBrowserRouter([
           { path: "/dashboard", element: <Dashboard /> },
           { path: "/children", element: <ChildrenPage /> },
           { path: "/ai-monitoring", element: <AIMonitoringPage /> },
+          { path: "/reports", element: <ReportsPage /> },
           { path: "/protocol-manager", element: <ProtocolManager /> },
           { path: "/user-management", element: <UserManagement /> },
           { path: "/user-management/:id", element: <UserDetails /> },

@@ -1,0 +1,189 @@
+import React, { useState, useEffect } from 'react';
+import { Loader2 } from 'lucide-react';
+
+const ReportsPage = () => {
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+
+  useEffect(() => {
+    const fetchReports = async () => {
+      setLoading(true);
+      try {
+        await new Promise(resolve => setTimeout(resolve, 1500));
+        
+        setData({
+          stats: {
+            totalGenerated: '1,284',
+            activeNodes: '42',
+            anomaliesDetected: '03'
+          },
+          reports: [
+            { id: 1, name: 'Benjamin Harrison', date: 'Oct 24, 2023', domains: ['BEHAVIORAL', 'COGNITIVE'], status: 'active' },
+            { id: 2, name: 'Sophia Chen', date: 'Oct 23, 2023', domains: ['SOCIAL-EMOTIONAL'], status: 'inactive' },
+            { id: 3, name: 'Lucas Montgomery', date: 'Oct 22, 2023', domains: ['LINGUISTIC', 'MOTOR SKILLS', '+2'], status: 'active' },
+            { id: 4, name: 'Elena Rodriguez', date: 'Oct 22, 2023', domains: ['COGNITIVE'], status: 'inactive' },
+            { id: 5, name: 'Oliver Smith', date: 'Oct 21, 2023', domains: ['BEHAVIORAL', 'PHYSICAL'], status: 'active' },
+            // Extra dummy items for pagination
+            { id: 6, name: 'Ava Johnson', date: 'Oct 20, 2023', domains: ['COGNITIVE', 'LINGUISTIC'], status: 'active' },
+            { id: 7, name: 'William Davis', date: 'Oct 19, 2023', domains: ['MOTOR SKILLS'], status: 'inactive' },
+            { id: 8, name: 'Mia Wilson', date: 'Oct 18, 2023', domains: ['BEHAVIORAL', 'SOCIAL-EMOTIONAL'], status: 'active' }
+          ],
+          systemStatus: 'OPTIMAL',
+          lastSync: '12:04:33 UTC'
+        });
+      } catch (error) {
+        console.error("Error fetching reports:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchReports();
+  }, []);
+
+  if (loading || !data) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4 text-gray-400">
+          <Loader2 className="animate-spin" size={32} />
+          <p className="text-[10px] font-bold tracking-widest uppercase">Loading Reports...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const totalPages = Math.ceil(data.reports.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const currentReports = data.reports.slice(startIndex, startIndex + itemsPerPage);
+
+  return (
+    <div className="min-h-screen p-8 bg-[#fdfdfd] font-sans text-[#111]">
+      <div className="mx-auto max-w-7xl animate-in fade-in zoom-in duration-500">
+        
+        {/* Header */}
+        <div className="flex justify-between items-end mb-10">
+          <div>
+            <p className="text-[10px] font-bold text-gray-500 tracking-[0.2em] uppercase mb-2">OPERATIONAL INTELLIGENCE</p>
+            <h1 className="text-6xl font-black tracking-tighter uppercase">Reports</h1>
+          </div>
+          <div className="flex gap-3 mb-2">
+            <button className="bg-[#e8e8e8] hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors">
+              FILTER VIEW
+            </button>
+            <button className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors">
+              GENERATE NEW REPORT
+            </button>
+          </div>
+        </div>
+
+        {/* Stats Section */}
+        <div className="grid grid-cols-3 gap-6 mb-10">
+          <div className="bg-[#f4f4f4] p-10 flex flex-col justify-between h-48">
+            <h3 className="text-[9px] font-bold text-gray-400 tracking-[0.15em] uppercase">TOTAL GENERATED</h3>
+            <div className="text-6xl font-light tracking-tight">{data.stats.totalGenerated}</div>
+          </div>
+          <div className="bg-[#f4f4f4] p-10 flex flex-col justify-between h-48">
+            <h3 className="text-[9px] font-bold text-gray-400 tracking-[0.15em] uppercase">ACTIVE MONITORING NODES</h3>
+            <div className="text-6xl font-light tracking-tight">{data.stats.activeNodes}</div>
+          </div>
+          <div className="bg-black p-10 flex flex-col justify-between h-48 text-white">
+            <h3 className="text-[9px] font-bold text-[#555] tracking-[0.15em] uppercase">ANOMALIES DETECTED</h3>
+            <div className="text-6xl font-light tracking-tight">{data.stats.anomaliesDetected}</div>
+          </div>
+        </div>
+
+        {/* Table Section */}
+        <div className="w-full">
+          {/* Table Headers */}
+          <div className="bg-[#e8e8e8] px-8 py-5 flex items-center">
+            <div className="w-[30%] text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">CHILD NAME</div>
+            <div className="w-[20%] text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">DATE</div>
+            <div className="w-[40%] text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">DOMAINS INCLUDED</div>
+            <div className="w-[10%] text-right text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">ACTIONS</div>
+          </div>
+          
+          {/* Table Rows */}
+          <div className="flex flex-col min-h-[400px]">
+            {currentReports.map((report) => (
+              <div key={report.id} className="bg-white px-8 py-7 flex items-center border-b border-[#f4f4f4] hover:bg-[#fafafa] transition-colors">
+                <div className="w-[30%] flex items-center gap-4">
+                  <div className={`w-1.5 h-1.5 ${report.status === 'active' ? 'bg-black' : 'bg-gray-400'}`}></div>
+                  <span className="text-[13px] font-bold">{report.name}</span>
+                </div>
+                <div className="w-[20%] text-[13px] text-gray-500">
+                  {report.date}
+                </div>
+                <div className="w-[40%] flex gap-2">
+                  {report.domains.map((domain, idx) => (
+                    <span 
+                      key={idx} 
+                      className="bg-[#e8e8e8] text-black text-[9px] font-bold px-2 py-1.5 tracking-widest uppercase"
+                    >
+                      {domain}
+                    </span>
+                  ))}
+                </div>
+                <div className="w-[10%] flex justify-end">
+                  <button className="text-[10px] font-bold text-black border-b border-black pb-0.5 hover:text-gray-600 hover:border-gray-600 transition-colors tracking-widest uppercase">
+                    DOWNLOAD
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Footer Section */}
+          <div className="mt-8 flex justify-between items-center py-4">
+            <div className="flex gap-8 text-[10px] font-bold tracking-widest uppercase">
+              <span className="text-gray-400">
+                SYSTEM STATUS: <span className="text-gray-700">{data.systemStatus}</span>
+              </span>
+              <span className="text-gray-400">
+                LAST SYNC: <span className="text-gray-700">{data.lastSync}</span>
+              </span>
+            </div>
+            
+            <div className="flex items-center gap-3 text-[10px] font-bold tracking-widest uppercase">
+              <button 
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                className="text-gray-400 hover:text-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors mr-2"
+              >
+                Previous
+              </button>
+              
+              <div className="flex gap-3">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`transition-colors ${
+                      currentPage === page 
+                        ? 'text-black border-b-2 border-black pb-0.5' 
+                        : 'text-gray-400 hover:text-black'
+                    }`}
+                  >
+                    {String(page).padStart(2, '0')}
+                  </button>
+                ))}
+              </div>
+
+              <button 
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="text-gray-400 hover:text-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors ml-2"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+export default ReportsPage;
