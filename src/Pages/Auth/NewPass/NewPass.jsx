@@ -1,17 +1,21 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import loginLogo from "../../../assets/image/login-logo.png";
-import mainBg from "../../../assets/image/main-bg.png";
 
 const NewPass = () => {
   const navigate = useNavigate();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (password !== confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+    setError("");
     setLoading(true);
     // Simulating password update
     setTimeout(() => {
@@ -21,96 +25,77 @@ const NewPass = () => {
   };
 
   return (
-    <div 
-      className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden font-sans bg-cover bg-center bg-no-repeat"
-      style={{ backgroundImage: `url(${mainBg})` }}
-    >
-      
-      {/* Subtle overlay to ensure good contrast */}
-      <div className="absolute inset-0 bg-[#030712]/30 pointer-events-none" />
-
-      {/* Main Container Container */}
-      <div className="w-full max-w-[850px] h-[550px] bg-[#0A0D14]/90 backdrop-blur-xl rounded-[24px] border border-[#1E293B]/50 shadow-[0_0_60px_rgba(30,58,138,0.15)] relative z-10 flex flex-col md:flex-row overflow-hidden">
-        
-        {/* Left Column - Logo Area */}
-        <div className="w-full md:w-1/2 flex items-center justify-center p-8 relative">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(6,182,212,0.05)_0%,transparent_60%)]" />
-          <img 
-            src={loginLogo} 
-            alt="Body Axis" 
-            className="w-48 object-contain filter drop-shadow-[0_0_15px_rgba(6,182,212,0.3)] z-10 hover:scale-105 transition-transform duration-500"
-          />
+    <div className="min-h-screen w-full bg-[#f4f4f4] flex items-center justify-center font-sans">
+      <div className="bg-white p-10 md:p-12 shadow-sm w-full max-w-[400px]">
+        {/* Header section */}
+        <div className="mb-10">
+          <div className="w-8 h-8 bg-black flex items-center justify-center mb-6">
+            <span className="text-white font-bold text-lg leading-none">K</span>
+          </div>
+          <h2 className="text-[20px] font-medium text-[#111] leading-none mb-2">
+            NEW PASSWORD
+          </h2>
+          <p className="text-[9px] text-gray-500 tracking-[0.15em] uppercase">
+            Terminal Access System
+          </p>
         </div>
 
-        {/* Right Column - Form Area */}
-        <div className="w-full md:w-1/2 flex items-center justify-center p-8 md:p-12">
-          
-          {/* Inner Form Card */}
-          <div className="w-full max-w-[320px] bg-[#131B2F]/60 backdrop-blur-md rounded-2xl p-8 border border-[#1E293B] shadow-[0_0_30px_rgba(37,99,235,0.08)] relative">
-            
-            {/* Form Header */}
-            <div className="text-center mb-6">
-              <h2 className="text-white font-bold text-[18px] mb-2 tracking-wide">New Password</h2>
-              <p className="text-[#94A3B8] text-[11px] leading-relaxed px-2">
-                Create a secure password for your account
-              </p>
+        {/* Form section */}
+        <form onSubmit={handleSubmit}>
+          {error && (
+            <div className="mb-4 text-red-500 text-[10px] font-bold tracking-widest uppercase bg-red-50 p-2 border border-red-200">
+              {error}
             </div>
+          )}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              
-              {/* New Password Input */}
-              <div className="space-y-1.5">
-                <label className="block text-[9px] font-bold text-[#94A3B8] uppercase tracking-widest pl-1">
-                  New Password
-                </label>
-                <input 
-                  type="password" 
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full bg-[#1E293B]/50 border border-[#334155]/50 focus:border-[#38BDF8]/50 focus:bg-[#1E293B] rounded-lg py-3 px-4 text-[13px] font-bold text-white placeholder:text-[#64748B] tracking-widest outline-none transition-all"
-                />
-              </div>
-
-              {/* Confirm Password Input */}
-              <div className="space-y-1.5">
-                <label className="block text-[9px] font-bold text-[#94A3B8] uppercase tracking-widest pl-1">
-                  Confirm Password
-                </label>
-                <input 
-                  type="password" 
-                  required
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full bg-[#1E293B]/50 border border-[#334155]/50 focus:border-[#38BDF8]/50 focus:bg-[#1E293B] rounded-lg py-3 px-4 text-[13px] font-bold text-white placeholder:text-[#64748B] tracking-widest outline-none transition-all"
-                />
-              </div>
-
-              {/* Submit Button */}
-              <button 
-                type="submit"
-                disabled={loading}
-                className="w-full bg-[#2563EB] hover:bg-[#3B82F6] text-white rounded-lg py-3 mt-4 font-bold text-[13px] tracking-wide shadow-lg shadow-blue-500/20 transition-all flex items-center justify-center disabled:opacity-70"
-              >
-                {loading ? (
-                  <div className="w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-                ) : (
-                  "Reset Password"
-                )}
-              </button>
-              
-            </form>
-
-            <div className="mt-6 text-center">
-              <Link to="/sign-in" className="inline-flex items-center gap-2 text-[11px] font-bold text-[#06B6D4] hover:text-white transition-colors tracking-wide">
-                <ArrowLeft size={14} />
-                Back to Login
-              </Link>
-            </div>
-
+          {/* New Password Field */}
+          <div className="mb-5">
+            <label className="block text-[10px] font-semibold text-gray-600 tracking-wider uppercase mb-2">
+              New Password
+            </label>
+            <input
+              type="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full h-10 px-3 text-sm text-gray-800 placeholder-gray-400 bg-[#f0f0f0] border-none rounded-none focus:outline-none focus:ring-1 focus:ring-black transition-all"
+              placeholder="••••••••"
+            />
           </div>
+
+          {/* Confirm Password Field */}
+          <div className="mb-8">
+            <label className="block text-[10px] font-semibold text-gray-600 tracking-wider uppercase mb-2">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              required
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              className="w-full h-10 px-3 text-sm text-gray-800 placeholder-gray-400 bg-[#f0f0f0] border-none rounded-none focus:outline-none focus:ring-1 focus:ring-black transition-all"
+              placeholder="••••••••"
+            />
+          </div>
+
+          {/* Action Button */}
+          <div className="mb-8">
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full h-11 bg-black hover:bg-gray-800 active:bg-gray-900 text-white font-bold text-[11px] tracking-widest uppercase transition-colors focus:outline-none disabled:opacity-70"
+            >
+              {loading ? "UPDATING..." : "RESET PASSWORD"}
+            </button>
+          </div>
+        </form>
+
+        {/* Footer */}
+        <div className="border-t border-gray-100 pt-6 text-center">
+          <Link to="/sign-in" className="inline-flex items-center gap-2 text-[10px] font-bold text-gray-500 hover:text-black transition-colors tracking-widest uppercase">
+            <ArrowLeft size={14} />
+            Back to Login
+          </Link>
         </div>
       </div>
     </div>
