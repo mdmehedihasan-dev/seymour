@@ -1,4 +1,3 @@
-import React from 'react';
 import TerminalDashboard from './TerminalDashboard';
 import AdminDashboard from './AdminDashboard';
 
