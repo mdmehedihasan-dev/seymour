@@ -6,14 +6,22 @@ const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const handleSignIn = (e) => {
     e.preventDefault();
+    setError("");
     setLoading(true);
+    
     // Simulating login without actual API call
     setTimeout(() => {
       setLoading(false);
-      navigate("/dashboard");
+      if (email === "adminterminal@gmail.com" && password === "123456") {
+        localStorage.setItem("user", "authenticated");
+        navigate("/");
+      } else {
+        setError("Invalid email or password");
+      }
     }, 1500);
   };
 
@@ -35,6 +43,11 @@ const SignIn = () => {
 
         {/* Form section */}
         <form onSubmit={handleSignIn}>
+          {error && (
+            <div className="mb-4 text-red-500 text-[10px] font-bold tracking-widest uppercase bg-red-50 p-2 border border-red-200">
+              {error}
+            </div>
+          )}
           {/* Email Field */}
           <div className="mb-5">
             <label className="block text-[10px] font-semibold text-gray-600 tracking-wider uppercase mb-2">

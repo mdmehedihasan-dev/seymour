@@ -219,7 +219,10 @@ const SettingsPage = () => {
                       <p className="text-[11px] text-gray-600">End your current administrative session and lock the terminal.</p>
                     </div>
                     <button 
-                      onClick={() => navigate('/sign-in')}
+                      onClick={() => {
+                        localStorage.removeItem('user');
+                        navigate('/sign-in');
+                      }}
                       className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-[0.15em] uppercase px-6 py-3 flex items-center gap-2 transition-colors"
                     >
                       <LogOut size={14} />
