@@ -1,0 +1,72 @@
+import React from "react";
+import { Link, useLocation } from "react-router-dom";
+import {
+  LayoutGrid,
+  Users,
+  Smile,
+  Brain,
+  BarChart2,
+  Settings,
+  Eye
+} from "lucide-react";
+
+const AdminSidebar = ({ closeDrawer }) => {
+  const location = useLocation();
+
+  const dashboardMenuItems = [
+    { icon: LayoutGrid, label: "Dashboard", Link: "/" },
+    { icon: Users, label: "Users", Link: "/user-management" },
+    { icon: Smile, label: "Child Profiles", Link: "/children" },
+    { icon: Eye, label: "Observations", Link: "/observations" },
+    { icon: Brain, label: "Milestones / AI", Link: "/ai-monitoring" },
+    { icon: BarChart2, label: "Reports / Analytics", Link: "/reports" },
+    { icon: Settings, label: "Settings", Link: "/settings" },
+  ];
+
+  return (
+    <div className="w-72 bg-white h-screen flex flex-col font-sans border-r border-gray-100">
+      {/* Sidebar Header */}
+      <div className="pt-8 px-6 mb-8 border-b border-gray-100 pb-6">
+        <div className="flex items-center gap-2 mb-2">
+          {/* Logo SVG Placeholder mapping the screenshot logo */}
+          <div className="relative w-8 h-8 flex items-center justify-center">
+            <div className="w-6 h-6 bg-yellow-400 rounded-full absolute bottom-0 left-0" style={{ clipPath: "polygon(0 50%, 100% 50%, 100% 100%, 0 100%)" }}></div>
+            <div className="w-3 h-3 bg-teal-400 rounded-full absolute top-0 left-1"></div>
+            <div className="w-2 h-2 bg-pink-400 rounded-full absolute top-2 right-1"></div>
+          </div>
+          <span className="text-xl font-bold text-[#1eb4cd] tracking-tight">KIDPort</span>
+        </div>
+        <p className="text-[11px] text-gray-500 pl-1">
+          Admin Dashboard
+        </p>
+      </div>
+
+      {/* Navigation Items */}
+      <div className="flex-1 flex flex-col px-4 space-y-2">
+        {dashboardMenuItems.map((item) => {
+          const isActive = location.pathname === item.Link ||
+            (item.Link !== '/' && location.pathname.startsWith(item.Link));
+
+          const Icon = item.icon;
+
+          return (
+            <Link
+              key={item.label}
+              to={item.Link}
+              onClick={closeDrawer}
+              className={`flex items-center gap-3.5 px-4 py-3 rounded-full transition-colors ${isActive
+                ? "bg-[#bdf0f1] text-[#1aa3b9] font-semibold"
+                : "text-[#4a5568] hover:bg-gray-50 font-medium"
+                }`}
+            >
+              <Icon size={18} strokeWidth={isActive ? 2.5 : 1.5} />
+              <span className="text-[13px]">{item.label}</span>
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+export default AdminSidebar;
