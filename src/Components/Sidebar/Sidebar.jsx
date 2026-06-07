@@ -54,9 +54,9 @@ const Sidebar = ({ closeDrawer }) => {
                 <Icon size={18} strokeWidth={isActive ? 2.5 : 1.5} />
                 <span className="text-[13px]">{item.label}</span>
               </Link>
-              {/* Specific separator below Dashboard */}
-              {index === 0 && (
-                <div className="mx-4 my-2 border-b border-[#111]"></div>
+              {/* Separator below active menu item */}
+              {isActive && (
+                <div className="mx-4 my-2 border-b-[1.5px] border-[#111]"></div>
               )}
             </React.Fragment>
           );
