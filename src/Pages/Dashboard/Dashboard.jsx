@@ -1,47 +1,95 @@
-import React from 'react';
-import { ExternalLink, TrendingUp, TrendingDown } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ExternalLink, TrendingUp, TrendingDown, Loader2 } from 'lucide-react';
 
 export default function Dashboard() {
-  const stats = [
-    { title: 'TOTAL USERS', value: '1,284', trend: '+12%', trendLabel: 'FROM LAST MONTH', isPositive: true },
-    { title: 'TOTAL CHILDREN', value: '842', trend: '+5.4%', trendLabel: 'FROM LAST MONTH', isPositive: true },
-    { title: 'ACTIVE CARE CIRCLES', value: '312', trend: '+3%', trendLabel: 'FROM LAST MONTH', isPositive: true },
-    { title: 'DAILY OBSERVATIONS', value: '4,120', trend: '-2.1%', trendLabel: 'FROM YESTERDAY', isPositive: false }
-  ];
+  const [loading, setLoading] = useState(true);
+  const [data, setData] = useState(null);
+  
+  // Pagination State
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 4;
 
-  const recentActivity = [
-    {
-      timestamp: ['2023-10-27', '14:23:45'],
-      user: ['Sarah', 'Jenkins'],
-      action: 'New Observation: Outdoor play social interaction log.',
-      risk: 'LOW'
-    },
-    {
-      timestamp: ['2023-10-27', '14:15:12'],
-      user: ['System', 'AI'],
-      action: 'Unusual activity detected in Circle 14: Emotional shift.',
-      risk: 'MEDIUM'
-    },
-    {
-      timestamp: ['2023-10-27', '13:58:22'],
-      user: ['David', 'Miller'],
-      action: 'Updated emergency contact info for Child ID: #442.',
-      risk: 'LOW'
-    },
-    {
-      timestamp: ['2023-10-27', '13:42:01'],
-      user: ['Maria', 'Garcia'],
-      action: 'New Observation: Academic achievement milestone (Math).',
-      risk: 'LOW'
-    }
-  ];
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      setLoading(true);
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        
+        setData({
+          stats: [
+            { title: 'TOTAL USERS', value: '1,284', trend: '+12%', trendLabel: 'FROM LAST MONTH', isPositive: true },
+            { title: 'TOTAL CHILDREN', value: '842', trend: '+5.4%', trendLabel: 'FROM LAST MONTH', isPositive: true },
+            { title: 'ACTIVE CARE CIRCLES', value: '312', trend: '+3%', trendLabel: 'FROM LAST MONTH', isPositive: true },
+            { title: 'DAILY OBSERVATIONS', value: '4,120', trend: '-2.1%', trendLabel: 'FROM YESTERDAY', isPositive: false }
+          ],
+          activityTrend: {
+            peakUsage: '14:00 PM',
+            lowUsage: '03:00 AM',
+            avgDuration: '14.2 min'
+          },
+          userGrowthBars: [30, 40, 35, 45, 60, 55, 80, 70, 95, 85, 100],
+          recentActivity: [
+            // Page 1
+            { id: 1, timestamp: ['2023-10-27', '14:23:45'], user: ['Sarah', 'Jenkins'], action: 'New Observation: Outdoor play social interaction log.', risk: 'LOW' },
+            { id: 2, timestamp: ['2023-10-27', '14:15:12'], user: ['System', 'AI'], action: 'Unusual activity detected in Circle 14: Emotional shift.', risk: 'MEDIUM' },
+            { id: 3, timestamp: ['2023-10-27', '13:58:22'], user: ['David', 'Miller'], action: 'Updated emergency contact info for Child ID: #442.', risk: 'LOW' },
+            { id: 4, timestamp: ['2023-10-27', '13:42:01'], user: ['Maria', 'Garcia'], action: 'New Observation: Academic achievement milestone (Math).', risk: 'LOW' },
+            // Page 2
+            { id: 5, timestamp: ['2023-10-27', '12:10:05'], user: ['Alex', 'Sterling'], action: 'Approved new care circle request.', risk: 'LOW' },
+            { id: 6, timestamp: ['2023-10-27', '11:45:30'], user: ['System', 'Admin'], action: 'Weekly system backup completed.', risk: 'LOW' },
+            { id: 7, timestamp: ['2023-10-27', '10:12:11'], user: ['Jane', 'Doe'], action: 'Failed login attempt detected from new IP.', risk: 'MEDIUM' },
+            { id: 8, timestamp: ['2023-10-27', '09:05:44'], user: ['System', 'AI'], action: 'Generated monthly user growth report.', risk: 'LOW' },
+            // Page 3
+            { id: 9, timestamp: ['2023-10-26', '16:20:15'], user: ['Chris', 'Evans'], action: 'Updated profile settings.', risk: 'LOW' },
+            { id: 10, timestamp: ['2023-10-26', '15:10:00'], user: ['Maria', 'Garcia'], action: 'Logged out.', risk: 'LOW' }
+          ],
+          totalEvents: 1284 // Keeping this as a number for dynamic calculations
+        });
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  // Dummy data for the bar chart
-  const barHeights = [30, 40, 35, 45, 60, 55, 80, 70, 95, 85, 100];
+    fetchDashboardData();
+  }, []);
+
+  if (loading || !data) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="flex flex-col items-center gap-4 text-gray-400">
+          <Loader2 className="animate-spin" size={32} />
+          <p className="text-[10px] font-bold tracking-widest uppercase">Loading System Data...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Calculate pagination details
+  const totalItems = data.recentActivity.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentActivityList = data.recentActivity.slice(startIndex, endIndex);
+
+  // Handlers for pagination
+  const handlePrevPage = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+  
+  const handleNextPage = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
+
+  const handlePageClick = (page) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="min-h-screen p-8 bg-white font-sans text-[#111]">
-      <div className="mx-auto max-w-7xl">
+      <div className="mx-auto max-w-7xl animate-in fade-in zoom-in duration-500">
         
         {/* Header Section */}
         <div className="flex justify-between items-end mb-10">
@@ -63,8 +111,8 @@ export default function Dashboard() {
 
         {/* Stats Grid */}
         <div className="grid grid-cols-4 gap-6 mb-8">
-          {stats.map((stat, i) => (
-            <div key={i} className="bg-[#f4f4f4] p-6 flex flex-col justify-between h-32">
+          {data.stats.map((stat, i) => (
+            <div key={i} className="bg-[#f4f4f4] p-6 flex flex-col justify-between h-32 hover:shadow-sm transition-all duration-300">
               <h3 className="text-[9px] font-bold text-gray-500 tracking-widest uppercase">{stat.title}</h3>
               <div className="text-4xl font-light tracking-tight">{stat.value}</div>
               <div className="flex items-center gap-1.5 mt-2">
@@ -85,7 +133,7 @@ export default function Dashboard() {
         <div className="flex gap-6 mb-8 h-[360px]">
           
           {/* User Growth Graph (Left) */}
-          <div className="flex-1 bg-[#f4f4f4] p-8 flex flex-col">
+          <div className="flex-1 bg-[#f4f4f4] p-8 flex flex-col group">
             <div className="flex justify-between items-start mb-8">
               <div>
                 <h2 className="text-lg font-bold">User Growth Graph</h2>
@@ -98,10 +146,10 @@ export default function Dashboard() {
             </div>
             
             <div className="flex-1 flex items-end gap-1.5 mt-auto">
-              {barHeights.map((h, i) => (
+              {data.userGrowthBars.map((h, i) => (
                 <div 
                   key={i} 
-                  className={`flex-1 ${i < 3 ? 'bg-[#e0e0e0]' : 'bg-black'}`}
+                  className={`flex-1 transition-all duration-500 hover:opacity-80 ${i < 3 ? 'bg-[#e0e0e0]' : 'bg-black'}`}
                   style={{ height: `${h}%` }}
                 ></div>
               ))}
@@ -115,15 +163,15 @@ export default function Dashboard() {
             <div className="space-y-6 mt-6">
               <div className="flex justify-between items-end border-b border-[#222] pb-2">
                 <span className="text-[11px] text-gray-500">Peak Usage</span>
-                <span className="text-xl font-bold">14:00 PM</span>
+                <span className="text-xl font-bold">{data.activityTrend.peakUsage}</span>
               </div>
               <div className="flex justify-between items-end border-b border-[#222] pb-2">
                 <span className="text-[11px] text-gray-500">Low Usage</span>
-                <span className="text-xl font-bold">03:00 AM</span>
+                <span className="text-xl font-bold">{data.activityTrend.lowUsage}</span>
               </div>
               <div className="flex justify-between items-end border-b border-[#222] pb-2">
                 <span className="text-[11px] text-gray-500">Avg Duration</span>
-                <span className="text-xl font-bold">14.2 min</span>
+                <span className="text-xl font-bold">{data.activityTrend.avgDuration}</span>
               </div>
             </div>
 
@@ -141,55 +189,83 @@ export default function Dashboard() {
             <span className="text-[9px] font-bold text-gray-500 tracking-widest uppercase">LAST 24 HOURS</span>
           </div>
 
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b border-gray-200">
-                <th className="pb-3 text-[9px] font-bold text-gray-500 tracking-widest uppercase w-[15%]">TIMESTAMP</th>
-                <th className="pb-3 text-[9px] font-bold text-gray-500 tracking-widest uppercase w-[20%]">USER / ACTOR</th>
-                <th className="pb-3 text-[9px] font-bold text-gray-500 tracking-widest uppercase w-[45%]">ACTION DETAILS</th>
-                <th className="pb-3 text-[9px] font-bold text-gray-500 tracking-widest uppercase w-[10%]">RISK LEVEL</th>
-                <th className="pb-3 text-[9px] font-bold text-gray-500 tracking-widest uppercase text-right w-[10%]">VIEW</th>
-              </tr>
-            </thead>
-            <tbody>
-              {recentActivity.map((item, i) => (
-                <tr key={i} className="border-b border-gray-200/60 last:border-0 hover:bg-gray-50/50 transition-colors">
-                  <td className="py-5 align-top">
-                    <div className="text-[11px] text-gray-500">{item.timestamp[0]}</div>
-                    <div className="text-[11px] text-gray-500">{item.timestamp[1]}</div>
-                  </td>
-                  <td className="py-5 align-top font-bold text-[13px] leading-tight">
-                    <div>{item.user[0]}</div>
-                    <div>{item.user[1]}</div>
-                  </td>
-                  <td className="py-5 align-top text-[13px] text-gray-700 pr-8">
-                    {item.action}
-                  </td>
-                  <td className="py-5 align-top">
-                    {item.risk === 'LOW' ? (
-                      <span className="bg-[#e0e0e0] text-black text-[9px] font-bold px-2 py-1 tracking-wider uppercase">LOW</span>
-                    ) : (
-                      <span className="bg-black text-white text-[9px] font-bold px-2 py-1 tracking-wider uppercase">MEDIUM</span>
-                    )}
-                  </td>
-                  <td className="py-5 align-top text-right">
-                    <button className="text-gray-400 hover:text-black transition-colors inline-block">
-                      <ExternalLink size={14} />
-                    </button>
-                  </td>
+          <div className="min-h-[350px]">
+            <table className="w-full text-left border-collapse">
+              <thead>
+                <tr className="border-b border-gray-200">
+                  <th className="pb-3 text-[9px] font-bold text-gray-500 tracking-widest uppercase w-[15%]">TIMESTAMP</th>
+                  <th className="pb-3 text-[9px] font-bold text-gray-500 tracking-widest uppercase w-[20%]">USER / ACTOR</th>
+                  <th className="pb-3 text-[9px] font-bold text-gray-500 tracking-widest uppercase w-[45%]">ACTION DETAILS</th>
+                  <th className="pb-3 text-[9px] font-bold text-gray-500 tracking-widest uppercase w-[10%]">RISK LEVEL</th>
+                  <th className="pb-3 text-[9px] font-bold text-gray-500 tracking-widest uppercase text-right w-[10%]">VIEW</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {currentActivityList.map((item) => (
+                  <tr key={item.id} className="border-b border-gray-200/60 last:border-0 hover:bg-gray-50 transition-colors">
+                    <td className="py-5 align-top">
+                      <div className="text-[11px] text-gray-500">{item.timestamp[0]}</div>
+                      <div className="text-[11px] text-gray-500">{item.timestamp[1]}</div>
+                    </td>
+                    <td className="py-5 align-top font-bold text-[13px] leading-tight">
+                      <div>{item.user[0]}</div>
+                      <div>{item.user[1]}</div>
+                    </td>
+                    <td className="py-5 align-top text-[13px] text-gray-700 pr-8">
+                      {item.action}
+                    </td>
+                    <td className="py-5 align-top">
+                      {item.risk === 'LOW' ? (
+                        <span className="bg-[#e0e0e0] text-black text-[9px] font-bold px-2 py-1 tracking-wider uppercase">LOW</span>
+                      ) : (
+                        <span className="bg-black text-white text-[9px] font-bold px-2 py-1 tracking-wider uppercase">MEDIUM</span>
+                      )}
+                    </td>
+                    <td className="py-5 align-top text-right">
+                      <button className="text-gray-400 hover:text-black transition-colors inline-block">
+                        <ExternalLink size={14} />
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
           <div className="flex justify-between items-center mt-8">
-            <span className="text-[10px] text-gray-500 font-medium">Showing 4 of 1,284 events</span>
+            <span className="text-[10px] text-gray-500 font-medium">
+              Showing {currentActivityList.length} of {data.totalEvents.toLocaleString()} events
+            </span>
             <div className="flex gap-1.5">
-              <button className="w-6 h-6 flex items-center justify-center bg-gray-200 text-gray-400 hover:bg-gray-300 transition-colors text-[10px] font-bold">&lt;</button>
-              <button className="w-6 h-6 flex items-center justify-center bg-black text-white text-[10px] font-bold">1</button>
-              <button className="w-6 h-6 flex items-center justify-center bg-gray-200 text-black hover:bg-gray-300 transition-colors text-[10px] font-bold">2</button>
-              <button className="w-6 h-6 flex items-center justify-center bg-gray-200 text-black hover:bg-gray-300 transition-colors text-[10px] font-bold">3</button>
-              <button className="w-6 h-6 flex items-center justify-center bg-gray-200 text-black hover:bg-gray-300 transition-colors text-[10px] font-bold">&gt;</button>
+              <button 
+                onClick={handlePrevPage}
+                disabled={currentPage === 1}
+                className="w-6 h-6 flex items-center justify-center bg-gray-200 text-gray-500 hover:bg-gray-300 transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                &lt;
+              </button>
+              
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => handlePageClick(page)}
+                  className={`w-6 h-6 flex items-center justify-center transition-colors text-[10px] font-bold ${
+                    currentPage === page 
+                      ? 'bg-black text-white' 
+                      : 'bg-gray-200 text-black hover:bg-gray-300'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
+
+              <button 
+                onClick={handleNextPage}
+                disabled={currentPage === totalPages}
+                className="w-6 h-6 flex items-center justify-center bg-gray-200 text-gray-500 hover:bg-gray-300 transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                &gt;
+              </button>
             </div>
           </div>
         </div>
