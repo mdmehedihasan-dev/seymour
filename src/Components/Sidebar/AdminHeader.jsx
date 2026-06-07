@@ -1,7 +1,14 @@
 import React from "react";
 import { Search, Bell, ChevronDown } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const AdminHeader = () => {
+  const navigate = useNavigate();
+  
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    navigate("/sign-in");
+  };
   return (
     <div className="h-[72px] flex items-center justify-between px-8 bg-white border-b border-gray-100 font-sans">
       
@@ -26,7 +33,10 @@ const AdminHeader = () => {
         </button>
         
         {/* Profile Section */}
-        <div className="flex items-center gap-3 cursor-pointer pl-6 border-l border-gray-100">
+        <div 
+          onClick={handleLogout}
+          className="flex items-center gap-3 cursor-pointer pl-6 border-l border-gray-100 hover:bg-gray-50 p-2 -my-2 rounded-lg transition-colors"
+        >
           {/* Avatar */}
           <div className="w-[38px] h-[38px] rounded-full bg-[#00a99d] flex items-center justify-center text-white font-bold text-[14px] shadow-sm">
             AD
