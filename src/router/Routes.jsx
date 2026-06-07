@@ -17,6 +17,7 @@ import VideoManager from "../Pages/VideoManager/VideoManager";
 import UploadVideo from "../Pages/VideoManager/UploadVideo";
 import SubscriptionManagement from "../Pages/SubscriptionManagement/SubscriptionManagement";
 import Settings from "../Pages/Settings/Settings";
+import ChildrenPage from "../Pages/Children/Children";
 
 export const router = createBrowserRouter([
   {
@@ -44,6 +45,7 @@ export const router = createBrowserRouter([
         children: [
           { path: "/", element: <Dashboard /> },
           { path: "/dashboard", element: <Dashboard /> },
+          { path: "/children", element: <ChildrenPage /> },
           { path: "/protocol-manager", element: <ProtocolManager /> },
           { path: "/user-management", element: <UserManagement /> },
           { path: "/user-management/:id", element: <UserDetails /> },
