@@ -1,13 +1,14 @@
 import React from 'react';
-import TerminalChildren from './TerminalChildren';
-import AdminChildren from './AdminChildren';
+import ParentChildren from './ParentChildren';
+import ChildChildren from './ChildChildren';
 
 export default function ChildrenPage() {
   const role = localStorage.getItem("role") || "terminal";
 
   if (role === "terminal") {
-    return <TerminalChildren />;
+    return <ParentChildren />;
   }
 
-  return <AdminChildren />;
+  return <ChildChildren />;
 }
+

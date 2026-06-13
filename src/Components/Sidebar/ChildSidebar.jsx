@@ -10,7 +10,7 @@ import {
   Eye
 } from "lucide-react";
 
-const AdminSidebar = ({ closeDrawer }) => {
+const ChildSidebar = ({ closeDrawer }) => {
   const location = useLocation();
 
   const dashboardMenuItems = [
@@ -69,4 +69,5 @@ const AdminSidebar = ({ closeDrawer }) => {
   );
 };
 
-export default AdminSidebar;
+export default ChildSidebar;
+

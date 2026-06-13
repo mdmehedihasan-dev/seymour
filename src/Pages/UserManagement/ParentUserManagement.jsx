@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { ChevronDown, Loader2, X } from 'lucide-react';
 
-const TerminalUserManagement = () => {
+const ParentUserManagement = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   
@@ -326,4 +326,5 @@ const TerminalUserManagement = () => {
   );
 };
 
-export default TerminalUserManagement;
+export default ParentUserManagement;
+

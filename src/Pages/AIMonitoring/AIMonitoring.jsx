@@ -1,13 +1,14 @@
 import React from 'react';
-import TerminalAIMonitoring from './TerminalAIMonitoring';
-import AdminAIMonitoring from './AdminAIMonitoring';
+import ParentAIMonitoring from './ParentAIMonitoring';
+import ChildAIMonitoring from './ChildAIMonitoring';
 
 export default function AIMonitoringPage() {
   const role = localStorage.getItem("role") || "terminal";
 
   if (role === "terminal") {
-    return <TerminalAIMonitoring />;
+    return <ParentAIMonitoring />;
   }
 
-  return <AdminAIMonitoring />;
+  return <ChildAIMonitoring />;
 }
+

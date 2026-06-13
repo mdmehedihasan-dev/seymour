@@ -1,15 +1,16 @@
 import React from "react";
-import TerminalSidebar from "./TerminalSidebar";
-import AdminSidebar from "./AdminSidebar";
+import ParentSidebar from "./ParentSidebar";
+import ChildSidebar from "./ChildSidebar";
 
 const Sidebar = ({ closeDrawer }) => {
   const role = localStorage.getItem("role") || "terminal";
 
   if (role === "terminal") {
-    return <TerminalSidebar closeDrawer={closeDrawer} />;
+    return <ParentSidebar closeDrawer={closeDrawer} />;
   }
 
-  return <AdminSidebar closeDrawer={closeDrawer} />;
+  return <ChildSidebar closeDrawer={closeDrawer} />;
 };
 
 export default Sidebar;
+

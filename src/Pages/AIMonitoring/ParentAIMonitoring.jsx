@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Loader2, CheckCircle2 } from 'lucide-react';
 
-const TerminalAIMonitoring = () => {
+const ParentAIMonitoring = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   
@@ -306,4 +306,5 @@ const TerminalAIMonitoring = () => {
   );
 };
 
-export default TerminalAIMonitoring;
+export default ParentAIMonitoring;
+

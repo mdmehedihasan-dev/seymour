@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Loader2, Eye, Shield, ListFilter, AlertTriangle } from 'lucide-react';
 
-const TerminalObservations = () => {
+const ParentObservations = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -150,4 +150,5 @@ const TerminalObservations = () => {
   );
 };
 
-export default TerminalObservations;
+export default ParentObservations;
+

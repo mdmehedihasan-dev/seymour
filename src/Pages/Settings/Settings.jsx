@@ -1,13 +1,14 @@
 import React from 'react';
-import TerminalSettings from './TerminalSettings';
-import AdminSettings from './AdminSettings';
+import ParentSettings from './ParentSettings';
+import ChildSettings from './ChildSettings';
 
 export default function SettingsPage() {
   const role = localStorage.getItem("role") || "terminal";
 
   if (role === "terminal") {
-    return <TerminalSettings />;
+    return <ParentSettings />;
   }
 
-  return <AdminSettings />;
+  return <ChildSettings />;
 }
+

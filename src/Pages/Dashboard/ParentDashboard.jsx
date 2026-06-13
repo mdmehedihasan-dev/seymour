@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ExternalLink, TrendingUp, TrendingDown, Loader2 } from 'lucide-react';
 
-export default function TerminalDashboard() {
+export default function ParentDashboard() {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
 
@@ -248,3 +248,4 @@ export default function TerminalDashboard() {
     </div>
   );
 }
+

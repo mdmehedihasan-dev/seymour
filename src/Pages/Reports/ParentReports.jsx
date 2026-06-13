@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Loader2 } from 'lucide-react';
 
-const TerminalReports = () => {
+const ParentReports = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -186,4 +186,5 @@ const TerminalReports = () => {
   );
 };
 
-export default TerminalReports;
+export default ParentReports;
+

@@ -9,7 +9,7 @@ import {
   Settings,
 } from "lucide-react";
 
-const TerminalSidebar = ({ closeDrawer }) => {
+const ParentSidebar = ({ closeDrawer }) => {
   const location = useLocation();
 
   const menuItems = [
@@ -81,4 +81,5 @@ const TerminalSidebar = ({ closeDrawer }) => {
   );
 };
 
-export default TerminalSidebar;
+export default ParentSidebar;
+

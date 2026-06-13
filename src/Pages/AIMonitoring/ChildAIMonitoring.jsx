@@ -6,7 +6,7 @@ import {
   BarChart, Bar
 } from 'recharts';
 
-const AdminAIMonitoring = () => {
+const ChildAIMonitoring = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -309,4 +309,5 @@ const AdminAIMonitoring = () => {
   );
 };
 
-export default AdminAIMonitoring;
+export default ChildAIMonitoring;
+

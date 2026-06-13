@@ -13,7 +13,7 @@ const Toggle = ({ enabled, setEnabled }) => (
   </button>
 );
 
-const AdminSettings = () => {
+const ChildSettings = () => {
   // Notification State
   const [emailNotif, setEmailNotif] = useState(true);
   const [alertFlagged, setAlertFlagged] = useState(true);
@@ -270,4 +270,5 @@ const AdminSettings = () => {
   );
 };
 
-export default AdminSettings;
+export default ChildSettings;
+

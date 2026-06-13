@@ -1,12 +1,13 @@
-import TerminalDashboard from './TerminalDashboard';
-import AdminDashboard from './AdminDashboard';
+import ParentDashboard from './ParentDashboard';
+import ChildDashboard from './ChildDashboard';
 
 export default function Dashboard() {
   const role = localStorage.getItem("role") || "terminal";
 
   if (role === "terminal") {
-    return <TerminalDashboard />;
+    return <ParentDashboard />;
   }
 
-  return <AdminDashboard />;
+  return <ChildDashboard />;
 }
+

@@ -1,13 +1,14 @@
 import React from 'react';
-import TerminalObservations from './TerminalObservations';
-import AdminObservations from './AdminObservations';
+import ParentObservations from './ParentObservations';
+import ChildObservations from './ChildObservations';
 
 export default function ObservationsPage() {
   const role = localStorage.getItem("role") || "terminal";
 
   if (role === "terminal") {
-    return <TerminalObservations />;
+    return <ParentObservations />;
   }
 
-  return <AdminObservations />;
+  return <ChildObservations />;
 }
+

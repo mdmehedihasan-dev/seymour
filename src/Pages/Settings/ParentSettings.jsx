@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LogOut, Loader2 } from 'lucide-react';
 
-const TerminalSettings = () => {
+const ParentSettings = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
@@ -258,4 +258,5 @@ const TerminalSettings = () => {
   );
 };
 
-export default TerminalSettings;
+export default ParentSettings;
+

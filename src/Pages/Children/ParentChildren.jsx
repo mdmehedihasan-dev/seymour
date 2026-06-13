@@ -1,11 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { Shield, Mail, QrCode, TrendingUp, AlertTriangle, Loader2, Filter, ListFilter } from 'lucide-react';
+import { Shield, Mail, QrCode, TrendingUp, AlertTriangle, Loader2, Filter, ListFilter, X } from 'lucide-react';
 
-const TerminalChildren = () => {
+const ParentChildren = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedChild, setSelectedChild] = useState(null);
+
+  const handleViewDetails = (child) => {
+    setSelectedChild(child);
+    setIsModalOpen(true);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -160,7 +168,7 @@ const TerminalChildren = () => {
                   </span>
                 </div>
                 <div className="w-[15%] flex justify-end">
-                  <button className="text-[9px] font-bold tracking-widest uppercase border border-gray-300 px-3 py-1.5 hover:bg-black hover:text-white hover:border-black transition-all">
+                  <button onClick={() => handleViewDetails(child)} className="text-[9px] font-bold tracking-widest uppercase border border-gray-300 px-3 py-1.5 hover:bg-black hover:text-white hover:border-black transition-all">
                     VIEW DETAILS
                   </button>
                 </div>
@@ -259,9 +267,63 @@ const TerminalChildren = () => {
           </div>
         </div>
 
+        {/* View Details Modal */}
+        {isModalOpen && selectedChild && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 animate-in fade-in duration-200">
+            <div className="bg-white w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-200">
+              <div className="bg-black text-white p-4 flex justify-between items-center">
+                <h2 className="text-[11px] font-bold tracking-widest uppercase">Child Details</h2>
+                <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-white transition-colors">
+                  <X size={16} />
+                </button>
+              </div>
+              <div className="p-6 space-y-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-[#e8e8e8] flex items-center justify-center text-[14px] font-bold tracking-wider">
+                    {selectedChild.initials}
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold">{selectedChild.name}</h3>
+                    <p className="text-[12px] text-gray-500">ID: {selectedChild.id}</p>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-1">Age</label>
+                    <p className="text-[13px] font-medium">{selectedChild.age} years</p>
+                  </div>
+                  <div>
+                    <label className="block text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-1">Parent</label>
+                    <p className="text-[13px] font-medium">{selectedChild.parent}</p>
+                  </div>
+                  <div>
+                    <label className="block text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-1">Care Circles</label>
+                    <span className="bg-[#e8e8e8] text-black text-[9px] font-bold px-2 py-1 tracking-widest uppercase inline-block mt-1">
+                      {selectedChild.circles} Circles
+                    </span>
+                  </div>
+                  <div>
+                    <label className="block text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-1">Registry Health</label>
+                    <div className="flex items-center gap-2 mt-1">
+                      <div className="w-1.5 h-1.5 bg-black"></div>
+                      <span className="text-[10px] font-bold tracking-widest uppercase">VERIFIED</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-[#f4f4f4] p-4 flex justify-end">
+                <button onClick={() => setIsModalOpen(false)} className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 transition-colors">
+                  CLOSE
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default TerminalChildren;
+export default ParentChildren;
+

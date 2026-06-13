@@ -8,7 +8,7 @@ import {
   BarChart, Bar
 } from 'recharts';
 
-const AdminReports = () => {
+const ChildReports = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -254,4 +254,5 @@ const AdminReports = () => {
   );
 };
 
-export default AdminReports;
+export default ChildReports;
+

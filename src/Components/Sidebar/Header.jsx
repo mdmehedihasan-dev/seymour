@@ -1,15 +1,16 @@
 import React from "react";
-import TerminalHeader from "./TerminalHeader";
-import AdminHeader from "./AdminHeader";
+import ParentHeader from "./ParentHeader";
+import ChildHeader from "./ChildHeader";
 
 const Header = () => {
   const role = localStorage.getItem("role") || "terminal";
 
   if (role === "terminal") {
-    return <TerminalHeader />;
+    return <ParentHeader />;
   }
 
-  return <AdminHeader />;
+  return <ChildHeader />;
 };
 
 export default Header;
+

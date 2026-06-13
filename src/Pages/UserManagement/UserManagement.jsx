@@ -1,13 +1,14 @@
 import React from 'react';
-import TerminalUserManagement from './TerminalUserManagement';
-import AdminUserManagement from './AdminUserManagement';
+import ParentUserManagement from './ParentUserManagement';
+import ChildUserManagement from './ChildUserManagement';
 
 export default function UserManagementPage() {
   const role = localStorage.getItem("role") || "terminal";
 
   if (role === "terminal") {
-    return <TerminalUserManagement />;
+    return <ParentUserManagement />;
   }
 
-  return <AdminUserManagement />;
+  return <ChildUserManagement />;
 }
+

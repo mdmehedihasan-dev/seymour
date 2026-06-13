@@ -2,7 +2,7 @@ import React from "react";
 import { Search, Bell, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const AdminHeader = () => {
+const ChildHeader = () => {
   const navigate = useNavigate();
   
   const handleLogout = () => {
@@ -55,4 +55,5 @@ const AdminHeader = () => {
   );
 };
 
-export default AdminHeader;
+export default ChildHeader;
+

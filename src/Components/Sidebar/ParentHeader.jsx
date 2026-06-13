@@ -2,7 +2,7 @@ import React from "react";
 import { Search, Bell, HelpCircle } from "lucide-react";
 import adminImage from "../../assets/image/adminkickclick.jpg";
 
-const TerminalHeader = () => {
+const ParentHeader = () => {
   return (
     <div className="h-16 flex items-center justify-between px-8 bg-[#fafafa] border-b border-gray-100 font-sans">
       
@@ -42,4 +42,5 @@ const TerminalHeader = () => {
   );
 };
 
-export default TerminalHeader;
+export default ParentHeader;
+

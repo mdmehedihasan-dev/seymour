@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Search, ChevronDown, MoreVertical, Calendar, Heart, TrendingUp, RefreshCw, Loader2 } from 'lucide-react';
 
-const AdminChildren = () => {
+const ChildChildren = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
 
@@ -319,4 +319,5 @@ const AdminChildren = () => {
   );
 };
 
-export default AdminChildren;
+export default ChildChildren;
+

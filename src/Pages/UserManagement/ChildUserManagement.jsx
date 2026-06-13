@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { ChevronDown, Loader2, Search, Filter, Mail, Phone, Calendar, Edit, MoreVertical, UserCheck, UserX, X } from 'lucide-react';
 
-const AdminUserManagement = () => {
+const ChildUserManagement = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
 
@@ -359,4 +359,5 @@ const AdminUserManagement = () => {
   );
 };
 
-export default AdminUserManagement;
+export default ChildUserManagement;
+
