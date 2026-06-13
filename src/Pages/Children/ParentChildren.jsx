@@ -6,6 +6,7 @@ const ParentChildren = () => {
   const [data, setData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
+  const [filterTab, setFilterTab] = useState('All Entries');
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedChild, setSelectedChild] = useState(null);
@@ -28,12 +29,12 @@ const ParentChildren = () => {
             alert: { value: '0.04%', trend: 'System healthy' }
           },
           registry: [
-            { id: 'KP-2938-X', initials: 'AM', name: 'Aria Miller', age: 6, parent: 'Sarah Miller', circles: 4 },
-            { id: 'KP-1102-Y', initials: 'LW', name: 'Liam Watson', age: 8, parent: 'David Watson', circles: 2 },
-            { id: 'KP-5542-Z', initials: 'EC', name: 'Elena Chen', age: 5, parent: 'Michael Chen', circles: 5 },
-            { id: 'KP-0081-B', initials: 'JB', name: 'Julian Brooks', age: 11, parent: 'Amanda Brooks', circles: 3 },
-            { id: 'KP-9982-A', initials: 'MR', name: 'Mia Robinson', age: 7, parent: 'Chloe Robinson', circles: 2 },
-            { id: 'KP-3321-C', initials: 'NS', name: 'Noah Smith', age: 9, parent: 'James Smith', circles: 4 }
+            { id: 'KP-2938-X', initials: 'AM', name: 'Aria Miller', age: 6, parent: 'Sarah Miller', circles: 4, status: 'Active' },
+            { id: 'KP-1102-Y', initials: 'LW', name: 'Liam Watson', age: 8, parent: 'David Watson', circles: 2, status: 'Alert' },
+            { id: 'KP-5542-Z', initials: 'EC', name: 'Elena Chen', age: 5, parent: 'Michael Chen', circles: 5, status: 'Active' },
+            { id: 'KP-0081-B', initials: 'JB', name: 'Julian Brooks', age: 11, parent: 'Amanda Brooks', circles: 3, status: 'Pending' },
+            { id: 'KP-9982-A', initials: 'MR', name: 'Mia Robinson', age: 7, parent: 'Chloe Robinson', circles: 2, status: 'Alert' },
+            { id: 'KP-3321-C', initials: 'NS', name: 'Noah Smith', age: 9, parent: 'James Smith', circles: 4, status: 'Active' }
           ],
           totalEntries: 1284,
           registryHealth: 94
@@ -58,9 +59,16 @@ const ParentChildren = () => {
     );
   }
 
-  const totalPages = Math.ceil(data.registry.length / itemsPerPage);
+  const filteredRegistry = data.registry.filter(child => {
+    if (filterTab === 'All Entries') return true;
+    if (filterTab === 'Alerts Only') return child.status === 'Alert';
+    if (filterTab === 'Pending Review') return child.status === 'Pending';
+    return true;
+  });
+
+  const totalPages = Math.ceil(filteredRegistry.length / itemsPerPage) || 1;
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentEntries = data.registry.slice(startIndex, startIndex + itemsPerPage);
+  const currentEntries = filteredRegistry.slice(startIndex, startIndex + itemsPerPage);
 
   return (
     <div className="min-h-screen p-8 bg-[#fdfdfd] font-sans text-[#111]">
@@ -123,9 +131,18 @@ const ParentChildren = () => {
               <h2 className="text-[11px] font-bold tracking-widest uppercase">REGISTRY RECORDS</h2>
               <div className="h-4 w-px bg-gray-300"></div>
               <div className="flex gap-6 text-[10px] font-semibold">
-                <button className="text-black border-b border-black pb-0.5">All Entries</button>
-                <button className="text-gray-500 hover:text-black transition-colors">Alerts Only</button>
-                <button className="text-gray-500 hover:text-black transition-colors">Pending Review</button>
+                <button 
+                  onClick={() => { setFilterTab('All Entries'); setCurrentPage(1); }}
+                  className={`${filterTab === 'All Entries' ? 'text-black border-b border-black pb-0.5' : 'text-gray-500 hover:text-black transition-colors'}`}
+                >All Entries</button>
+                <button 
+                  onClick={() => { setFilterTab('Alerts Only'); setCurrentPage(1); }}
+                  className={`${filterTab === 'Alerts Only' ? 'text-black border-b border-black pb-0.5' : 'text-gray-500 hover:text-black transition-colors'}`}
+                >Alerts Only</button>
+                <button 
+                  onClick={() => { setFilterTab('Pending Review'); setCurrentPage(1); }}
+                  className={`${filterTab === 'Pending Review' ? 'text-black border-b border-black pb-0.5' : 'text-gray-500 hover:text-black transition-colors'}`}
+                >Pending Review</button>
               </div>
             </div>
             <div className="flex gap-4 text-gray-500">
@@ -179,7 +196,7 @@ const ParentChildren = () => {
           {/* Pagination */}
           <div className="px-8 py-5 flex justify-between items-center border-t border-[#e8e8e8]">
             <span className="text-[10px] font-medium text-gray-500">
-              Showing {currentEntries.length} of {data.totalEntries.toLocaleString()} entries
+              Showing {currentEntries.length} of {filteredRegistry.length} entries
             </span>
             <div className="flex gap-1.5">
               <button 
