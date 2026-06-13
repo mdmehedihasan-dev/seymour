@@ -17,6 +17,20 @@ const AdminReports = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  const handleDownload = (reportName, fileType) => {
+    const content = `This is a sample ${fileType} report for: ${reportName}`;
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    const extension = fileType === 'Excel' ? 'xlsx' : 'pdf';
+    link.download = `${reportName.replace(/\s+/g, '_').toLowerCase()}.${extension}`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
   const areaData = [
     { name: 'Oct', current: 880, previous: 640 },
     { name: 'Nov', current: 950, previous: 700 },
@@ -160,7 +174,7 @@ const AdminReports = () => {
             <div className="flex-1">
               <div className="flex justify-between items-start mb-1">
                 <h4 className="text-[14px] font-bold text-[#1e293b]">Monthly Platform Report</h4>
-                <button className="flex items-center gap-1.5 text-[12px] font-semibold text-[#64748b] hover:text-[#06b6d4] transition-colors border border-gray-200 px-3 py-1.5 rounded-lg hover:border-[#06b6d4]">
+                <button onClick={() => handleDownload('Monthly Platform Report', 'PDF')} className="flex items-center gap-1.5 text-[12px] font-semibold text-[#64748b] hover:text-[#06b6d4] transition-colors border border-gray-200 px-3 py-1.5 rounded-lg hover:border-[#06b6d4]">
                   <Download size={14} /> Download
                 </button>
               </div>
@@ -180,7 +194,7 @@ const AdminReports = () => {
             <div className="flex-1">
               <div className="flex justify-between items-start mb-1">
                 <h4 className="text-[14px] font-bold text-[#1e293b]">User Growth Analytics</h4>
-                <button className="flex items-center gap-1.5 text-[12px] font-semibold text-[#64748b] hover:text-[#06b6d4] transition-colors border border-gray-200 px-3 py-1.5 rounded-lg hover:border-[#06b6d4]">
+                <button onClick={() => handleDownload('User Growth Analytics', 'Excel')} className="flex items-center gap-1.5 text-[12px] font-semibold text-[#64748b] hover:text-[#06b6d4] transition-colors border border-gray-200 px-3 py-1.5 rounded-lg hover:border-[#06b6d4]">
                   <Download size={14} /> Download
                 </button>
               </div>
@@ -200,7 +214,7 @@ const AdminReports = () => {
             <div className="flex-1">
               <div className="flex justify-between items-start mb-1">
                 <h4 className="text-[14px] font-bold text-[#1e293b]">Observations Summary</h4>
-                <button className="flex items-center gap-1.5 text-[12px] font-semibold text-[#64748b] hover:text-[#06b6d4] transition-colors border border-gray-200 px-3 py-1.5 rounded-lg hover:border-[#06b6d4]">
+                <button onClick={() => handleDownload('Observations Summary', 'PDF')} className="flex items-center gap-1.5 text-[12px] font-semibold text-[#64748b] hover:text-[#06b6d4] transition-colors border border-gray-200 px-3 py-1.5 rounded-lg hover:border-[#06b6d4]">
                   <Download size={14} /> Download
                 </button>
               </div>
@@ -220,7 +234,7 @@ const AdminReports = () => {
             <div className="flex-1">
               <div className="flex justify-between items-start mb-1">
                 <h4 className="text-[14px] font-bold text-[#1e293b]">AI Performance Report</h4>
-                <button className="flex items-center gap-1.5 text-[12px] font-semibold text-[#64748b] hover:text-[#06b6d4] transition-colors border border-gray-200 px-3 py-1.5 rounded-lg hover:border-[#06b6d4]">
+                <button onClick={() => handleDownload('AI Performance Report', 'PDF')} className="flex items-center gap-1.5 text-[12px] font-semibold text-[#64748b] hover:text-[#06b6d4] transition-colors border border-gray-200 px-3 py-1.5 rounded-lg hover:border-[#06b6d4]">
                   <Download size={14} /> Download
                 </button>
               </div>

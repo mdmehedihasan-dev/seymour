@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { ChevronDown, Loader2, Search, Filter, Mail, Phone, Calendar, Edit, MoreVertical, UserCheck, UserX } from 'lucide-react';
+import { ChevronDown, Loader2, Search, Filter, Mail, Phone, Calendar, Edit, MoreVertical, UserCheck, UserX, X } from 'lucide-react';
 
 const AdminUserManagement = () => {
   const [loading, setLoading] = useState(true);
@@ -11,12 +11,21 @@ const AdminUserManagement = () => {
   const [dashStatus, setDashStatus] = useState('All Status');
   const [dashPage, setDashPage] = useState(1);
 
+  // Edit Modal State
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState(null);
+
+  const handleEditClick = (user) => {
+    setEditingUser(user);
+    setIsEditModalOpen(true);
+  };
+
   useEffect(() => {
     const fetchUserData = async () => {
       setLoading(true);
       try {
         await new Promise((resolve) => setTimeout(resolve, 1500));
-        
+
         setData({
           dashStats: {
             total: "1,247",
@@ -50,8 +59,8 @@ const AdminUserManagement = () => {
       const matchesRole = dashRole === 'All Roles' || user.role === dashRole;
       const matchesStatus = dashStatus === 'All Status' || user.status === dashStatus;
       const searchLower = dashSearch.toLowerCase();
-      const matchesSearch = 
-        user.name.toLowerCase().includes(searchLower) || 
+      const matchesSearch =
+        user.name.toLowerCase().includes(searchLower) ||
         user.email.toLowerCase().includes(searchLower);
       return matchesRole && matchesStatus && matchesSearch;
     });
@@ -78,7 +87,7 @@ const AdminUserManagement = () => {
   return (
     <div className="min-h-screen bg-[#f8fafc] p-6 lg:p-10 font-sans text-[#1e293b]">
       <div className="max-w-[1400px] mx-auto animate-in fade-in duration-500">
-        
+
         {/* Header Title */}
         <div className="mb-8">
           <h1 className="text-2xl font-bold text-[#0f172a] mb-1">User Management</h1>
@@ -114,10 +123,10 @@ const AdminUserManagement = () => {
 
         {/* Filter Bar */}
         <div className="bg-white rounded-xl border border-gray-100 p-4 mb-6 shadow-sm flex items-center justify-between gap-4">
-          
+
           <div className="flex-1 relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#94a3b8]" size={16} />
-            <input 
+            <input
               type="text"
               placeholder="Search by name, email, or phone..."
               value={dashSearch}
@@ -131,7 +140,7 @@ const AdminUserManagement = () => {
 
           <div className="flex items-center gap-4">
             <div className="relative">
-              <select 
+              <select
                 value={dashRole}
                 onChange={(e) => {
                   setDashRole(e.target.value);
@@ -149,7 +158,7 @@ const AdminUserManagement = () => {
             </div>
 
             <div className="relative">
-              <select 
+              <select
                 value={dashStatus}
                 onChange={(e) => {
                   setDashStatus(e.target.value);
@@ -173,7 +182,7 @@ const AdminUserManagement = () => {
 
         {/* Table Area */}
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-          
+
           <div className="grid grid-cols-12 gap-4 p-4 border-b border-gray-100 bg-[#f8fafc] text-[10px] font-bold text-[#64748b] tracking-wider uppercase">
             <div className="col-span-3 pl-2">USER</div>
             <div className="col-span-3">CONTACT</div>
@@ -188,7 +197,7 @@ const AdminUserManagement = () => {
             {currentDashUsers.length > 0 ? (
               currentDashUsers.map((user) => (
                 <div key={user.id} className="grid grid-cols-12 gap-4 p-4 items-center hover:bg-gray-50 transition-colors">
-                  
+
                   {/* User Column */}
                   <div className="col-span-3 flex items-center gap-3 pl-2">
                     <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-[13px] ${user.color}`}>
@@ -246,7 +255,7 @@ const AdminUserManagement = () => {
 
                   {/* Actions Column */}
                   <div className="col-span-1 flex items-center justify-end gap-3 pr-2 text-[#94a3b8]">
-                    <button className="hover:text-[#06b6d4] transition-colors"><Edit size={16} /></button>
+                    <button onClick={() => handleEditClick(user)} className="hover:text-[#06b6d4] transition-colors"><Edit size={16} /></button>
                     <button className="hover:text-[#1e293b] transition-colors"><MoreVertical size={16} /></button>
                   </div>
 
@@ -265,29 +274,28 @@ const AdminUserManagement = () => {
               Showing {dashTotalItems > 0 ? dashStartIndex + 1 : 0} to {Math.min(dashEndIndex, dashTotalItems)} of {dashTotalItems} users
             </span>
             <div className="flex items-center gap-2">
-              <button 
+              <button
                 onClick={() => setDashPage(prev => Math.max(prev - 1, 1))}
                 disabled={dashPage === 1}
                 className="px-4 py-1.5 text-[13px] font-medium text-[#64748b] bg-white border border-gray-200 rounded-full hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Previous
               </button>
-              
+
               {Array.from({ length: dashTotalPages }, (_, i) => i + 1).map((page) => (
                 <button
                   key={page}
                   onClick={() => setDashPage(page)}
-                  className={`w-8 h-8 rounded-full text-[13px] font-medium flex items-center justify-center transition-colors ${
-                    dashPage === page 
-                      ? 'bg-[#06b6d4] text-white' 
-                      : 'bg-white border border-gray-200 text-[#475569] hover:bg-gray-50'
-                  }`}
+                  className={`w-8 h-8 rounded-full text-[13px] font-medium flex items-center justify-center transition-colors ${dashPage === page
+                    ? 'bg-[#06b6d4] text-white'
+                    : 'bg-white border border-gray-200 text-[#475569] hover:bg-gray-50'
+                    }`}
                 >
                   {page}
                 </button>
               ))}
 
-              <button 
+              <button
                 onClick={() => setDashPage(prev => Math.min(prev + 1, dashTotalPages))}
                 disabled={dashPage === dashTotalPages || dashTotalPages === 0}
                 className="px-4 py-1.5 text-[13px] font-medium text-[#64748b] bg-white border border-gray-200 rounded-full hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -296,9 +304,57 @@ const AdminUserManagement = () => {
               </button>
             </div>
           </div>
-          
+
         </div>
       </div>
+
+      {/* Edit Modal */}
+      {isEditModalOpen && editingUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-xl shadow-lg w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
+            <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+              <h2 className="text-lg font-bold text-[#0f172a]">Edit User</h2>
+              <button onClick={() => setIsEditModalOpen(false)} className="text-gray-400 hover:text-gray-600 transition-colors">
+                <X size={20} />
+              </button>
+            </div>
+            <div className="p-4 space-y-4">
+              <div>
+                <label className="block text-[13px] font-medium text-[#475569] mb-1">Name</label>
+                <input type="text" defaultValue={editingUser.name} className="w-full px-3 py-2 bg-[#f8fafc] border border-gray-200 rounded-lg text-[13px] focus:outline-none focus:ring-2 focus:ring-[#06b6d4]/20 focus:border-[#06b6d4]" />
+              </div>
+              <div>
+                <label className="block text-[13px] font-medium text-[#475569] mb-1">Email</label>
+                <input type="email" defaultValue={editingUser.email} className="w-full px-3 py-2 bg-[#f8fafc] border border-gray-200 rounded-lg text-[13px] focus:outline-none focus:ring-2 focus:ring-[#06b6d4]/20 focus:border-[#06b6d4]" />
+              </div>
+              <div>
+                <label className="block text-[13px] font-medium text-[#475569] mb-1">Phone</label>
+                <input type="text" defaultValue={editingUser.phone} className="w-full px-3 py-2 bg-[#f8fafc] border border-gray-200 rounded-lg text-[13px] focus:outline-none focus:ring-2 focus:ring-[#06b6d4]/20 focus:border-[#06b6d4]" />
+              </div>
+              <div>
+                <label className="block text-[13px] font-medium text-[#475569] mb-1">Role</label>
+                <select defaultValue={editingUser.role} className="w-full px-3 py-2 bg-[#f8fafc] border border-gray-200 rounded-lg text-[13px] focus:outline-none focus:ring-2 focus:ring-[#06b6d4]/20 focus:border-[#06b6d4]">
+                  <option value="Parent">Parent</option>
+                  <option value="Caregiver">Caregiver</option>
+                  <option value="Daycare Provider">Daycare Provider</option>
+                  <option value="Family Member">Family Member</option>
+                </select>
+              </div>
+              <div>
+                <label className="block text-[13px] font-medium text-[#475569] mb-1">Status</label>
+                <select defaultValue={editingUser.status} className="w-full px-3 py-2 bg-[#f8fafc] border border-gray-200 rounded-lg text-[13px] focus:outline-none focus:ring-2 focus:ring-[#06b6d4]/20 focus:border-[#06b6d4]">
+                  <option value="Active">Active</option>
+                  <option value="Inactive">Inactive</option>
+                </select>
+              </div>
+            </div>
+            <div className="p-4 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50">
+              <button onClick={() => setIsEditModalOpen(false)} className="px-4 py-2 text-[13px] font-medium text-[#475569] hover:text-[#1e293b] transition-colors">Cancel</button>
+              <button onClick={() => setIsEditModalOpen(false)} className="px-4 py-2 text-[13px] font-medium text-white bg-[#06b6d4] hover:bg-[#0891b2] rounded-lg transition-colors">Save Changes</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
