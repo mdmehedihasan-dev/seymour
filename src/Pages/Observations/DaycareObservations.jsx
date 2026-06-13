@@ -192,10 +192,10 @@ const DaycareObservations = () => {
         </div>
 
         {/* Filter Bar */}
-        <div className="bg-white rounded-[14px] border border-gray-100 p-3 mb-8 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] flex items-center justify-between gap-4">
+        <div className="bg-white rounded-[14px] border border-gray-100 p-3 mb-8 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
           
-          <div className="flex-1 relative pl-2">
-            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[#94a3b8]" size={16} strokeWidth={2.5} />
+          <div className="w-full md:flex-1 relative md:pl-2">
+            <Search className="absolute left-4 md:left-5 top-1/2 -translate-y-1/2 text-[#94a3b8]" size={16} strokeWidth={2.5} />
             <input 
               type="text"
               placeholder="Search observations..."
@@ -205,12 +205,12 @@ const DaycareObservations = () => {
             />
           </div>
 
-          <div className="flex items-center gap-3">
-            <div className="relative">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
+            <div className="relative w-full sm:w-auto">
               <select 
                 value={typeFilter}
                 onChange={(e) => setTypeFilter(e.target.value)}
-                className="pl-4 pr-10 py-2.5 bg-[#f8fafc] border border-gray-100 rounded-full text-[13px] font-semibold text-[#475569] appearance-none focus:outline-none focus:ring-1 focus:ring-gray-200 cursor-pointer min-w-[130px]"
+                className="w-full pl-4 pr-10 py-2.5 bg-[#f8fafc] border border-gray-100 rounded-full text-[13px] font-semibold text-[#475569] appearance-none focus:outline-none focus:ring-1 focus:ring-gray-200 cursor-pointer sm:min-w-[130px]"
               >
                 <option value="All Types">All Types</option>
                 <option value="Video">Video</option>
@@ -221,11 +221,11 @@ const DaycareObservations = () => {
               <ChevronDown size={14} strokeWidth={3} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#94a3b8] pointer-events-none" />
             </div>
 
-            <div className="relative">
+            <div className="relative w-full sm:w-auto">
               <select 
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="pl-4 pr-10 py-2.5 bg-[#f8fafc] border border-gray-100 rounded-full text-[13px] font-semibold text-[#475569] appearance-none focus:outline-none focus:ring-1 focus:ring-gray-200 cursor-pointer min-w-[130px]"
+                className="w-full pl-4 pr-10 py-2.5 bg-[#f8fafc] border border-gray-100 rounded-full text-[13px] font-semibold text-[#475569] appearance-none focus:outline-none focus:ring-1 focus:ring-gray-200 cursor-pointer sm:min-w-[130px]"
               >
                 <option value="All Status">All Status</option>
                 <option value="Processed">Processed</option>
@@ -241,7 +241,7 @@ const DaycareObservations = () => {
         <div className="space-y-4">
           {filteredObservations.length > 0 ? (
             filteredObservations.map((obs) => (
-              <div key={obs.id} className="bg-white rounded-[16px] border border-gray-100 p-6 shadow-[0_2px_15px_-5px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_25px_-5px_rgba(0,0,0,0.06)] transition-shadow flex items-start gap-6">
+              <div key={obs.id} className="bg-white rounded-[16px] border border-gray-100 p-4 md:p-6 shadow-[0_2px_15px_-5px_rgba(0,0,0,0.03)] hover:shadow-[0_8px_25px_-5px_rgba(0,0,0,0.06)] transition-shadow flex flex-col sm:flex-row items-start gap-4 md:gap-6">
                 
                 {/* Icon */}
                 <div className={`w-[52px] h-[52px] rounded-full flex items-center justify-center shrink-0 ${obs.iconColor}`}>
@@ -249,19 +249,19 @@ const DaycareObservations = () => {
                 </div>
 
                 {/* Content */}
-                <div className="flex-1 min-w-0">
-                  <div className="flex justify-between items-start mb-3">
+                <div className="flex-1 min-w-0 w-full">
+                  <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3 lg:gap-0 mb-3 w-full">
                     <div>
                       <h3 className="text-[16px] font-bold text-[#0f172a] mb-1 leading-tight">{obs.title}</h3>
                       <p className="text-[13px] text-[#64748b]">{obs.subtitle}</p>
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex flex-wrap gap-2 w-full lg:w-auto">
                       {renderStatusPills(obs.status)}
                     </div>
                   </div>
 
                   {/* Metadata Row */}
-                  <div className="flex items-center gap-6 text-[12px] mb-4">
+                  <div className="flex flex-wrap items-center gap-4 md:gap-6 text-[12px] mb-4">
                     <div className="flex items-center gap-1.5 text-[#64748b]">
                       <span>Child:</span>
                       <span className="font-semibold text-[#1e293b]">{obs.child}</span>
@@ -276,14 +276,14 @@ const DaycareObservations = () => {
                   </div>
 
                   {/* Tags Row */}
-                  <div className="flex items-center gap-3">
+                  <div className="flex flex-wrap items-center gap-2 md:gap-3">
                     {obs.tags.map((tag, idx) => (
                       <span key={idx} className="bg-[#ccfbf1] text-[#0d9488] px-3 py-1 rounded-full text-[11px] font-bold border border-[#99f6e4]">
                         {tag}
                       </span>
                     ))}
-                    <div className="flex items-center gap-2 text-[#64748b] text-[11px] font-medium ml-2">
-                      <div className="w-1 h-1 bg-[#cbd5e1] rounded-full"></div>
+                    <div className="flex items-center gap-2 text-[#64748b] text-[11px] font-medium ml-2 w-full sm:w-auto mt-2 sm:mt-0">
+                      <div className="hidden sm:block w-1 h-1 bg-[#cbd5e1] rounded-full"></div>
                       {obs.insights} AI Insights Generated
                     </div>
                   </div>

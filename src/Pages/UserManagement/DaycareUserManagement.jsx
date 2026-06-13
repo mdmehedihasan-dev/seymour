@@ -26,11 +26,11 @@ const DaycareUserManagement = () => {
         dashStats: {
           ...prev.dashStats,
           total: (parseInt(prev.dashStats.total.replace(/,/g, '')) - 1).toLocaleString(),
-          active: userToDelete.status === 'Active' 
-            ? (parseInt(prev.dashStats.active.replace(/,/g, '')) - 1).toLocaleString() 
+          active: userToDelete.status === 'Active'
+            ? (parseInt(prev.dashStats.active.replace(/,/g, '')) - 1).toLocaleString()
             : prev.dashStats.active,
-          inactive: userToDelete.status === 'Inactive' 
-            ? (parseInt(prev.dashStats.inactive.replace(/,/g, '')) - 1).toLocaleString() 
+          inactive: userToDelete.status === 'Inactive'
+            ? (parseInt(prev.dashStats.inactive.replace(/,/g, '')) - 1).toLocaleString()
             : prev.dashStats.inactive
         },
         dashUsers: prev.dashUsers.filter(u => u.id !== userToDelete.id)
@@ -208,7 +208,8 @@ const DaycareUserManagement = () => {
         {/* Table Area */}
         <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
 
-          <div className="grid grid-cols-12 gap-4 p-4 border-b border-gray-100 bg-[#f8fafc] text-[10px] font-bold text-[#64748b] tracking-wider uppercase">
+          {/* Desktop Table Header */}
+          <div className="hidden lg:grid grid-cols-12 gap-4 p-4 border-b border-gray-100 bg-[#f8fafc] text-[10px] font-bold text-[#64748b] tracking-wider uppercase">
             <div className="col-span-3 pl-2">USER</div>
             <div className="col-span-3">CONTACT</div>
             <div className="col-span-2">ROLE</div>
@@ -221,11 +222,11 @@ const DaycareUserManagement = () => {
           <div className="divide-y divide-gray-100">
             {currentDashUsers.length > 0 ? (
               currentDashUsers.map((user) => (
-                <div key={user.id} className="grid grid-cols-12 gap-4 p-4 items-center hover:bg-gray-50 transition-colors">
+                <div key={user.id} className="flex flex-col lg:grid lg:grid-cols-12 gap-4 p-4 lg:items-center hover:bg-gray-50 transition-colors">
 
                   {/* User Column */}
-                  <div className="col-span-3 flex items-center gap-3 pl-2">
-                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-[13px] ${user.color}`}>
+                  <div className="w-full lg:col-span-3 flex items-center gap-3 lg:pl-2">
+                    <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-[13px] shrink-0 ${user.color}`}>
                       {user.initials}
                     </div>
                     <div>
@@ -235,10 +236,11 @@ const DaycareUserManagement = () => {
                   </div>
 
                   {/* Contact Column */}
-                  <div className="col-span-3 space-y-1">
+                  <div className="w-full lg:col-span-3 space-y-1">
+                    <span className="lg:hidden text-[10px] font-bold text-[#64748b] tracking-wider uppercase mb-1 block">Contact</span>
                     <div className="flex items-center gap-2 text-[12px] text-[#475569]">
                       <Mail size={12} className="text-[#94a3b8]" />
-                      {user.email}
+                      <span className="truncate pr-4">{user.email}</span>
                     </div>
                     <div className="flex items-center gap-2 text-[12px] text-[#475569]">
                       <Phone size={12} className="text-[#94a3b8]" />
@@ -247,14 +249,16 @@ const DaycareUserManagement = () => {
                   </div>
 
                   {/* Role Column */}
-                  <div className="col-span-2 flex items-center">
+                  <div className="w-full lg:col-span-2 flex justify-between lg:justify-start items-center">
+                    <span className="lg:hidden text-[10px] font-bold text-[#64748b] tracking-wider uppercase">Role</span>
                     <span className={`text-[11px] font-medium px-2.5 py-1 rounded-full ${user.roleColor}`}>
                       {user.role}
                     </span>
                   </div>
 
                   {/* Status Column */}
-                  <div className="col-span-1 flex items-center">
+                  <div className="w-full lg:col-span-1 flex justify-between lg:justify-start items-center">
+                    <span className="lg:hidden text-[10px] font-bold text-[#64748b] tracking-wider uppercase">Status</span>
                     {user.status === 'Active' ? (
                       <div className="flex items-center gap-1.5 text-[12px] font-medium text-[#10b981]">
                         <UserCheck size={14} /> Active
@@ -267,28 +271,38 @@ const DaycareUserManagement = () => {
                   </div>
 
                   {/* Activity Column */}
-                  <div className="col-span-1">
-                    <div className="text-[12px] text-[#1e293b]">{user.children} Children</div>
-                    <div className="text-[11px] text-[#94a3b8]">{user.observations} Observations</div>
+                  <div className="w-full lg:col-span-1 flex justify-between lg:block items-center">
+                    <span className="lg:hidden text-[10px] font-bold text-[#64748b] tracking-wider uppercase">Activity</span>
+                    <div className="text-right lg:text-left">
+                      <div className="text-[12px] text-[#1e293b]">{user.children} Children</div>
+                      <div className="text-[11px] text-[#94a3b8]">{user.observations} Obsv.</div>
+                    </div>
                   </div>
 
                   {/* Join Date Column */}
-                  <div className="col-span-1 flex items-center gap-2 text-[12px] text-[#475569]">
-                    <Calendar size={12} className="text-[#94a3b8]" />
-                    {user.joinDate}
+                  <div className="w-full lg:col-span-1 flex justify-between lg:justify-start items-center">
+                    <span className="lg:hidden text-[10px] font-bold text-[#64748b] tracking-wider uppercase">Join Date</span>
+                    <div className="flex items-center gap-2 text-[12px] text-[#475569]">
+                      <Calendar size={12} className="text-[#94a3b8]" />
+                      {user.joinDate}
+                    </div>
                   </div>
 
                   {/* Actions Column */}
-                  <div className="col-span-1 flex items-center justify-end gap-3 pr-2 text-[#94a3b8]">
-                    <button onClick={() => handleEditClick(user)} className="hover:text-[#06b6d4] transition-colors"><Edit size={16} /></button>
-                    <button 
+                  <div className="w-full lg:col-span-1 flex items-center justify-end gap-4 lg:pr-2 text-[#94a3b8] pt-3 lg:pt-0 border-t border-gray-100 lg:border-0 mt-1 lg:mt-0">
+                    <button onClick={() => handleEditClick(user)} className="hover:text-[#06b6d4] transition-colors flex items-center gap-1 lg:block">
+                      <Edit size={16} />
+                      <span className="lg:hidden text-[11px] font-medium">Edit</span>
+                    </button>
+                    <button
                       onClick={() => {
                         setUserToDelete(user);
                         setDeleteModalOpen(true);
                       }}
-                      className="hover:text-[#1e293b] transition-colors"
+                      className="hover:text-[#1e293b] transition-colors flex items-center gap-1 lg:block"
                     >
                       <MoreVertical size={16} />
+                      <span className="lg:hidden text-[11px] font-medium">More</span>
                     </button>
                   </div>
 
@@ -302,15 +316,15 @@ const DaycareUserManagement = () => {
           </div>
 
           {/* Pagination Footer */}
-          <div className="p-4 border-t border-gray-100 flex items-center justify-between">
-            <span className="text-[12px] text-[#64748b]">
+          <div className="p-4 border-t border-gray-100 flex flex-col md:flex-row items-center justify-between gap-4">
+            <span className="text-[12px] text-[#64748b] text-center md:text-left">
               Showing {dashTotalItems > 0 ? dashStartIndex + 1 : 0} to {Math.min(dashEndIndex, dashTotalItems)} of {dashTotalItems} users
             </span>
-            <div className="flex gap-1.5">
+            <div className="flex flex-wrap justify-center gap-1.5">
               <button
                 onClick={() => setDashPage(prev => Math.max(prev - 1, 1))}
                 disabled={dashPage === 1}
-                className="w-8 h-8 flex items-center justify-center bg-white text-[#64748b] hover:bg-[#f1f5f9] transition-colors text-[13px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e2e8f0] rounded-lg"
+                className="w-8 h-8 flex items-center justify-center bg-white text-[#64748b] hover:bg-[#f1f5f9] transition-colors text-[13px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e2e8f0] rounded-lg shrink-0"
               >
                 &lt;
               </button>
@@ -319,7 +333,7 @@ const DaycareUserManagement = () => {
                 <button
                   key={page}
                   onClick={() => setDashPage(page)}
-                  className={`w-8 h-8 flex items-center justify-center transition-colors text-[13px] font-bold rounded-lg border ${dashPage === page
+                  className={`w-8 h-8 flex items-center justify-center transition-colors text-[13px] font-bold rounded-lg border shrink-0 ${dashPage === page
                     ? 'bg-[#06b6d4] text-white border-[#06b6d4] shadow-sm'
                     : 'bg-white text-[#64748b] hover:bg-[#f1f5f9] border-[#e2e8f0]'
                     }`}
@@ -331,7 +345,7 @@ const DaycareUserManagement = () => {
               <button
                 onClick={() => setDashPage(prev => Math.min(prev + 1, dashTotalPages))}
                 disabled={dashPage === dashTotalPages || dashTotalPages === 0}
-                className="w-8 h-8 flex items-center justify-center bg-white text-[#64748b] hover:bg-[#f1f5f9] transition-colors text-[13px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e2e8f0] rounded-lg"
+                className="w-8 h-8 flex items-center justify-center bg-white text-[#64748b] hover:bg-[#f1f5f9] transition-colors text-[13px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e2e8f0] rounded-lg shrink-0"
               >
                 &gt;
               </button>
@@ -398,17 +412,17 @@ const DaycareUserManagement = () => {
                 <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-500">
                   <AlertTriangle size={24} strokeWidth={2} />
                 </div>
-                <button 
+                <button
                   onClick={() => {
                     setDeleteModalOpen(false);
                     setUserToDelete(null);
-                  }} 
+                  }}
                   className="text-[#94a3b8] hover:text-[#0f172a] transition-colors"
                 >
                   <X size={20} />
                 </button>
               </div>
-              
+
               <h2 className="text-xl font-bold text-[#0f172a] mb-2">Delete User Profile?</h2>
               <p className="text-[#64748b] text-[14px] leading-relaxed mb-6">
                 Are you sure you want to delete <strong className="text-[#0f172a]">{userToDelete.name}</strong> from the system? This action cannot be undone and will revoke all access.
@@ -425,16 +439,16 @@ const DaycareUserManagement = () => {
               </div>
 
               <div className="flex justify-end gap-3">
-                <button 
+                <button
                   onClick={() => {
                     setDeleteModalOpen(false);
                     setUserToDelete(null);
-                  }} 
+                  }}
                   className="px-5 py-2.5 text-[13px] font-semibold text-[#64748b] hover:text-[#0f172a] hover:bg-[#f8fafc] border border-transparent hover:border-[#e2e8f0] rounded-xl transition-all"
                 >
                   Cancel
                 </button>
-                <button 
+                <button
                   onClick={handleDeleteConfirm}
                   className="px-5 py-2.5 text-[13px] font-semibold text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors shadow-sm"
                 >
