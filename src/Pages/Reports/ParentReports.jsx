@@ -181,28 +181,33 @@ const ParentReports = () => {
         </div>
 
         {/* Table Section */}
-        <div className="w-full overflow-x-auto">
-          <div className="min-w-[800px]">
-            {/* Table Headers */}
-            <div className="bg-[#e8e8e8] px-8 py-5 flex items-center">
-              <div className="w-[30%] text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">CHILD NAME</div>
-              <div className="w-[20%] text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">DATE</div>
-              <div className="w-[40%] text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">DOMAINS INCLUDED</div>
-              <div className="w-[10%] text-right text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">ACTIONS</div>
-            </div>
-            
-            {/* Table Rows */}
-            <div className="flex flex-col min-h-[400px]">
-              {currentReports.map((report) => (
-                <div key={report.id} className="bg-white px-8 py-7 flex items-center border-b border-[#f4f4f4] hover:bg-[#fafafa] transition-colors">
-                  <div className="w-[30%] flex items-center gap-4">
+        <div className="w-full">
+          {/* Desktop Table Headers */}
+          <div className="hidden lg:flex bg-[#e8e8e8] px-8 py-5 items-center">
+            <div className="w-[30%] text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">CHILD NAME</div>
+            <div className="w-[20%] text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">DATE</div>
+            <div className="w-[40%] text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">DOMAINS INCLUDED</div>
+            <div className="w-[10%] text-right text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">ACTIONS</div>
+          </div>
+          
+          {/* Table Rows */}
+          <div className="flex flex-col min-h-[400px] border-t border-gray-100 lg:border-t-0">
+            {currentReports.map((report) => (
+              <div key={report.id} className="bg-white px-6 lg:px-8 py-6 flex flex-col lg:flex-row lg:items-center border-b border-[#f4f4f4] hover:bg-[#fafafa] transition-colors gap-4 lg:gap-0">
+                <div className="w-full lg:w-[30%] flex justify-between lg:justify-start items-center gap-4">
+                  <span className="lg:hidden text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">CHILD NAME</span>
+                  <div className="flex items-center gap-3 lg:gap-4">
                     <div className={`w-1.5 h-1.5 flex-shrink-0 ${report.status === 'active' ? 'bg-black' : 'bg-gray-400'}`}></div>
                     <span className="text-[13px] font-bold">{report.name}</span>
                   </div>
-                  <div className="w-[20%] text-[13px] text-gray-500">
-                    {report.date}
-                  </div>
-                  <div className="w-[40%] flex gap-2 flex-wrap">
+                </div>
+                <div className="w-full lg:w-[20%] flex justify-between lg:justify-start items-center text-[13px] text-gray-500">
+                  <span className="lg:hidden text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">DATE</span>
+                  <span>{report.date}</span>
+                </div>
+                <div className="w-full lg:w-[40%] flex justify-between lg:justify-start items-start lg:items-center">
+                  <span className="lg:hidden text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase pt-1">DOMAINS</span>
+                  <div className="flex gap-2 flex-wrap justify-end lg:justify-start max-w-[60%] lg:max-w-full">
                     {report.domains.map((domain, idx) => (
                       <span 
                         key={idx} 
@@ -212,14 +217,14 @@ const ParentReports = () => {
                       </span>
                     ))}
                   </div>
-                  <div className="w-[10%] flex justify-end">
-                    <button onClick={() => handleDownload(report)} className="text-[10px] font-bold text-black border-b border-black pb-0.5 hover:text-gray-600 hover:border-gray-600 transition-colors tracking-widest uppercase whitespace-nowrap">
-                      DOWNLOAD
-                    </button>
-                  </div>
                 </div>
-              ))}
-            </div>
+                <div className="w-full lg:w-[10%] flex justify-end pt-4 lg:pt-0 border-t border-gray-100 lg:border-t-0 mt-2 lg:mt-0">
+                  <button onClick={() => handleDownload(report)} className="text-[10px] font-bold text-black border-b border-black pb-0.5 hover:text-gray-600 hover:border-gray-600 transition-colors tracking-widest uppercase whitespace-nowrap">
+                    DOWNLOAD
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 

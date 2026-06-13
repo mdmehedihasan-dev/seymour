@@ -7,6 +7,7 @@ const ParentChildren = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
   const [filterTab, setFilterTab] = useState('All Entries');
+  const [sortConfig, setSortConfig] = useState({ key: 'name', direction: 'asc' });
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedChild, setSelectedChild] = useState(null);
@@ -57,6 +58,14 @@ const ParentChildren = () => {
     
     setNewChildFormData({ name: '', age: '', parent: '' });
     setIsRegisterModalOpen(false);
+  };
+
+  const handleSort = (key) => {
+    setSortConfig(prev => ({
+      key,
+      direction: prev.key === key && prev.direction === 'asc' ? 'desc' : 'asc'
+    }));
+    setCurrentPage(1);
   };
 
   const handleViewDetails = (child) => {
@@ -112,6 +121,16 @@ const ParentChildren = () => {
     if (filterTab === 'Alerts Only') return child.status === 'Alert';
     if (filterTab === 'Pending Review') return child.status === 'Pending';
     return true;
+  }).sort((a, b) => {
+    let aValue = a[sortConfig.key];
+    let bValue = b[sortConfig.key];
+    
+    if (typeof aValue === 'string') aValue = aValue.toLowerCase();
+    if (typeof bValue === 'string') bValue = bValue.toLowerCase();
+
+    if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+    if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+    return 0;
   });
 
   const totalPages = Math.ceil(filteredRegistry.length / itemsPerPage) || 1;
@@ -194,8 +213,20 @@ const ParentChildren = () => {
               </div>
             </div>
             <div className="flex gap-4 text-gray-500 ml-auto md:ml-0">
-              <Filter size={16} className="cursor-pointer hover:text-black" />
-              <ListFilter size={16} className="cursor-pointer hover:text-black" />
+              <button 
+                onClick={() => handleSort('age')} 
+                className={`hover:text-black transition-colors ${sortConfig.key === 'age' ? 'text-black' : ''}`}
+                title={`Sort by Age (${sortConfig.key === 'age' && sortConfig.direction === 'asc' ? 'Desc' : 'Asc'})`}
+              >
+                <Filter size={16} />
+              </button>
+              <button 
+                onClick={() => handleSort('name')} 
+                className={`hover:text-black transition-colors ${sortConfig.key === 'name' ? 'text-black' : ''}`}
+                title={`Sort by Name (${sortConfig.key === 'name' && sortConfig.direction === 'asc' ? 'Desc' : 'Asc'})`}
+              >
+                <ListFilter size={16} />
+              </button>
             </div>
           </div>
 
