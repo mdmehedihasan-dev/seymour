@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Search, ChevronDown, MoreVertical, Calendar, Heart, TrendingUp, RefreshCw, Loader2 } from 'lucide-react';
+import { Search, ChevronDown, MoreVertical, Calendar, Heart, TrendingUp, RefreshCw, Loader2, X, AlertTriangle } from 'lucide-react';
 
 const DaycareChildren = () => {
   const [loading, setLoading] = useState(true);
@@ -9,7 +9,26 @@ const DaycareChildren = () => {
   const [search, setSearch] = useState('');
   const [ageFilter, setAgeFilter] = useState('All Ages');
   const [page, setPage] = useState(1);
-  const itemsPerPage = 5; // To match the screenshot which shows 5 cards, but 6 per page is usually better for a 3-col grid. The screenshot shows 5 items on page 1. We will use 5 items. Wait, the screenshot says "Showing 1 to 5 of 823 children". We'll use 5.
+  const itemsPerPage = 5; 
+
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [childToDelete, setChildToDelete] = useState(null);
+
+  const handleDeleteConfirm = () => {
+    if (childToDelete) {
+      setData(prev => ({
+        ...prev,
+        stats: {
+          ...prev.stats,
+          total: (parseInt(prev.stats.total) - 1).toString(),
+          active: (parseInt(prev.stats.active) - 1).toString()
+        },
+        children: prev.children.filter(c => c.id !== childToDelete.id)
+      }));
+      setDeleteModalOpen(false);
+      setChildToDelete(null);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -229,7 +248,13 @@ const DaycareChildren = () => {
                       <p className="text-[12px] text-[#64748b] font-medium">{child.age}</p>
                     </div>
                   </div>
-                  <button className="text-[#94a3b8] hover:text-[#475569] transition-colors p-1">
+                  <button 
+                    onClick={() => {
+                      setChildToDelete(child);
+                      setDeleteModalOpen(true);
+                    }}
+                    className="text-[#94a3b8] hover:text-[#475569] transition-colors p-1"
+                  >
                     <MoreVertical size={18} />
                   </button>
                 </div>
@@ -308,8 +333,8 @@ const DaycareChildren = () => {
                 key={p}
                 onClick={() => setPage(p)}
                 className={`w-[34px] h-[34px] rounded-full text-[13px] font-bold flex items-center justify-center transition-colors ${page === p
-                    ? 'bg-[#06b6d4] text-white shadow-md'
-                    : 'bg-white text-[#475569] hover:bg-gray-50'
+                  ? 'bg-[#06b6d4] text-white shadow-md'
+                  : 'bg-white text-[#475569] hover:bg-gray-50'
                   }`}
               >
                 {p}
@@ -325,6 +350,63 @@ const DaycareChildren = () => {
             </button>
           </div>
         </div>
+
+        {/* Delete Confirmation Modal */}
+        {deleteModalOpen && childToDelete && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0f172a]/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+            <div className="bg-white w-full max-w-md rounded-2xl shadow-xl animate-in zoom-in-95 duration-200 border border-[#e2e8f0]">
+              <div className="p-6">
+                <div className="flex justify-between items-start mb-6">
+                  <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-500">
+                    <AlertTriangle size={24} strokeWidth={2} />
+                  </div>
+                  <button 
+                    onClick={() => {
+                      setDeleteModalOpen(false);
+                      setChildToDelete(null);
+                    }} 
+                    className="text-[#94a3b8] hover:text-[#0f172a] transition-colors"
+                  >
+                    <X size={20} />
+                  </button>
+                </div>
+                
+                <h2 className="text-xl font-bold text-[#0f172a] mb-2">Delete Child Profile?</h2>
+                <p className="text-[#64748b] text-[14px] leading-relaxed mb-6">
+                  Are you sure you want to delete <strong className="text-[#0f172a]">{childToDelete.name}</strong> from the daycare system? This action cannot be undone and will remove all associated observations and milestones.
+                </p>
+
+                <div className="bg-[#f8fafc] p-4 rounded-xl border border-[#e2e8f0] mb-8 flex items-center gap-4">
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-[14px] shadow-sm ${childToDelete.color}`}>
+                    {childToDelete.initials}
+                  </div>
+                  <div>
+                    <h3 className="text-[14px] font-bold text-[#0f172a]">{childToDelete.name}</h3>
+                    <p className="text-[12px] text-[#64748b]">Parents: {childToDelete.parents}</p>
+                  </div>
+                </div>
+
+                <div className="flex justify-end gap-3">
+                  <button 
+                    onClick={() => {
+                      setDeleteModalOpen(false);
+                      setChildToDelete(null);
+                    }} 
+                    className="px-5 py-2.5 text-[13px] font-semibold text-[#64748b] hover:text-[#0f172a] hover:bg-[#f8fafc] border border-transparent hover:border-[#e2e8f0] rounded-xl transition-all"
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    onClick={handleDeleteConfirm}
+                    className="px-5 py-2.5 text-[13px] font-semibold text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors shadow-sm"
+                  >
+                    Delete Profile
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
       </div>
     </div>
