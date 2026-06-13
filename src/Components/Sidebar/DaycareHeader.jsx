@@ -4,11 +4,6 @@ import { useNavigate } from "react-router-dom";
 
 const DaycareHeader = () => {
   const navigate = useNavigate();
-  
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    navigate("/sign-in");
-  };
   return (
     <div className="h-[72px] flex items-center justify-between px-8 bg-white border-b border-gray-100 font-sans">
       
@@ -34,7 +29,7 @@ const DaycareHeader = () => {
         
         {/* Profile Section */}
         <div 
-          onClick={handleLogout}
+          onClick={() => navigate('/settings')}
           className="flex items-center gap-3 cursor-pointer pl-6 border-l border-gray-100 hover:bg-gray-50 p-2 -my-2 rounded-lg transition-colors"
         >
           {/* Avatar */}

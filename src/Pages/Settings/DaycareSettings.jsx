@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import {
-  Globe, Bell, Shield, Sparkles, Database, ChevronDown, Loader2
+  Globe, Bell, Shield, Sparkles, Database, ChevronDown, Loader2, LogOut
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 // Reusable Toggle Component
 const Toggle = ({ enabled, setEnabled }) => (
@@ -14,6 +15,7 @@ const Toggle = ({ enabled, setEnabled }) => (
 );
 
 const DaycareSettings = () => {
+  const navigate = useNavigate();
   // General State
   const [platformName, setPlatformName] = useState("Seymour");
   const [supportEmail, setSupportEmail] = useState("support@seymour.internal");
@@ -192,6 +194,19 @@ const DaycareSettings = () => {
                   <span className="text-[11px] text-[#94a3b8]">Lock account after failed attempts</span>
                 </div>
                 <Toggle enabled={loginLimit} setEnabled={setLoginLimit} />
+              </div>
+
+              <div className="pt-6 border-t border-gray-100 mt-2">
+                <button
+                  onClick={() => {
+                    localStorage.removeItem('user');
+                    navigate('/sign-in');
+                  }}
+                  className="w-full flex justify-center items-center gap-2 bg-[#fee2e2] hover:bg-[#fecaca] text-[#ef4444] font-semibold rounded-lg px-4 py-2.5 text-[13px] transition-colors"
+                >
+                  <LogOut size={16} />
+                  Log Out Everywhere
+                </button>
               </div>
             </div>
           </div>
