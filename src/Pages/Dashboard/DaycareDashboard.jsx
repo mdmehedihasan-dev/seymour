@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { TrendingUp, TrendingDown, Loader2, Users, Smile, Eye, Brain, AlertTriangle, CheckCircle, Clock } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar } from 'recharts';
 
 export default function DaycareDashboard() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
 
@@ -255,7 +257,7 @@ export default function DaycareDashboard() {
           <div className="bg-white rounded-xl border border-gray-100 p-6 shadow-sm lg:col-span-2">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-[14px] font-bold text-[#1e293b]">Recent Activity</h3>
-              <button className="text-[12px] font-bold text-[#06b6d4] hover:text-[#0891b2] transition-colors">View All</button>
+              <button onClick={() => navigate('/daycare-notifications')} className="text-[12px] font-bold text-[#06b6d4] hover:text-[#0891b2] transition-colors">View All</button>
             </div>
             <div className="space-y-6">
               {[
