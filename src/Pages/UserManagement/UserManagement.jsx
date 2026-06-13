@@ -1,6 +1,6 @@
 import React from 'react';
 import ParentUserManagement from './ParentUserManagement';
-import ChildUserManagement from './ChildUserManagement';
+import DaycareUserManagement from './DaycareUserManagement';
 
 export default function UserManagementPage() {
   const role = localStorage.getItem("role") || "terminal";
@@ -9,6 +9,6 @@ export default function UserManagementPage() {
     return <ParentUserManagement />;
   }
 
-  return <ChildUserManagement />;
+  return <DaycareUserManagement />;
 }
 

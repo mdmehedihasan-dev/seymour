@@ -6,7 +6,7 @@ import {
   BarChart, Bar
 } from 'recharts';
 
-const ChildAIMonitoring = () => {
+const DaycareAIMonitoring = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -309,5 +309,5 @@ const ChildAIMonitoring = () => {
   );
 };
 
-export default ChildAIMonitoring;
+export default DaycareAIMonitoring;
 

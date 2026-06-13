@@ -13,7 +13,7 @@ const Toggle = ({ enabled, setEnabled }) => (
   </button>
 );
 
-const ChildSettings = () => {
+const DaycareSettings = () => {
   // General State
   const [platformName, setPlatformName] = useState("Seymour");
   const [supportEmail, setSupportEmail] = useState("support@seymour.internal");
@@ -318,4 +318,4 @@ const ChildSettings = () => {
   );
 };
 
-export default ChildSettings;
+export default DaycareSettings;

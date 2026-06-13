@@ -8,7 +8,7 @@ import {
   BarChart, Bar
 } from 'recharts';
 
-const ChildReports = () => {
+const DaycareReports = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -254,5 +254,5 @@ const ChildReports = () => {
   );
 };
 
-export default ChildReports;
+export default DaycareReports;
 

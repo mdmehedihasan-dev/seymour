@@ -1,6 +1,6 @@
 import React from "react";
 import ParentSidebar from "./ParentSidebar";
-import ChildSidebar from "./ChildSidebar";
+import DaycareSidebar from "./DaycareSidebar";
 
 const Sidebar = ({ closeDrawer }) => {
   const role = localStorage.getItem("role") || "terminal";
@@ -9,7 +9,7 @@ const Sidebar = ({ closeDrawer }) => {
     return <ParentSidebar closeDrawer={closeDrawer} />;
   }
 
-  return <ChildSidebar closeDrawer={closeDrawer} />;
+  return <DaycareSidebar closeDrawer={closeDrawer} />;
 };
 
 export default Sidebar;

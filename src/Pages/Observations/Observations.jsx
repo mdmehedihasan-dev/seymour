@@ -1,6 +1,6 @@
 import React from 'react';
 import ParentObservations from './ParentObservations';
-import ChildObservations from './ChildObservations';
+import DaycareObservations from './DaycareObservations';
 
 export default function ObservationsPage() {
   const role = localStorage.getItem("role") || "terminal";
@@ -9,6 +9,6 @@ export default function ObservationsPage() {
     return <ParentObservations />;
   }
 
-  return <ChildObservations />;
+  return <DaycareObservations />;
 }
 

@@ -28,7 +28,7 @@ const SignIn = () => {
         // ==========================================
         // ADMIN DASHBOARD
         // ==========================================
-      } else if (email === "adminchild@gmail.com" && password === "123456") {
+      } else if (email === "admindaycare@gmail.com" && password === "123456") {
         localStorage.setItem("user", "authenticated");
         localStorage.setItem("role", "dashboard");
         navigate("/");

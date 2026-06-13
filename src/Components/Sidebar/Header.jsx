@@ -1,6 +1,6 @@
 import React from "react";
 import ParentHeader from "./ParentHeader";
-import ChildHeader from "./ChildHeader";
+import DaycareHeader from "./DaycareHeader";
 
 const Header = () => {
   const role = localStorage.getItem("role") || "terminal";
@@ -9,7 +9,7 @@ const Header = () => {
     return <ParentHeader />;
   }
 
-  return <ChildHeader />;
+  return <DaycareHeader />;
 };
 
 export default Header;

@@ -1,6 +1,6 @@
 import React from 'react';
 import ParentReports from './ParentReports';
-import ChildReports from './ChildReports';
+import DaycareReports from './DaycareReports';
 
 export default function ReportsPage() {
   const role = localStorage.getItem("role") || "terminal";
@@ -9,6 +9,6 @@ export default function ReportsPage() {
     return <ParentReports />;
   }
 
-  return <ChildReports />;
+  return <DaycareReports />;
 }
 

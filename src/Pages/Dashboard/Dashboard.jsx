@@ -1,5 +1,5 @@
 import ParentDashboard from './ParentDashboard';
-import ChildDashboard from './ChildDashboard';
+import DaycareDashboard from './DaycareDashboard';
 
 export default function Dashboard() {
   const role = localStorage.getItem("role") || "terminal";
@@ -8,6 +8,6 @@ export default function Dashboard() {
     return <ParentDashboard />;
   }
 
-  return <ChildDashboard />;
+  return <DaycareDashboard />;
 }
 

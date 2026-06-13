@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { Search, ChevronDown, Video, Mic, FileText, Eye, CheckCircle2, Flag, Clock, Loader2 } from 'lucide-react';
 
-const ChildObservations = () => {
+const DaycareObservations = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
 
@@ -304,5 +304,5 @@ const ChildObservations = () => {
   );
 };
 
-export default ChildObservations;
+export default DaycareObservations;
 

@@ -10,13 +10,13 @@ import {
   Eye
 } from "lucide-react";
 
-const ChildSidebar = ({ closeDrawer }) => {
+const DaycareSidebar = ({ closeDrawer }) => {
   const location = useLocation();
 
   const dashboardMenuItems = [
     { icon: LayoutGrid, label: "Dashboard", Link: "/" },
     { icon: Users, label: "Users", Link: "/user-management" },
-    { icon: Smile, label: "Child Profiles", Link: "/children" },
+    { icon: Smile, label: "Children Profiles", Link: "/children" },
     { icon: Eye, label: "Observations", Link: "/observations" },
     { icon: Brain, label: "Milestones / AI", Link: "/ai-monitoring" },
     { icon: BarChart2, label: "Reports / Analytics", Link: "/reports" },
@@ -69,5 +69,5 @@ const ChildSidebar = ({ closeDrawer }) => {
   );
 };
 
-export default ChildSidebar;
+export default DaycareSidebar;
 

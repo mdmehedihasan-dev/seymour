@@ -1,6 +1,6 @@
 import React from 'react';
 import ParentAIMonitoring from './ParentAIMonitoring';
-import ChildAIMonitoring from './ChildAIMonitoring';
+import DaycareAIMonitoring from './DaycareAIMonitoring';
 
 export default function AIMonitoringPage() {
   const role = localStorage.getItem("role") || "terminal";
@@ -9,6 +9,6 @@ export default function AIMonitoringPage() {
     return <ParentAIMonitoring />;
   }
 
-  return <ChildAIMonitoring />;
+  return <DaycareAIMonitoring />;
 }
 

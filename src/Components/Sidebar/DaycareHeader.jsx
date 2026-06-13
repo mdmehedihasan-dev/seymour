@@ -2,7 +2,7 @@ import React from "react";
 import { Search, Bell, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const ChildHeader = () => {
+const DaycareHeader = () => {
   const navigate = useNavigate();
   
   const handleLogout = () => {
@@ -55,5 +55,5 @@ const ChildHeader = () => {
   );
 };
 
-export default ChildHeader;
+export default DaycareHeader;
 

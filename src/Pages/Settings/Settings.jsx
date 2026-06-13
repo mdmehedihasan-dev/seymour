@@ -1,6 +1,6 @@
 import React from 'react';
 import ParentSettings from './ParentSettings';
-import ChildSettings from './ChildSettings';
+import DaycareSettings from './DaycareSettings';
 
 export default function SettingsPage() {
   const role = localStorage.getItem("role") || "terminal";
@@ -9,6 +9,6 @@ export default function SettingsPage() {
     return <ParentSettings />;
   }
 
-  return <ChildSettings />;
+  return <DaycareSettings />;
 }
 
