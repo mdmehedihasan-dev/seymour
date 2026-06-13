@@ -11,6 +11,54 @@ const ParentChildren = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedChild, setSelectedChild] = useState(null);
 
+  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
+  const [newChildFormData, setNewChildFormData] = useState({ name: '', age: '', parent: '' });
+
+  const handleExportCSV = () => {
+    if (!data) return;
+    const headers = ["ID", "Name", "Age", "Parent", "Circles", "Status"];
+    const csvContent = [
+      headers.join(","),
+      ...data.registry.map(c => `"${c.id}","${c.name}","${c.age}","${c.parent}",${c.circles},${c.status}`)
+    ].join("\n");
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "children_registry.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleRegisterChildSubmit = (e) => {
+    e.preventDefault();
+    if (!newChildFormData.name || !newChildFormData.parent) return;
+
+    const initials = newChildFormData.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    const randomId = 'KP-' + Math.floor(1000 + Math.random() * 9000) + '-' + String.fromCharCode(65 + Math.floor(Math.random() * 26));
+
+    const newChild = {
+      id: randomId,
+      initials: initials,
+      name: newChildFormData.name,
+      age: parseInt(newChildFormData.age) || 0,
+      parent: newChildFormData.parent,
+      circles: 1,
+      status: 'Active'
+    };
+
+    setData(prev => ({
+      ...prev,
+      totalEntries: prev.totalEntries + 1,
+      registry: [newChild, ...prev.registry]
+    }));
+    
+    setNewChildFormData({ name: '', age: '', parent: '' });
+    setIsRegisterModalOpen(false);
+  };
+
   const handleViewDetails = (child) => {
     setSelectedChild(child);
     setIsModalOpen(true);
@@ -84,10 +132,10 @@ const ParentChildren = () => {
             </p>
           </div>
           <div className="flex gap-3 mt-8">
-            <button className="bg-[#e8e8e8] hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors">
+            <button onClick={handleExportCSV} disabled={!data} className="bg-[#e8e8e8] hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors disabled:opacity-50">
               EXPORT CSV
             </button>
-            <button className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors">
+            <button onClick={() => setIsRegisterModalOpen(true)} disabled={!data} className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors disabled:opacity-50">
               + REGISTER CHILD
             </button>
           </div>
@@ -334,6 +382,66 @@ const ParentChildren = () => {
                   CLOSE
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+        {/* Register Modal */}
+        {isRegisterModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 animate-in fade-in duration-200">
+            <div className="bg-white w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-200">
+              <div className="bg-black text-white p-4 flex justify-between items-center">
+                <h2 className="text-[11px] font-bold tracking-widest uppercase">Register Child</h2>
+                <button onClick={() => setIsRegisterModalOpen(false)} className="text-gray-400 hover:text-white transition-colors">
+                  <X size={16} />
+                </button>
+              </div>
+              <form onSubmit={handleRegisterChildSubmit}>
+                <div className="p-6 space-y-5">
+                  <div>
+                    <label className="block text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-2">Child's Full Name</label>
+                    <input 
+                      type="text" 
+                      required 
+                      value={newChildFormData.name}
+                      onChange={(e) => setNewChildFormData({...newChildFormData, name: e.target.value})}
+                      className="w-full px-4 py-2.5 bg-[#f8fafc] border-none text-[13px] focus:outline-none focus:ring-1 focus:ring-gray-300 transition-shadow"
+                      placeholder="e.g. Liam Smith"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-2">Age</label>
+                    <input 
+                      type="number" 
+                      required 
+                      min="0"
+                      max="18"
+                      value={newChildFormData.age}
+                      onChange={(e) => setNewChildFormData({...newChildFormData, age: e.target.value})}
+                      className="w-full px-4 py-2.5 bg-[#f8fafc] border-none text-[13px] focus:outline-none focus:ring-1 focus:ring-gray-300 transition-shadow"
+                      placeholder="e.g. 5"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-2">Primary Parent/Guardian Name</label>
+                    <input 
+                      type="text" 
+                      required 
+                      value={newChildFormData.parent}
+                      onChange={(e) => setNewChildFormData({...newChildFormData, parent: e.target.value})}
+                      className="w-full px-4 py-2.5 bg-[#f8fafc] border-none text-[13px] focus:outline-none focus:ring-1 focus:ring-gray-300 transition-shadow"
+                      placeholder="e.g. David Smith"
+                    />
+                  </div>
+                </div>
+                <div className="bg-[#f4f4f4] p-4 flex justify-end gap-3">
+                  <button type="button" onClick={() => setIsRegisterModalOpen(false)} className="bg-gray-200 hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 transition-colors">
+                    CANCEL
+                  </button>
+                  <button type="submit" className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 transition-colors">
+                    REGISTER
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}
