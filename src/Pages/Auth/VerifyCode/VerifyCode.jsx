@@ -49,7 +49,7 @@ const VerifyCode = () => {
             VERIFY ACCESS
           </h2>
           <p className="text-[9px] text-gray-500 tracking-[0.15em] uppercase">
-            Terminal Access System
+            Kidport Admin Wireframe
           </p>
         </div>
 

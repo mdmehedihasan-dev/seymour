@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -51,7 +51,7 @@ const SignIn = () => {
             KIDPORT ADMIN
           </h2>
           <p className="text-[9px] text-gray-500 tracking-[0.15em] uppercase">
-            Terminal Access System
+            Wireframe
           </p>
         </div>
 
@@ -79,9 +79,14 @@ const SignIn = () => {
 
           {/* Password Field */}
           <div className="mb-8">
-            <label className="block text-[10px] font-semibold text-gray-600 tracking-wider uppercase mb-2">
-              Password
-            </label>
+            <div className="flex justify-between items-center mb-2">
+              <label className="block text-[10px] font-semibold text-gray-600 tracking-wider uppercase">
+                Password
+              </label>
+              <Link to="/forgate-password" className="text-[10px] font-bold text-gray-500 hover:text-black transition-colors uppercase tracking-widest">
+                Forgot Password?
+              </Link>
+            </div>
             <input
               type="password"
               required
