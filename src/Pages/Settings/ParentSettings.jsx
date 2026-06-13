@@ -6,18 +6,31 @@ const ParentSettings = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
-  const [activeTab, setActiveTab] = useState('Admin Profile');
+  const [activeTab, setActiveTab] = useState('Parent Profile');
   const [darkMode, setDarkMode] = useState(true);
+  const [autoArchive, setAutoArchive] = useState(false);
 
   // Form State
-  const [adminName, setAdminName] = useState('');
-  const [adminEmail, setAdminEmail] = useState('');
+  const [parentName, setParentName] = useState('');
+  const [parentEmail, setParentEmail] = useState('');
   const [signature, setSignature] = useState('');
+
+  // Security State
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
+
+  // Alerts State
+  const [emailAlerts, setEmailAlerts] = useState(true);
+  const [pushAlerts, setPushAlerts] = useState(true);
+  const [weeklyDigest, setWeeklyDigest] = useState(false);
+  const [alertThreshold, setAlertThreshold] = useState('All Events');
 
   const [isSaving, setIsSaving] = useState(false);
 
   const tabs = [
-    'Admin Profile',
+    'Parent Profile',
     'System Preferences',
     'Security & Access',
     'Global Alerts'
@@ -30,9 +43,9 @@ const ParentSettings = () => {
         await new Promise(resolve => setTimeout(resolve, 1500));
 
         const mockData = {
-          uid: 'KP-992-X-ADMIN',
-          name: 'System Administrator Zero',
-          email: 'admin@kidport.internal',
+          uid: 'KP-992-X-PARENT',
+          name: 'Parent Zero',
+          email: 'parent@kidport.internal',
           signature: '',
           darkMode: true,
           ipAddress: '192.168.1.104',
@@ -40,8 +53,8 @@ const ParentSettings = () => {
         };
 
         setData(mockData);
-        setAdminName(mockData.name);
-        setAdminEmail(mockData.email);
+        setParentName(mockData.name);
+        setParentEmail(mockData.email);
         setSignature(mockData.signature);
         setDarkMode(mockData.darkMode);
 
@@ -112,12 +125,12 @@ const ParentSettings = () => {
           {/* Right Content Area */}
           <div className="flex-1 max-w-3xl">
 
-            {activeTab === 'Admin Profile' && (
+            {activeTab === 'Parent Profile' && (
               <>
-                {/* Admin Profile Section */}
+                {/* Parent Profile Section */}
                 <div className="mb-16 animate-in fade-in duration-300">
                   <div className="flex justify-between items-end border-b border-gray-300 pb-3 mb-8">
-                    <h2 className="text-xl font-bold tracking-tight">Admin Profile Information</h2>
+                    <h2 className="text-xl font-bold tracking-tight">Parent Profile Information</h2>
                     <span className="text-[9px] font-mono text-gray-500 tracking-widest uppercase">
                       UID: {data.uid}
                     </span>
@@ -126,12 +139,12 @@ const ParentSettings = () => {
                   <div className="flex gap-6 mb-8">
                     <div className="flex-1">
                       <label className="block text-[9px] font-bold text-gray-500 tracking-[0.1em] uppercase mb-3">
-                        FULL ADMINISTRATIVE NAME
+                        FULL PARENT NAME
                       </label>
                       <input
                         type="text"
-                        value={adminName}
-                        onChange={(e) => setAdminName(e.target.value)}
+                        value={parentName}
+                        onChange={(e) => setParentName(e.target.value)}
                         className="w-full bg-white p-4 text-[13px] text-black focus:outline-none focus:ring-1 focus:ring-black transition-all shadow-sm border border-transparent focus:border-gray-200"
                       />
                     </div>
@@ -141,8 +154,8 @@ const ParentSettings = () => {
                       </label>
                       <input
                         type="email"
-                        value={adminEmail}
-                        onChange={(e) => setAdminEmail(e.target.value)}
+                        value={parentEmail}
+                        onChange={(e) => setParentEmail(e.target.value)}
                         className="w-full bg-white p-4 text-[13px] text-black focus:outline-none focus:ring-1 focus:ring-black transition-all shadow-sm border border-transparent focus:border-gray-200"
                       />
                     </div>
@@ -192,15 +205,18 @@ const ParentSettings = () => {
                       </button>
                     </div>
 
-                    {/* Auto-Archive Reports Toggle (Disabled) */}
+                    {/* Auto-Archive Reports Toggle */}
                     <div className="flex justify-between items-center pb-8 border-b border-gray-200 mb-6">
-                      <div className="opacity-50">
-                        <h3 className="text-[12px] font-bold text-gray-500 mb-1">Auto-Archive Reports</h3>
-                        <p className="text-[11px] text-gray-400">Automatically move 30-day old reports to deep storage.</p>
+                      <div>
+                        <h3 className="text-[12px] font-bold text-black mb-1">Auto-Archive Reports</h3>
+                        <p className="text-[11px] text-gray-600">Automatically move 30-day old reports to deep storage.</p>
                       </div>
-                      <div className="w-11 h-6 bg-gray-200 relative flex items-center px-1 opacity-50 cursor-not-allowed">
-                        <div className="w-4 h-4 bg-gray-400"></div>
-                      </div>
+                      <button
+                        onClick={() => setAutoArchive(!autoArchive)}
+                        className={`w-11 h-6 relative flex items-center px-1 border transition-colors duration-300 ${autoArchive ? 'bg-black border-black' : 'bg-[#e8e8e8] border-gray-300'}`}
+                      >
+                        <div className={`w-4 h-4 bg-white transition-transform duration-300 shadow-sm ${autoArchive ? 'translate-x-5' : 'translate-x-0'}`}></div>
+                      </button>
                     </div>
 
                     <p className="text-[10px] text-gray-500 italic leading-relaxed">
@@ -233,13 +249,165 @@ const ParentSettings = () => {
               </>
             )}
 
-            {/* Empty State for other tabs */}
-            {activeTab !== 'Admin Profile' && (
-              <div className="flex flex-col items-center justify-center py-24 text-gray-400 animate-in fade-in duration-300">
-                <p className="text-[11px] font-bold tracking-widest uppercase mb-2">RESTRICTED AREA</p>
-                <p className="text-[13px] text-gray-500 text-center max-w-sm">
-                  The {activeTab} panel is currently locked or under development in this phase.
-                </p>
+            {/* Security & Access Section */}
+            {activeTab === 'Security & Access' && (
+              <div className="animate-in fade-in duration-300">
+                <div className="border-b border-gray-300 pb-3 mb-8">
+                  <h2 className="text-xl font-bold tracking-tight">Security & Access Control</h2>
+                </div>
+
+                <div className="bg-[#f4f4f4] p-8 shadow-sm mb-12">
+                  <h3 className="text-[12px] font-bold text-black mb-6 uppercase tracking-wider">Change Password</h3>
+                  <div className="space-y-4 mb-6">
+                    <input
+                      type="password"
+                      placeholder="Current Password"
+                      value={currentPassword}
+                      onChange={(e) => setCurrentPassword(e.target.value)}
+                      className="w-full bg-white p-4 text-[13px] text-black focus:outline-none focus:ring-1 focus:ring-black transition-all border border-transparent focus:border-gray-200"
+                    />
+                    <input
+                      type="password"
+                      placeholder="New Password"
+                      value={newPassword}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      className="w-full bg-white p-4 text-[13px] text-black focus:outline-none focus:ring-1 focus:ring-black transition-all border border-transparent focus:border-gray-200"
+                    />
+                    <input
+                      type="password"
+                      placeholder="Confirm New Password"
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}
+                      className="w-full bg-white p-4 text-[13px] text-black focus:outline-none focus:ring-1 focus:ring-black transition-all border border-transparent focus:border-gray-200"
+                    />
+                  </div>
+                  <button
+                    onClick={handleUpdateProfile}
+                    disabled={isSaving}
+                    className="bg-black hover:bg-gray-800 text-white text-[11px] font-bold px-6 py-3 transition-colors tracking-wide disabled:bg-gray-500 flex items-center justify-center min-w-[140px]"
+                  >
+                    {isSaving ? <Loader2 className="animate-spin" size={16} /> : 'Update Password'}
+                  </button>
+                </div>
+
+                <div className="bg-[#f4f4f4] p-8 shadow-sm mb-12">
+                  <div className="flex justify-between items-center mb-6">
+                    <div>
+                      <h3 className="text-[12px] font-bold text-black mb-1 uppercase tracking-wider">Two-Factor Authentication (2FA)</h3>
+                      <p className="text-[11px] text-gray-600">Require an extra security code when logging in.</p>
+                    </div>
+                    <button
+                      onClick={() => setTwoFactorEnabled(!twoFactorEnabled)}
+                      className={`w-11 h-6 relative flex items-center px-1 border transition-colors duration-300 ${twoFactorEnabled ? 'bg-black border-black' : 'bg-[#e8e8e8] border-gray-300'}`}
+                    >
+                      <div className={`w-4 h-4 bg-white transition-transform duration-300 shadow-sm ${twoFactorEnabled ? 'translate-x-5' : 'translate-x-0'}`}></div>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="bg-[#f4f4f4] p-8 shadow-sm">
+                  <h3 className="text-[12px] font-bold text-black mb-6 uppercase tracking-wider">Active Sessions</h3>
+                  <div className="flex justify-between items-center pb-4 border-b border-gray-200 mb-4">
+                    <div>
+                      <p className="text-[12px] font-bold text-black">Windows PC - Chrome</p>
+                      <p className="text-[10px] text-gray-500">IP: {data.ipAddress} &bull; Current Session</p>
+                    </div>
+                    <span className="text-[9px] font-bold text-green-600 bg-green-100 px-2 py-1 uppercase tracking-widest">Active</span>
+                  </div>
+                  <div className="flex justify-between items-center pb-4 mb-4">
+                    <div>
+                      <p className="text-[12px] font-bold text-gray-600">iPhone 14 - Safari</p>
+                      <p className="text-[10px] text-gray-500">IP: 192.168.1.108 &bull; Last seen 2 hours ago</p>
+                    </div>
+                    <button className="text-[10px] font-bold text-red-500 hover:text-red-700 transition-colors uppercase tracking-widest border-b border-red-500 pb-0.5">Revoke</button>
+                  </div>
+                  <button className="text-[10px] font-bold text-black border-b border-black pb-0.5 hover:text-gray-600 transition-colors tracking-widest uppercase mt-4">
+                    Revoke All Other Sessions
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Global Alerts Section */}
+            {activeTab === 'Global Alerts' && (
+              <div className="animate-in fade-in duration-300">
+                <div className="border-b border-gray-300 pb-3 mb-8">
+                  <h2 className="text-xl font-bold tracking-tight">Global Alerts & Notifications</h2>
+                </div>
+
+                <div className="bg-[#f4f4f4] p-8 shadow-sm mb-12">
+                  <h3 className="text-[12px] font-bold text-black mb-6 uppercase tracking-wider">Notification Channels</h3>
+                  
+                  <div className="flex justify-between items-center pb-6 border-b border-gray-200 mb-6">
+                    <div>
+                      <p className="text-[12px] font-bold text-black mb-1">Email Notifications</p>
+                      <p className="text-[11px] text-gray-600">Receive alerts directly to {parentEmail || data.email}</p>
+                    </div>
+                    <button
+                      onClick={() => setEmailAlerts(!emailAlerts)}
+                      className={`w-11 h-6 relative flex items-center px-1 border transition-colors duration-300 ${emailAlerts ? 'bg-black border-black' : 'bg-[#e8e8e8] border-gray-300'}`}
+                    >
+                      <div className={`w-4 h-4 bg-white transition-transform duration-300 shadow-sm ${emailAlerts ? 'translate-x-5' : 'translate-x-0'}`}></div>
+                    </button>
+                  </div>
+
+                  <div className="flex justify-between items-center pb-6 border-b border-gray-200 mb-6">
+                    <div>
+                      <p className="text-[12px] font-bold text-black mb-1">Push Notifications</p>
+                      <p className="text-[11px] text-gray-600">Receive alerts on your active devices.</p>
+                    </div>
+                    <button
+                      onClick={() => setPushAlerts(!pushAlerts)}
+                      className={`w-11 h-6 relative flex items-center px-1 border transition-colors duration-300 ${pushAlerts ? 'bg-black border-black' : 'bg-[#e8e8e8] border-gray-300'}`}
+                    >
+                      <div className={`w-4 h-4 bg-white transition-transform duration-300 shadow-sm ${pushAlerts ? 'translate-x-5' : 'translate-x-0'}`}></div>
+                    </button>
+                  </div>
+
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-[12px] font-bold text-black mb-1">Weekly Digest</p>
+                      <p className="text-[11px] text-gray-600">Get a weekly summary of all monitoring activity.</p>
+                    </div>
+                    <button
+                      onClick={() => setWeeklyDigest(!weeklyDigest)}
+                      className={`w-11 h-6 relative flex items-center px-1 border transition-colors duration-300 ${weeklyDigest ? 'bg-black border-black' : 'bg-[#e8e8e8] border-gray-300'}`}
+                    >
+                      <div className={`w-4 h-4 bg-white transition-transform duration-300 shadow-sm ${weeklyDigest ? 'translate-x-5' : 'translate-x-0'}`}></div>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="bg-[#f4f4f4] p-8 shadow-sm">
+                  <h3 className="text-[12px] font-bold text-black mb-6 uppercase tracking-wider">Alert Threshold</h3>
+                  <div className="space-y-4">
+                    {['All Events', 'High Severity Only', 'Critical Events Only'].map(threshold => (
+                      <label key={threshold} className="flex items-center gap-3 cursor-pointer">
+                        <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${alertThreshold === threshold ? 'border-black' : 'border-gray-400'}`}>
+                          {alertThreshold === threshold && <div className="w-2 h-2 rounded-full bg-black"></div>}
+                        </div>
+                        <span className="text-[12px] font-medium text-black">{threshold}</span>
+                        <input 
+                          type="radio" 
+                          name="threshold" 
+                          value={threshold} 
+                          checked={alertThreshold === threshold}
+                          onChange={(e) => setAlertThreshold(e.target.value)}
+                          className="hidden"
+                        />
+                      </label>
+                    ))}
+                  </div>
+                  <div className="mt-8 flex justify-end">
+                    <button
+                      onClick={handleUpdateProfile}
+                      disabled={isSaving}
+                      className="bg-black hover:bg-gray-800 text-white text-[11px] font-bold px-6 py-3 transition-colors tracking-wide disabled:bg-gray-500 flex items-center justify-center min-w-[140px]"
+                    >
+                      {isSaving ? <Loader2 className="animate-spin" size={16} /> : 'Save Preferences'}
+                    </button>
+                  </div>
+                </div>
               </div>
             )}
 
