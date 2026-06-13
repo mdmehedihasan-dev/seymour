@@ -29,7 +29,7 @@ const ForgatePassword = () => {
             PASSWORD RECOVERY
           </h2>
           <p className="text-[9px] text-gray-500 tracking-[0.15em] uppercase">
-            Kidport Admin Wireframe
+            Terminal Access System
           </p>
         </div>
 

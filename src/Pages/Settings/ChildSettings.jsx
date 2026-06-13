@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   Globe, Bell, Shield, Sparkles, Database, ChevronDown, Loader2
 } from 'lucide-react';
