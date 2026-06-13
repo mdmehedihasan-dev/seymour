@@ -212,50 +212,72 @@ export default function ParentDashboard() {
             <span className="text-[9px] font-bold text-gray-500 tracking-widest uppercase">LAST 24 HOURS</span>
           </div>
 
-          <div className="min-h-[350px] overflow-x-auto w-full">
-            <table className="w-full text-left border-collapse min-w-[600px]">
-              <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="pb-3 text-[9px] font-bold text-gray-500 tracking-widest uppercase w-[15%]">TIMESTAMP</th>
-                  <th className="pb-3 text-[9px] font-bold text-gray-500 tracking-widest uppercase w-[20%]">USER / ACTOR</th>
-                  <th className="pb-3 text-[9px] font-bold text-gray-500 tracking-widest uppercase w-[45%]">ACTION DETAILS</th>
-                  <th className="pb-3 text-[9px] font-bold text-gray-500 tracking-widest uppercase w-[10%]">RISK LEVEL</th>
-                  <th className="pb-3 text-[9px] font-bold text-gray-500 tracking-widest uppercase text-right w-[10%]">VIEW</th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentActivityList.map((item) => (
-                  <tr key={item.id} className="border-b border-gray-200/60 last:border-0 hover:bg-gray-50 transition-colors">
-                    <td className="py-5 align-top">
+          <div className="min-h-[350px] w-full">
+            {/* Desktop Header */}
+            <div className="hidden lg:grid grid-cols-12 gap-4 border-b border-gray-200 pb-3 text-[9px] font-bold text-gray-500 tracking-widest uppercase">
+              <div className="col-span-2">TIMESTAMP</div>
+              <div className="col-span-3">USER / ACTOR</div>
+              <div className="col-span-4">ACTION DETAILS</div>
+              <div className="col-span-2">RISK LEVEL</div>
+              <div className="col-span-1 text-right pr-2">VIEW</div>
+            </div>
+
+            <div className="divide-y divide-gray-200/60">
+              {currentActivityList.map((item) => (
+                <div key={item.id} className="flex flex-col lg:grid lg:grid-cols-12 gap-4 lg:gap-4 py-4 hover:bg-gray-50 transition-colors border-b border-gray-200/60 last:border-0">
+                  
+                  {/* Timestamp */}
+                  <div className="w-full lg:col-span-2 flex justify-between lg:block">
+                    <span className="lg:hidden text-[9px] font-bold text-gray-500 tracking-widest uppercase">Timestamp</span>
+                    <div className="text-right lg:text-left">
                       <div className="text-[11px] text-gray-500">{item.timestamp[0]}</div>
                       <div className="text-[11px] text-gray-500">{item.timestamp[1]}</div>
-                    </td>
-                    <td className="py-5 align-top font-bold text-[13px] leading-tight">
+                    </div>
+                  </div>
+
+                  {/* User / Actor */}
+                  <div className="w-full lg:col-span-3 flex justify-between lg:block">
+                    <span className="lg:hidden text-[9px] font-bold text-gray-500 tracking-widest uppercase">User / Actor</span>
+                    <div className="text-right lg:text-left font-bold text-[13px] leading-tight">
                       <div>{item.user[0]}</div>
                       <div>{item.user[1]}</div>
-                    </td>
-                    <td className="py-5 align-top text-[13px] text-gray-700 pr-8">
+                    </div>
+                  </div>
+
+                  {/* Action Details */}
+                  <div className="w-full lg:col-span-4">
+                    <span className="lg:hidden text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-1 block">Action Details</span>
+                    <div className="text-[13px] text-gray-700 lg:pr-8">
                       {item.action}
-                    </td>
-                    <td className="py-5 align-top">
+                    </div>
+                  </div>
+
+                  {/* Risk Level */}
+                  <div className="w-full lg:col-span-2 flex justify-between lg:block items-center">
+                    <span className="lg:hidden text-[9px] font-bold text-gray-500 tracking-widest uppercase">Risk Level</span>
+                    <div>
                       {item.risk === 'LOW' ? (
                         <span className="bg-[#e0e0e0] text-black text-[9px] font-bold px-2 py-1 tracking-wider uppercase">LOW</span>
                       ) : (
                         <span className="bg-black text-white text-[9px] font-bold px-2 py-1 tracking-wider uppercase">MEDIUM</span>
                       )}
-                    </td>
-                    <td className="py-5 align-top text-right">
-                      <button 
-                        onClick={() => navigate('/notifications')}
-                        className="text-gray-400 hover:text-black transition-colors inline-block"
-                      >
-                        <ExternalLink size={14} />
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    </div>
+                  </div>
+
+                  {/* View */}
+                  <div className="w-full lg:col-span-1 flex justify-end lg:block items-center pt-2 lg:pt-0 border-t border-gray-200/60 lg:border-0 mt-2 lg:mt-0">
+                    <button 
+                      onClick={() => navigate('/notifications')}
+                      className="text-gray-400 hover:text-black transition-colors inline-flex items-center gap-2 lg:block lg:float-right lg:pr-2"
+                    >
+                      <span className="lg:hidden text-[11px] font-bold text-gray-500 uppercase tracking-widest">View Details</span>
+                      <ExternalLink size={14} />
+                    </button>
+                  </div>
+
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="flex justify-between items-center mt-8">

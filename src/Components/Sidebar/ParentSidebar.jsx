@@ -29,7 +29,7 @@ const ParentSidebar = ({ closeDrawer }) => {
   ];
 
   return (
-    <div className="w-72 bg-[#f4f4f4] h-screen flex flex-col font-sans">
+    <div className="w-64 md:w-72 bg-[#f4f4f4] h-full flex flex-col font-sans shrink-0">
       {/* Sidebar Header */}
       <div className="pt-10 px-8 mb-8">
         <h1 className="text-xl font-bold text-[#111] tracking-tight leading-none mb-1.5">
@@ -41,7 +41,7 @@ const ParentSidebar = ({ closeDrawer }) => {
       </div>
 
       {/* Navigation Items */}
-      <div className="flex-1 flex flex-col px-4 space-y-1">
+      <div className="flex-1 flex flex-col px-4 space-y-1 overflow-y-auto">
         {menuItems.map((item) => {
           const isActive = location.pathname === item.Link ||
             (item.Link !== '/' && location.pathname.startsWith(item.Link));

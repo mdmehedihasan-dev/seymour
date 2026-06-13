@@ -31,7 +31,7 @@ const DaycareSidebar = ({ closeDrawer }) => {
   ];
 
   return (
-    <div className="w-72 bg-white h-screen flex flex-col font-sans border-r border-gray-100">
+    <div className="w-64 md:w-72 bg-white h-full flex flex-col font-sans border-r border-gray-100 shrink-0">
       {/* Sidebar Header */}
       <div className="pt-8 px-6 mb-8 border-b border-gray-100 pb-6">
         <div className="flex items-center gap-2 mb-2">
@@ -49,7 +49,7 @@ const DaycareSidebar = ({ closeDrawer }) => {
       </div>
 
       {/* Navigation Items */}
-      <div className="flex-1 flex flex-col px-4 space-y-2">
+      <div className="flex-1 flex flex-col px-4 space-y-2 overflow-y-auto">
         {dashboardMenuItems.map((item) => {
           const isActive = location.pathname === item.Link ||
             (item.Link !== '/' && location.pathname.startsWith(item.Link));
