@@ -16,7 +16,7 @@ const DaycareChildren = () => {
       setLoading(true);
       try {
         await new Promise((resolve) => setTimeout(resolve, 1500));
-        
+
         setData({
           stats: {
             total: "823",
@@ -25,47 +25,47 @@ const DaycareChildren = () => {
             avgAge: "2.6 yrs"
           },
           children: [
-            { 
-              id: 1, 
-              initials: 'EJ', color: 'bg-[#06b6d4]', 
-              name: 'Emma Johnson', age: '2 years 4 months', 
-              born: 'Dec 15, 2022', 
+            {
+              id: 1,
+              initials: 'EJ', color: 'bg-[#06b6d4]',
+              name: 'Emma Johnson', age: '2 years 4 months',
+              born: 'Dec 15, 2022',
               parents: 'Sarah & Michael Johnson',
               observations: 145, milestones: 32, careCircle: 4,
               lastActivity: '2 hours ago'
             },
-            { 
-              id: 2, 
-              initials: 'LS', color: 'bg-[#f97316]', 
-              name: 'Liam Smith', age: '3 years 2 months', 
-              born: 'Feb 8, 2022', 
+            {
+              id: 2,
+              initials: 'LS', color: 'bg-[#f97316]',
+              name: 'Liam Smith', age: '3 years 2 months',
+              born: 'Feb 8, 2022',
               parents: 'Emily & David Smith',
               observations: 203, milestones: 45, careCircle: 5,
               lastActivity: '1 hour ago'
             },
-            { 
-              id: 3, 
-              initials: 'OM', color: 'bg-[#fca5a5]', 
-              name: 'Olivia Martinez', age: '1 year 8 months', 
-              born: 'Aug 22, 2023', 
+            {
+              id: 3,
+              initials: 'OM', color: 'bg-[#fca5a5]',
+              name: 'Olivia Martinez', age: '1 year 8 months',
+              born: 'Aug 22, 2023',
               parents: 'Carlos & Ana Martinez',
               observations: 98, milestones: 18, careCircle: 3,
               lastActivity: '5 hours ago'
             },
-            { 
-              id: 4, 
-              initials: 'NB', color: 'bg-[#a855f7]', 
-              name: 'Noah Brown', age: '4 years 1 month', 
-              born: 'Mar 10, 2021', 
+            {
+              id: 4,
+              initials: 'NB', color: 'bg-[#a855f7]',
+              name: 'Noah Brown', age: '4 years 1 month',
+              born: 'Mar 10, 2021',
               parents: 'Jennifer & Robert Brown',
               observations: 287, milestones: 58, careCircle: 6,
               lastActivity: '30 min ago'
             },
-            { 
-              id: 5, 
-              initials: 'SD', color: 'bg-[#fbbf24]', 
-              name: 'Sophia Davis', age: '2 years 9 months', 
-              born: 'Jul 5, 2022', 
+            {
+              id: 5,
+              initials: 'SD', color: 'bg-[#fbbf24]',
+              name: 'Sophia Davis', age: '2 years 9 months',
+              born: 'Jul 5, 2022',
               parents: 'Amanda Davis',
               observations: 167, milestones: 38, careCircle: 3,
               lastActivity: '3 days ago'
@@ -86,12 +86,25 @@ const DaycareChildren = () => {
     if (!data) return [];
     return data.children.filter(child => {
       const searchLower = search.toLowerCase();
-      const matchesSearch = 
-        child.name.toLowerCase().includes(searchLower) || 
+      const matchesSearch =
+        child.name.toLowerCase().includes(searchLower) ||
         child.parents.toLowerCase().includes(searchLower);
-      return matchesSearch;
+
+      let matchesAge = true;
+      if (ageFilter !== "All Ages") {
+        const ageYears = parseInt(child.age);
+        if (ageFilter === "0-2") {
+          matchesAge = ageYears <= 2;
+        } else if (ageFilter === "3-4") {
+          matchesAge = ageYears === 3 || ageYears === 4;
+        } else if (ageFilter === "5+") {
+          matchesAge = ageYears >= 5;
+        }
+      }
+
+      return matchesSearch && matchesAge;
     });
-  }, [data, search]);
+  }, [data, search, ageFilter]);
 
   if (loading || !data) {
     return (
@@ -109,14 +122,14 @@ const DaycareChildren = () => {
   const totalPages = Math.ceil(displayTotal / itemsPerPage) || 1;
   const startIndex = (page - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, displayTotal);
-  
+
   // For demonstration, we just show the 5 mocked items if page is 1
   const currentChildren = page === 1 ? filteredChildren : [];
 
   return (
     <div className="min-h-screen bg-[#fdfdfd] p-6 lg:p-10 font-sans text-[#1e293b]">
       <div className="max-w-[1400px] mx-auto animate-in fade-in duration-500">
-        
+
         {/* Header Title */}
         <div className="mb-8">
           <h1 className="text-[26px] font-bold text-[#0f172a] mb-1 leading-tight">Child Profiles</h1>
@@ -160,10 +173,10 @@ const DaycareChildren = () => {
 
         {/* Filter Bar */}
         <div className="bg-white rounded-[14px] border border-gray-100 p-3 mb-8 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] flex items-center justify-between gap-4">
-          
+
           <div className="flex-1 relative pl-2">
             <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[#94a3b8]" size={16} strokeWidth={2.5} />
-            <input 
+            <input
               type="text"
               placeholder="Search by child name, parent name, or ID..."
               value={search}
@@ -177,7 +190,7 @@ const DaycareChildren = () => {
 
           <div className="flex items-center gap-4">
             <div className="relative">
-              <select 
+              <select
                 value={ageFilter}
                 onChange={(e) => {
                   setAgeFilter(e.target.value);
@@ -204,7 +217,7 @@ const DaycareChildren = () => {
           {currentChildren.length > 0 ? (
             currentChildren.map((child) => (
               <div key={child.id} className="bg-white rounded-[16px] border border-gray-100 p-6 shadow-[0_2px_15px_-5px_rgba(0,0,0,0.05)] hover:shadow-[0_8px_25px_-5px_rgba(0,0,0,0.08)] transition-shadow">
-                
+
                 {/* Header */}
                 <div className="flex justify-between items-start mb-6">
                   <div className="flex items-center gap-4">
@@ -227,7 +240,7 @@ const DaycareChildren = () => {
                     <Calendar size={14} className="text-[#94a3b8]" />
                     Born: {child.born}
                   </div>
-                  
+
                   <div>
                     <p className="text-[10px] font-semibold text-[#94a3b8] tracking-wide uppercase mb-1">Parents</p>
                     <p className="text-[13px] font-semibold text-[#1e293b]">{child.parents}</p>
@@ -270,9 +283,9 @@ const DaycareChildren = () => {
               </div>
             ))
           ) : (
-             <div className="col-span-full py-16 text-center text-[14px] font-medium text-[#64748b]">
-               No child profiles found matching your criteria.
-             </div>
+            <div className="col-span-full py-16 text-center text-[14px] font-medium text-[#64748b]">
+              No child profiles found matching your criteria.
+            </div>
           )}
         </div>
 
@@ -282,29 +295,28 @@ const DaycareChildren = () => {
             Showing {currentChildren.length > 0 ? startIndex + 1 : 0} to {endIndex} of {displayTotal} children
           </span>
           <div className="flex items-center gap-2">
-            <button 
+            <button
               onClick={() => setPage(prev => Math.max(prev - 1, 1))}
               disabled={page === 1}
               className="px-4 py-1.5 text-[13px] font-semibold text-[#475569] bg-white border border-transparent rounded-full hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Previous
             </button>
-            
+
             {Array.from({ length: 3 }, (_, i) => i + 1).map((p) => (
               <button
                 key={p}
                 onClick={() => setPage(p)}
-                className={`w-[34px] h-[34px] rounded-full text-[13px] font-bold flex items-center justify-center transition-colors ${
-                  page === p 
-                    ? 'bg-[#06b6d4] text-white shadow-md' 
+                className={`w-[34px] h-[34px] rounded-full text-[13px] font-bold flex items-center justify-center transition-colors ${page === p
+                    ? 'bg-[#06b6d4] text-white shadow-md'
                     : 'bg-white text-[#475569] hover:bg-gray-50'
-                }`}
+                  }`}
               >
                 {p}
               </button>
             ))}
 
-            <button 
+            <button
               onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
               disabled={page === totalPages || totalPages === 0}
               className="px-4 py-1.5 text-[13px] font-semibold text-[#475569] bg-white border border-transparent rounded-full hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
