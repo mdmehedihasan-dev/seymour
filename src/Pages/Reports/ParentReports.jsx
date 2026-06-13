@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Loader2 } from 'lucide-react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Loader2, X, ChevronDown } from 'lucide-react';
 import jsPDF from 'jspdf';
 
 const ParentReports = () => {
@@ -7,6 +7,44 @@ const ParentReports = () => {
   const [data, setData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
+
+  const [filterStatus, setFilterStatus] = useState('All');
+  const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
+  const [newReportData, setNewReportData] = useState({ name: '', domains: 'BEHAVIORAL' });
+
+  const handleFilterToggle = () => {
+    setFilterStatus(prev => {
+      if (prev === 'All') return 'Active';
+      if (prev === 'Active') return 'Inactive';
+      return 'All';
+    });
+    setCurrentPage(1);
+  };
+
+  const handleGenerateReportSubmit = (e) => {
+    e.preventDefault();
+    if (!newReportData.name) return;
+    
+    const newReport = {
+      id: data.reports.length > 0 ? Math.max(...data.reports.map(r => r.id)) + 1 : 1,
+      name: newReportData.name,
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
+      domains: [newReportData.domains],
+      status: 'active'
+    };
+    
+    setData(prev => ({
+      ...prev,
+      stats: {
+        ...prev.stats,
+        totalGenerated: (parseInt(prev.stats.totalGenerated.replace(/,/g, '')) + 1).toLocaleString()
+      },
+      reports: [newReport, ...prev.reports]
+    }));
+    
+    setNewReportData({ name: '', domains: 'BEHAVIORAL' });
+    setIsGenerateModalOpen(false);
+  };
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -44,6 +82,14 @@ const ParentReports = () => {
     fetchReports();
   }, []);
 
+  const filteredReports = useMemo(() => {
+    if (!data) return [];
+    return data.reports.filter(r => {
+      if (filterStatus === 'All') return true;
+      return r.status.toLowerCase() === filterStatus.toLowerCase();
+    });
+  }, [data, filterStatus]);
+
   if (loading || !data) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
@@ -55,9 +101,9 @@ const ParentReports = () => {
     );
   }
 
-  const totalPages = Math.ceil(data.reports.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredReports.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const currentReports = data.reports.slice(startIndex, startIndex + itemsPerPage);
+  const currentReports = filteredReports.slice(startIndex, startIndex + itemsPerPage);
 
   const handleDownload = (report) => {
     const doc = new jsPDF();
@@ -109,10 +155,10 @@ const ParentReports = () => {
             <h1 className="text-6xl font-black tracking-tighter uppercase">Reports</h1>
           </div>
           <div className="flex gap-3 mb-2">
-            <button className="bg-[#e8e8e8] hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors">
-              FILTER VIEW
+            <button onClick={handleFilterToggle} disabled={!data} className="bg-[#e8e8e8] hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors disabled:opacity-50">
+              FILTER VIEW: {filterStatus}
             </button>
-            <button className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors">
+            <button onClick={() => setIsGenerateModalOpen(true)} disabled={!data} className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors disabled:opacity-50">
               GENERATE NEW REPORT
             </button>
           </div>
@@ -185,41 +231,93 @@ const ParentReports = () => {
               </span>
             </div>
             
-            <div className="flex items-center gap-3 text-[10px] font-bold tracking-widest uppercase">
+            <div className="flex gap-1.5">
               <button 
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className="text-gray-400 hover:text-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors mr-2"
+                className="w-8 h-8 flex items-center justify-center bg-white text-gray-500 hover:bg-gray-100 transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e8e8e8]"
               >
-                Previous
+                &lt;
               </button>
               
-              <div className="flex gap-3">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                  <button
-                    key={page}
-                    onClick={() => setCurrentPage(page)}
-                    className={`transition-colors ${
-                      currentPage === page 
-                        ? 'text-black border-b-2 border-black pb-0.5' 
-                        : 'text-gray-400 hover:text-black'
-                    }`}
-                  >
-                    {String(page).padStart(2, '0')}
-                  </button>
-                ))}
-              </div>
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                <button
+                  key={page}
+                  onClick={() => setCurrentPage(page)}
+                  className={`w-8 h-8 flex items-center justify-center transition-colors text-[10px] font-bold border border-[#e8e8e8] ${
+                    currentPage === page 
+                      ? 'bg-black text-white border-black' 
+                      : 'bg-white text-gray-500 hover:bg-gray-100'
+                  }`}
+                >
+                  {page}
+                </button>
+              ))}
 
               <button 
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-                disabled={currentPage === totalPages}
-                className="text-gray-400 hover:text-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors ml-2"
+                disabled={currentPage === totalPages || totalPages === 0}
+                className="w-8 h-8 flex items-center justify-center bg-white text-gray-500 hover:bg-gray-100 transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e8e8e8]"
               >
-                Next
+                &gt;
               </button>
             </div>
           </div>
         </div>
+
+        {/* Generate Report Modal */}
+        {isGenerateModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 animate-in fade-in duration-200">
+            <div className="bg-white w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-200">
+              <div className="bg-black text-white p-4 flex justify-between items-center">
+                <h2 className="text-[11px] font-bold tracking-widest uppercase">Generate Report</h2>
+                <button onClick={() => setIsGenerateModalOpen(false)} className="text-gray-400 hover:text-white transition-colors">
+                  <X size={16} />
+                </button>
+              </div>
+              <form onSubmit={handleGenerateReportSubmit}>
+                <div className="p-6 space-y-5">
+                  <div>
+                    <label className="block text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-2">Subject Name</label>
+                    <input 
+                      type="text" 
+                      required 
+                      value={newReportData.name}
+                      onChange={(e) => setNewReportData({...newReportData, name: e.target.value})}
+                      className="w-full px-4 py-2.5 bg-[#f8fafc] border-none text-[13px] focus:outline-none focus:ring-1 focus:ring-gray-300 transition-shadow"
+                      placeholder="e.g. Liam Smith"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-2">Primary Domain</label>
+                    <div className="relative">
+                      <select 
+                        value={newReportData.domains}
+                        onChange={(e) => setNewReportData({...newReportData, domains: e.target.value})}
+                        className="w-full px-4 py-2.5 bg-[#f8fafc] border-none text-[13px] appearance-none focus:outline-none focus:ring-1 focus:ring-gray-300 transition-shadow cursor-pointer"
+                      >
+                        <option value="BEHAVIORAL">Behavioral</option>
+                        <option value="COGNITIVE">Cognitive</option>
+                        <option value="SOCIAL-EMOTIONAL">Social-Emotional</option>
+                        <option value="LINGUISTIC">Linguistic</option>
+                        <option value="MOTOR SKILLS">Motor Skills</option>
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={14} />
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-[#f4f4f4] p-4 flex justify-end gap-3">
+                  <button type="button" onClick={() => setIsGenerateModalOpen(false)} className="bg-gray-200 hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 transition-colors">
+                    CANCEL
+                  </button>
+                  <button type="submit" className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 transition-colors">
+                    GENERATE
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
 
       </div>
     </div>

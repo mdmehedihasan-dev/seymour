@@ -302,35 +302,35 @@ const ParentAIMonitoring = () => {
           <span className="text-[9px] font-bold text-gray-500 tracking-widest uppercase">
             SHOWING {totalItems > 0 ? startIndex + 1 : 0}-{Math.min(endIndex, totalItems)} OF {totalItems} FLAGS
           </span>
-          <div className="flex items-center gap-4 text-[10px] font-bold">
+          <div className="flex gap-1.5">
             <button 
               onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
-              className="text-gray-500 hover:text-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors tracking-wide"
+              className="w-8 h-8 flex items-center justify-center bg-white text-gray-500 hover:bg-gray-100 transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e8e8e8]"
             >
-              Previous
+              &lt;
             </button>
-            <div className="flex gap-1.5">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
-                <button
-                  key={page}
-                  onClick={() => setCurrentPage(page)}
-                  className={`w-6 h-6 flex items-center justify-center transition-colors ${
-                    currentPage === page 
-                      ? 'bg-black text-white' 
-                      : 'text-gray-600 hover:bg-gray-200'
-                  }`}
-                >
-                  {page}
-                </button>
-              ))}
-            </div>
+            
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`w-8 h-8 flex items-center justify-center transition-colors text-[10px] font-bold border border-[#e8e8e8] ${
+                  currentPage === page 
+                    ? 'bg-black text-white border-black' 
+                    : 'bg-white text-gray-500 hover:bg-gray-100'
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+
             <button 
               onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
               disabled={currentPage === totalPages || totalPages === 0}
-              className="text-black hover:text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors tracking-wide"
+              className="w-8 h-8 flex items-center justify-center bg-white text-gray-500 hover:bg-gray-100 transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e8e8e8]"
             >
-              Next
+              &gt;
             </button>
           </div>
         </div>
