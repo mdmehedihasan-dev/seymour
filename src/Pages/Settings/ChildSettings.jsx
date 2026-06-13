@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { 
-  Globe, Bell, Shield, Sparkles, Database, ChevronDown 
+import {
+  Globe, Bell, Shield, Sparkles, Database, ChevronDown, Loader2
 } from 'lucide-react';
 
 // Reusable Toggle Component
 const Toggle = ({ enabled, setEnabled }) => (
-  <button 
+  <button
     onClick={() => setEnabled(!enabled)}
     className={`w-11 h-6 rounded-full relative transition-colors duration-200 focus:outline-none ${enabled ? 'bg-[#06b6d4]' : 'bg-gray-200'}`}
   >
@@ -14,6 +14,11 @@ const Toggle = ({ enabled, setEnabled }) => (
 );
 
 const ChildSettings = () => {
+  // General State
+  const [platformName, setPlatformName] = useState("Seymour");
+  const [supportEmail, setSupportEmail] = useState("support@seymour.internal");
+  const [timeZone, setTimeZone] = useState("est");
+
   // Notification State
   const [emailNotif, setEmailNotif] = useState(true);
   const [alertFlagged, setAlertFlagged] = useState(true);
@@ -22,16 +27,41 @@ const ChildSettings = () => {
   const [criticalAlerts, setCriticalAlerts] = useState(true);
 
   // Security State
+  const [sessionTimeout, setSessionTimeout] = useState(30);
   const [twoFactor, setTwoFactor] = useState(true);
   const [loginLimit, setLoginLimit] = useState(true);
 
   // AI State
+  const [aiPriority, setAiPriority] = useState("realtime");
+  const [confidenceThreshold, setConfidenceThreshold] = useState(85);
   const [autoFlag, setAutoFlag] = useState(true);
 
+  // Database State
+  const [backupFreq, setBackupFreq] = useState("daily");
+
+  const [isSaving, setIsSaving] = useState(false);
+  const [isBackingUp, setIsBackingUp] = useState(false);
+
+  const handleSave = () => {
+    setIsSaving(true);
+    setTimeout(() => {
+      setIsSaving(false);
+      alert("Settings saved successfully!");
+    }, 1000);
+  };
+
+  const handleBackup = () => {
+    setIsBackingUp(true);
+    setTimeout(() => {
+      setIsBackingUp(false);
+      alert("Manual backup completed!");
+    }, 2000);
+  };
+
   return (
-    <div className="min-h-screen bg-[#fdfdfd] p-6 lg:p-10 font-sans text-[#1e293b] pb-32">
+    <div className="min-h-screen bg-[#fdfdfd] p-6 lg:p-10 font-sans text-[#1e293b]">
       <div className="max-w-[900px] mx-auto animate-in fade-in duration-500">
-        
+
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-[26px] font-bold text-[#0f172a] mb-1 leading-tight">Settings</h1>
@@ -55,24 +85,29 @@ const ChildSettings = () => {
             <div className="space-y-5">
               <div>
                 <label className="block text-[12px] font-semibold text-[#475569] mb-2">Platform Name</label>
-                <input 
-                  type="text" 
-                  defaultValue="KIDport"
+                <input
+                  type="text"
+                  value={platformName}
+                  onChange={(e) => setPlatformName(e.target.value)}
                   className="w-full bg-[#f8fafc] border border-transparent focus:border-gray-200 focus:bg-white rounded-lg px-4 py-2.5 text-[13px] font-medium text-[#1e293b] outline-none transition-all"
                 />
               </div>
               <div>
                 <label className="block text-[12px] font-semibold text-[#475569] mb-2">Support Email</label>
-                <input 
-                  type="email" 
-                  defaultValue="support@kidport.com"
+                <input
+                  type="email"
+                  value={supportEmail}
+                  onChange={(e) => setSupportEmail(e.target.value)}
                   className="w-full bg-[#f8fafc] border border-transparent focus:border-gray-200 focus:bg-white rounded-lg px-4 py-2.5 text-[13px] font-medium text-[#1e293b] outline-none transition-all"
                 />
               </div>
               <div>
                 <label className="block text-[12px] font-semibold text-[#475569] mb-2">Time Zone</label>
                 <div className="relative">
-                  <select className="w-full bg-[#f8fafc] border border-transparent focus:border-gray-200 focus:bg-white rounded-lg px-4 py-2.5 text-[13px] font-medium text-[#1e293b] outline-none appearance-none cursor-pointer transition-all">
+                  <select
+                    value={timeZone}
+                    onChange={(e) => setTimeZone(e.target.value)}
+                    className="w-full bg-[#f8fafc] border border-transparent focus:border-gray-200 focus:bg-white rounded-lg px-4 py-2.5 text-[13px] font-medium text-[#1e293b] outline-none appearance-none cursor-pointer transition-all">
                     <option value="est">Eastern Standard Time (EST)</option>
                     <option value="cst">Central Standard Time (CST)</option>
                     <option value="pst">Pacific Standard Time (PST)</option>
@@ -135,9 +170,10 @@ const ChildSettings = () => {
             <div className="space-y-6">
               <div>
                 <label className="block text-[12px] font-semibold text-[#475569] mb-2">Session Timeout (minutes)</label>
-                <input 
-                  type="number" 
-                  defaultValue="30"
+                <input
+                  type="number"
+                  value={sessionTimeout}
+                  onChange={(e) => setSessionTimeout(Number(e.target.value))}
                   className="w-full bg-[#f8fafc] border border-transparent focus:border-gray-200 focus:bg-white rounded-lg px-4 py-2.5 text-[13px] font-medium text-[#1e293b] outline-none transition-all"
                 />
               </div>
@@ -176,7 +212,10 @@ const ChildSettings = () => {
               <div>
                 <label className="block text-[12px] font-semibold text-[#475569] mb-2">AI Processing Priority</label>
                 <div className="relative">
-                  <select className="w-full bg-[#f8fafc] border border-transparent focus:border-gray-200 focus:bg-white rounded-lg px-4 py-2.5 text-[13px] font-medium text-[#1e293b] outline-none appearance-none cursor-pointer transition-all">
+                  <select
+                    value={aiPriority}
+                    onChange={(e) => setAiPriority(e.target.value)}
+                    className="w-full bg-[#f8fafc] border border-transparent focus:border-gray-200 focus:bg-white rounded-lg px-4 py-2.5 text-[13px] font-medium text-[#1e293b] outline-none appearance-none cursor-pointer transition-all">
                     <option value="realtime">Real-time Processing</option>
                     <option value="batch">Batch Processing (Nightly)</option>
                     <option value="hybrid">Hybrid (Priority first)</option>
@@ -187,9 +226,10 @@ const ChildSettings = () => {
 
               <div>
                 <label className="block text-[12px] font-semibold text-[#475569] mb-2">Confidence Threshold (%)</label>
-                <input 
-                  type="number" 
-                  defaultValue="85"
+                <input
+                  type="number"
+                  value={confidenceThreshold}
+                  onChange={(e) => setConfidenceThreshold(Number(e.target.value))}
                   className="w-full bg-[#f8fafc] border border-transparent focus:border-gray-200 focus:bg-white rounded-lg px-4 py-2.5 text-[13px] font-medium text-[#1e293b] outline-none transition-all mb-1"
                 />
                 <p className="text-[11px] text-[#94a3b8]">Minimum confidence level for AI Insights</p>
@@ -235,7 +275,10 @@ const ChildSettings = () => {
             <div className="mb-6">
               <label className="block text-[12px] font-semibold text-[#475569] mb-2">Backup Frequency</label>
               <div className="relative">
-                <select className="w-full bg-[#f8fafc] border border-transparent focus:border-gray-200 focus:bg-white rounded-lg px-4 py-2.5 text-[13px] font-medium text-[#1e293b] outline-none appearance-none cursor-pointer transition-all">
+                <select
+                  value={backupFreq}
+                  onChange={(e) => setBackupFreq(e.target.value)}
+                  className="w-full bg-[#f8fafc] border border-transparent focus:border-gray-200 focus:bg-white rounded-lg px-4 py-2.5 text-[13px] font-medium text-[#1e293b] outline-none appearance-none cursor-pointer transition-all">
                   <option value="daily">Daily</option>
                   <option value="weekly">Weekly</option>
                   <option value="monthly">Monthly</option>
@@ -244,26 +287,31 @@ const ChildSettings = () => {
               </div>
             </div>
 
-            <button className="w-full border-2 border-[#06b6d4] text-[#06b6d4] hover:bg-[#ecfeff] font-semibold rounded-lg px-4 py-2.5 text-[13px] transition-colors">
-              Run Manual Backup Now
+            <button
+              onClick={handleBackup}
+              disabled={isBackingUp}
+              className="w-full border-2 border-[#06b6d4] text-[#06b6d4] hover:bg-[#ecfeff] disabled:bg-gray-100 disabled:border-gray-300 disabled:text-gray-500 font-semibold rounded-lg px-4 py-2.5 text-[13px] transition-colors flex justify-center items-center gap-2">
+              {isBackingUp ? <Loader2 className="animate-spin" size={16} /> : null}
+              {isBackingUp ? "Backing up..." : "Run Manual Backup Now"}
             </button>
 
           </div>
 
+          {/* Action Bar */}
+          <div className="bg-white rounded-[14px] border border-gray-100 p-6 lg:p-8 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] flex justify-end gap-3">
+            <button className="px-5 py-2.5 text-[13px] font-semibold text-[#64748b] hover:text-[#1e293b] hover:bg-gray-50 rounded-full transition-colors border border-gray-200">
+              Cancel
+            </button>
+            <button
+              onClick={handleSave}
+              disabled={isSaving}
+              className="px-5 py-2.5 text-[13px] font-semibold text-white bg-[#06b6d4] hover:bg-[#0891b2] disabled:bg-gray-400 rounded-full transition-colors flex items-center justify-center gap-2 min-w-[120px]">
+              {isSaving ? <Loader2 className="animate-spin" size={16} /> : "Save Changes"}
+            </button>
+          </div>
+
         </div>
 
-      </div>
-
-      {/* Floating Action Bar */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 py-4 px-6 md:pl-64 z-20 shadow-[0_-4px_10px_rgba(0,0,0,0.02)]">
-        <div className="max-w-[900px] mx-auto flex justify-end gap-3">
-          <button className="px-5 py-2.5 text-[13px] font-semibold text-[#64748b] hover:text-[#1e293b] hover:bg-gray-50 rounded-full transition-colors border border-gray-200">
-            Cancel
-          </button>
-          <button className="px-5 py-2.5 text-[13px] font-semibold text-white bg-[#06b6d4] hover:bg-[#0891b2] rounded-full transition-colors">
-            Save Changes
-          </button>
-        </div>
       </div>
 
     </div>
@@ -271,4 +319,3 @@ const ChildSettings = () => {
 };
 
 export default ChildSettings;
-
