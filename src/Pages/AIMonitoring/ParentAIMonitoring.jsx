@@ -27,6 +27,24 @@ const ParentAIMonitoring = () => {
     setIsArchiveModalOpen(true);
   };
 
+  const handleExportLog = () => {
+    if (!data) return;
+    const headers = ["ID", "Child Name", "Domain", "Severity", "Status", "Description"];
+    const csvContent = [
+      headers.join(","),
+      ...data.flags.map(f => `"${f.id}","${f.childName}","${f.domain}","${f.severity}","${f.status}","${f.description.replace(/"/g, '""')}"`)
+    ].join("\n");
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "ai_monitoring_log.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -203,7 +221,7 @@ const ParentAIMonitoring = () => {
             </div>
           </div>
 
-          <button className="bg-[#e8e8e8] hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors h-[40px] flex items-center justify-center">
+          <button onClick={handleExportLog} disabled={!data} className="bg-[#e8e8e8] hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors h-[40px] flex items-center justify-center disabled:opacity-50">
             EXPORT LOG
           </button>
         </div>
