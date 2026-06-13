@@ -21,6 +21,7 @@ import ChildrenPage from "../Pages/Children/Children";
 import AIMonitoringPage from "../Pages/AIMonitoring/AIMonitoring";
 import ReportsPage from "../Pages/Reports/Reports";
 import ObservationsPage from "../Pages/Observations/Observations";
+import ParentNotifications from "../Pages/Notifications/ParentNotifications";
 
 export const router = createBrowserRouter([
   {
@@ -63,6 +64,7 @@ export const router = createBrowserRouter([
           { path: "/upload-video", element: <UploadVideo /> },
           { path: "/subscription", element: <SubscriptionManagement /> },
           { path: "/settings", element: <Settings /> },
+          { path: "/notifications", element: <ParentNotifications /> },
         ],
       },
     ],

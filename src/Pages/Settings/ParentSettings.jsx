@@ -31,7 +31,6 @@ const ParentSettings = () => {
 
   const tabs = [
     'Parent Profile',
-    'System Preferences',
     'Security & Access',
     'Global Alerts'
   ];
@@ -108,8 +107,8 @@ const ParentSettings = () => {
                   key={tab}
                   onClick={() => setActiveTab(tab)}
                   className={`text-left py-3 text-[13px] transition-all relative ${activeTab === tab
-                      ? 'font-bold text-black'
-                      : 'font-medium text-gray-500 hover:text-black'
+                    ? 'font-bold text-black'
+                    : 'font-medium text-gray-500 hover:text-black'
                     }`}
                 >
                   {/* Active Indicator Line */}
@@ -234,7 +233,7 @@ const ParentSettings = () => {
                       <h3 className="text-[10px] font-bold tracking-[0.1em] uppercase text-black mb-1.5">SESSION MANAGEMENT</h3>
                       <p className="text-[11px] text-gray-600">End your current administrative session and lock the terminal.</p>
                     </div>
-                    <button 
+                    <button
                       onClick={() => {
                         localStorage.removeItem('user');
                         navigate('/sign-in');
@@ -337,7 +336,7 @@ const ParentSettings = () => {
 
                 <div className="bg-[#f4f4f4] p-8 shadow-sm mb-12">
                   <h3 className="text-[12px] font-bold text-black mb-6 uppercase tracking-wider">Notification Channels</h3>
-                  
+
                   <div className="flex justify-between items-center pb-6 border-b border-gray-200 mb-6">
                     <div>
                       <p className="text-[12px] font-bold text-black mb-1">Email Notifications</p>
@@ -387,10 +386,10 @@ const ParentSettings = () => {
                           {alertThreshold === threshold && <div className="w-2 h-2 rounded-full bg-black"></div>}
                         </div>
                         <span className="text-[12px] font-medium text-black">{threshold}</span>
-                        <input 
-                          type="radio" 
-                          name="threshold" 
-                          value={threshold} 
+                        <input
+                          type="radio"
+                          name="threshold"
+                          value={threshold}
                           checked={alertThreshold === threshold}
                           onChange={(e) => setAlertThreshold(e.target.value)}
                           className="hidden"
