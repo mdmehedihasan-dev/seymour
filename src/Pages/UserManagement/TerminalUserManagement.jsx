@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { ChevronDown, Loader2 } from 'lucide-react';
+import { ChevronDown, Loader2, X } from 'lucide-react';
 
 const TerminalUserManagement = () => {
   const [loading, setLoading] = useState(true);
@@ -10,6 +10,26 @@ const TerminalUserManagement = () => {
   const [selectedRole, setSelectedRole] = useState('All Roles');
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
+
+  // View Modal State
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [viewingUser, setViewingUser] = useState(null);
+
+  const handleViewClick = (user) => {
+    setViewingUser(user);
+    setIsViewModalOpen(true);
+  };
+
+  const handleToggleStatus = (userId) => {
+    setData(prevData => ({
+      ...prevData,
+      users: prevData.users.map(user => 
+        user.id === userId 
+          ? { ...user, status: user.status === 'ACTIVE' ? 'SUSPENDED' : 'ACTIVE' }
+          : user
+      )
+    }));
+  };
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -184,8 +204,13 @@ const TerminalUserManagement = () => {
                     )}
                   </div>
                   <div className="w-[10%] flex justify-end gap-3 text-[9px] font-bold tracking-widest uppercase">
-                    <button className="text-gray-400 hover:text-black hover:underline transition-all">VIEW</button>
-                    <button className="text-red-400 hover:text-red-600 transition-colors">DISABLE</button>
+                    <button onClick={() => handleViewClick(user)} className="text-gray-400 hover:text-black hover:underline transition-all">VIEW</button>
+                    <button 
+                      onClick={() => handleToggleStatus(user.id)}
+                      className={`${user.status === 'ACTIVE' ? 'text-red-400 hover:text-red-600' : 'text-green-500 hover:text-green-700'} transition-colors`}
+                    >
+                      {user.status === 'ACTIVE' ? 'DISABLE' : 'ENABLE'}
+                    </button>
                   </div>
                 </div>
               ))
@@ -233,6 +258,69 @@ const TerminalUserManagement = () => {
             </div>
           </div>
         </div>
+
+        {/* View Modal */}
+        {isViewModalOpen && viewingUser && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 animate-in fade-in duration-200">
+            <div className="bg-white w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-200">
+              <div className="bg-black text-white p-4 flex justify-between items-center">
+                <h2 className="text-[11px] font-bold tracking-widest uppercase">User Details</h2>
+                <button onClick={() => setIsViewModalOpen(false)} className="text-gray-400 hover:text-white transition-colors">
+                  <X size={16} />
+                </button>
+              </div>
+              <div className="p-6 space-y-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-12 h-12 bg-[#e8e8e8] flex items-center justify-center text-[14px] font-bold tracking-wider">
+                    {viewingUser.initials}
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold">{viewingUser.name}</h3>
+                    <p className="text-[12px] text-gray-500">{viewingUser.email}</p>
+                  </div>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-1">Unique ID</label>
+                    <p className="text-[13px] font-medium">#{viewingUser.id}</p>
+                  </div>
+                  <div>
+                    <label className="block text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-1">Role</label>
+                    <span className="bg-[#e8e8e8] text-black text-[9px] font-bold px-2 py-1 tracking-widest uppercase inline-block mt-1">
+                      {viewingUser.role}
+                    </span>
+                  </div>
+                  <div>
+                    <label className="block text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-1">Status</label>
+                    <div className="flex items-center gap-2 mt-1">
+                      {viewingUser.status === 'ACTIVE' ? (
+                        <>
+                          <div className="w-1.5 h-1.5 bg-black"></div>
+                          <span className="text-[10px] font-bold tracking-widest uppercase">ACTIVE</span>
+                        </>
+                      ) : (
+                        <>
+                          <div className="w-1.5 h-1.5 border border-gray-400"></div>
+                          <span className="text-[10px] font-bold text-gray-400 tracking-widest uppercase">SUSPENDED</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-1">Last Login</label>
+                    <p className="text-[13px] font-medium">Today, 09:41 AM</p>
+                  </div>
+                </div>
+              </div>
+              <div className="bg-[#f4f4f4] p-4 flex justify-end">
+                <button onClick={() => setIsViewModalOpen(false)} className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 transition-colors">
+                  CLOSE
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

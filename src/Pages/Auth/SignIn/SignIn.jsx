@@ -12,27 +12,27 @@ const SignIn = () => {
     e.preventDefault();
     setError("");
     setLoading(true);
-    
+
     // Simulating login without actual API call
     setTimeout(() => {
       setLoading(false);
-      
+
       // ==========================================
       // TERMINAL DASHBOARD
       // ==========================================
-      if (email === "adminterminal@gmail.com" && password === "123456") {
+      if (email === "adminparent@gmail.com" && password === "123456") {
         localStorage.setItem("user", "authenticated");
         localStorage.setItem("role", "terminal");
         navigate("/");
-        
-      // ==========================================
-      // ADMIN DASHBOARD
-      // ==========================================
-      } else if (email === "admindashboard@gmail.com" && password === "123456") {
+
+        // ==========================================
+        // ADMIN DASHBOARD
+        // ==========================================
+      } else if (email === "adminchild@gmail.com" && password === "123456") {
         localStorage.setItem("user", "authenticated");
         localStorage.setItem("role", "dashboard");
         navigate("/");
-        
+
       } else {
         setError("Invalid email or password");
       }
