@@ -146,7 +146,7 @@ const DaycareChildren = () => {
   const currentChildren = page === 1 ? filteredChildren : [];
 
   return (
-    <div className="min-h-screen bg-[#fdfdfd] p-6 lg:p-10 font-sans text-[#1e293b]">
+    <div className="min-h-screen bg-[#fdfdfd] p-4 md:p-6 lg:p-10 font-sans text-[#1e293b]">
       <div className="max-w-[1400px] mx-auto animate-in fade-in duration-500">
 
         {/* Header Title */}
@@ -191,10 +191,10 @@ const DaycareChildren = () => {
         </div>
 
         {/* Filter Bar */}
-        <div className="bg-white rounded-[14px] border border-gray-100 p-3 mb-8 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] flex items-center justify-between gap-4">
+        <div className="bg-white rounded-[14px] border border-gray-100 p-3 mb-8 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
 
-          <div className="flex-1 relative pl-2">
-            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-[#94a3b8]" size={16} strokeWidth={2.5} />
+          <div className="w-full md:w-auto flex-1 relative pl-0 md:pl-2">
+            <Search className="absolute left-3 md:left-5 top-1/2 -translate-y-1/2 text-[#94a3b8]" size={16} strokeWidth={2.5} />
             <input
               type="text"
               placeholder="Search by child name, parent name, or ID..."
@@ -203,29 +203,29 @@ const DaycareChildren = () => {
                 setSearch(e.target.value);
                 setPage(1);
               }}
-              className="w-full pl-10 pr-4 py-2 bg-[#f8fafc] border border-transparent rounded-lg text-[13px] font-medium focus:outline-none focus:ring-2 focus:ring-gray-100 focus:bg-white transition-all placeholder:text-[#94a3b8]"
+              className="w-full pl-9 md:pl-10 pr-4 py-2 bg-[#f8fafc] border border-transparent rounded-lg text-[13px] font-medium focus:outline-none focus:ring-2 focus:ring-gray-100 focus:bg-white transition-all placeholder:text-[#94a3b8]"
             />
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="relative">
+          <div className="w-full md:w-auto flex flex-wrap md:flex-nowrap items-center gap-3 md:gap-4">
+            <div className="relative flex-1 md:flex-none">
               <select
                 value={ageFilter}
                 onChange={(e) => {
                   setAgeFilter(e.target.value);
                   setPage(1);
                 }}
-                className="pl-4 pr-10 py-2.5 bg-white text-[13px] font-semibold text-[#475569] appearance-none focus:outline-none cursor-pointer min-w-[120px]"
+                className="w-full md:w-auto pl-4 pr-10 py-2.5 bg-[#f8fafc] md:bg-white rounded-lg md:rounded-none text-[13px] font-semibold text-[#475569] appearance-none focus:outline-none cursor-pointer min-w-[120px]"
               >
                 <option value="All Ages">All Ages</option>
                 <option value="0-2">0 - 2 years</option>
                 <option value="3-4">3 - 4 years</option>
                 <option value="5+">5+ years</option>
               </select>
-              <ChevronDown size={14} strokeWidth={3} className="absolute right-2 top-1/2 -translate-y-1/2 text-[#94a3b8] pointer-events-none" />
+              <ChevronDown size={14} strokeWidth={3} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#94a3b8] pointer-events-none" />
             </div>
 
-            <button className="bg-[#06b6d4] hover:bg-[#0891b2] text-white px-7 py-2.5 rounded-full text-[13px] font-semibold transition-colors">
+            <button className="flex-1 md:flex-none bg-[#06b6d4] hover:bg-[#0891b2] text-white px-7 py-2.5 rounded-full text-[13px] font-semibold transition-colors whitespace-nowrap">
               Apply Filters
             </button>
           </div>

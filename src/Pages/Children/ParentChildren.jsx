@@ -119,30 +119,30 @@ const ParentChildren = () => {
   const currentEntries = filteredRegistry.slice(startIndex, startIndex + itemsPerPage);
 
   return (
-    <div className="min-h-screen p-8 bg-[#fdfdfd] font-sans text-[#111]">
+    <div className="min-h-screen p-4 md:p-8 bg-[#fdfdfd] font-sans text-[#111]">
       <div className="mx-auto max-w-7xl animate-in fade-in zoom-in duration-500">
         
         {/* Header */}
-        <div className="flex justify-between items-start mb-10">
-          <div className="w-1/2">
+        <div className="flex flex-col md:flex-row justify-between items-start mb-8 md:mb-10 gap-6">
+          <div className="w-full md:w-1/2">
             <p className="text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-2">MANAGEMENT TERMINAL</p>
-            <h1 className="text-5xl font-black tracking-tighter mb-4 uppercase">Children</h1>
-            <p className="text-sm text-gray-600 leading-relaxed pr-8">
+            <h1 className="text-4xl md:text-5xl font-black tracking-tighter mb-4 uppercase">Children</h1>
+            <p className="text-sm text-gray-600 leading-relaxed md:pr-8">
               Comprehensive database of all registered minors. Manage care circles, monitor AI safety scores, and review parental permissions.
             </p>
           </div>
-          <div className="flex gap-3 mt-8">
-            <button onClick={handleExportCSV} disabled={!data} className="bg-[#e8e8e8] hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors disabled:opacity-50">
+          <div className="flex flex-wrap gap-3 mt-0 md:mt-8 w-full md:w-auto">
+            <button onClick={handleExportCSV} disabled={!data} className="flex-1 md:flex-none bg-[#e8e8e8] hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors disabled:opacity-50 whitespace-nowrap">
               EXPORT CSV
             </button>
-            <button onClick={() => setIsRegisterModalOpen(true)} disabled={!data} className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors disabled:opacity-50">
+            <button onClick={() => setIsRegisterModalOpen(true)} disabled={!data} className="flex-1 md:flex-none bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors disabled:opacity-50 whitespace-nowrap">
               + REGISTER CHILD
             </button>
           </div>
         </div>
 
         {/* Top Stats */}
-        <div className="grid grid-cols-3 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-8">
           <div className="bg-[#f4f4f4] p-8 flex flex-col justify-between h-40 border-l-4 border-black">
             <h3 className="text-[9px] font-bold text-gray-500 tracking-widest uppercase">TOTAL MANAGED</h3>
             <div className="text-5xl font-light tracking-tight">{data.stats.managed.value}</div>
@@ -174,11 +174,11 @@ const ParentChildren = () => {
         {/* Registry Records Block */}
         <div className="bg-white mb-8 border border-[#e8e8e8] shadow-sm">
           {/* Registry Header */}
-          <div className="bg-[#f4f4f4] px-8 py-5 flex justify-between items-center border-b border-[#e8e8e8]">
-            <div className="flex items-center gap-8">
-              <h2 className="text-[11px] font-bold tracking-widest uppercase">REGISTRY RECORDS</h2>
-              <div className="h-4 w-px bg-gray-300"></div>
-              <div className="flex gap-6 text-[10px] font-semibold">
+          <div className="bg-[#f4f4f4] px-4 md:px-8 py-4 md:py-5 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 md:gap-0 border-b border-[#e8e8e8]">
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8 w-full md:w-auto">
+              <h2 className="text-[11px] font-bold tracking-widest uppercase shrink-0">REGISTRY RECORDS</h2>
+              <div className="hidden md:block h-4 w-px bg-gray-300"></div>
+              <div className="flex flex-wrap gap-4 md:gap-6 text-[10px] font-semibold w-full md:w-auto">
                 <button 
                   onClick={() => { setFilterTab('All Entries'); setCurrentPage(1); }}
                   className={`${filterTab === 'All Entries' ? 'text-black border-b border-black pb-0.5' : 'text-gray-500 hover:text-black transition-colors'}`}
@@ -193,52 +193,57 @@ const ParentChildren = () => {
                 >Pending Review</button>
               </div>
             </div>
-            <div className="flex gap-4 text-gray-500">
+            <div className="flex gap-4 text-gray-500 ml-auto md:ml-0">
               <Filter size={16} className="cursor-pointer hover:text-black" />
               <ListFilter size={16} className="cursor-pointer hover:text-black" />
             </div>
           </div>
 
-          {/* Table Headers */}
-          <div className="px-8 py-4 flex items-center border-b border-[#e8e8e8] bg-[#fbfbfb]">
-            <div className="w-[30%] text-[9px] font-bold text-gray-500 tracking-widest uppercase">CHILD NAME</div>
-            <div className="w-[15%] text-[9px] font-bold text-gray-500 tracking-widest uppercase">AGE</div>
-            <div className="w-[25%] text-[9px] font-bold text-gray-500 tracking-widest uppercase">PARENT NAME</div>
-            <div className="w-[15%] text-[9px] font-bold text-gray-500 tracking-widest uppercase">CARE CIRCLES</div>
-            <div className="w-[15%] text-right text-[9px] font-bold text-gray-500 tracking-widest uppercase">ACTIONS</div>
-          </div>
-
-          {/* Table Rows */}
-          <div className="flex flex-col min-h-[300px]">
-            {currentEntries.map((child, i) => (
-              <div key={i} className="px-8 py-5 flex items-center border-b border-[#e8e8e8] last:border-0 hover:bg-[#fafafa] transition-colors">
-                <div className="w-[30%] flex items-center gap-4">
-                  <div className="w-9 h-9 bg-[#e8e8e8] flex items-center justify-center text-[11px] font-bold tracking-wider">
-                    {child.initials}
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-[13px] font-bold">{child.name}</span>
-                    <span className="text-[9px] text-gray-500 mt-0.5 tracking-wider">ID: {child.id}</span>
-                  </div>
-                </div>
-                <div className="w-[15%] text-[13px] text-gray-600 font-medium">
-                  {child.age}
-                </div>
-                <div className="w-[25%] text-[13px] text-gray-600">
-                  {child.parent}
-                </div>
-                <div className="w-[15%]">
-                  <span className="bg-[#f4f4f4] text-black text-[9px] font-bold px-2 py-1 tracking-widest uppercase border border-gray-200">
-                    {child.circles} Circles
-                  </span>
-                </div>
-                <div className="w-[15%] flex justify-end">
-                  <button onClick={() => handleViewDetails(child)} className="text-[9px] font-bold tracking-widest uppercase border border-gray-300 px-3 py-1.5 hover:bg-black hover:text-white hover:border-black transition-all">
-                    VIEW DETAILS
-                  </button>
-                </div>
+          {/* Responsive Table Wrapper */}
+          <div className="overflow-x-auto">
+            <div className="min-w-[800px]">
+              {/* Table Headers */}
+              <div className="px-8 py-4 flex items-center border-b border-[#e8e8e8] bg-[#fbfbfb]">
+                <div className="w-[30%] text-[9px] font-bold text-gray-500 tracking-widest uppercase">CHILD NAME</div>
+                <div className="w-[15%] text-[9px] font-bold text-gray-500 tracking-widest uppercase">AGE</div>
+                <div className="w-[25%] text-[9px] font-bold text-gray-500 tracking-widest uppercase">PARENT NAME</div>
+                <div className="w-[15%] text-[9px] font-bold text-gray-500 tracking-widest uppercase">CARE CIRCLES</div>
+                <div className="w-[15%] text-right text-[9px] font-bold text-gray-500 tracking-widest uppercase">ACTIONS</div>
               </div>
-            ))}
+
+              {/* Table Rows */}
+              <div className="flex flex-col min-h-[300px]">
+                {currentEntries.map((child, i) => (
+                  <div key={i} className="px-8 py-5 flex items-center border-b border-[#e8e8e8] last:border-0 hover:bg-[#fafafa] transition-colors">
+                    <div className="w-[30%] flex items-center gap-4">
+                      <div className="w-9 h-9 bg-[#e8e8e8] flex items-center justify-center text-[11px] font-bold tracking-wider shrink-0">
+                        {child.initials}
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-[13px] font-bold">{child.name}</span>
+                        <span className="text-[9px] text-gray-500 mt-0.5 tracking-wider">ID: {child.id}</span>
+                      </div>
+                    </div>
+                    <div className="w-[15%] text-[13px] text-gray-600 font-medium">
+                      {child.age}
+                    </div>
+                    <div className="w-[25%] text-[13px] text-gray-600">
+                      {child.parent}
+                    </div>
+                    <div className="w-[15%]">
+                      <span className="bg-[#f4f4f4] text-black text-[9px] font-bold px-2 py-1 tracking-widest uppercase border border-gray-200 whitespace-nowrap">
+                        {child.circles} Circles
+                      </span>
+                    </div>
+                    <div className="w-[15%] flex justify-end">
+                      <button onClick={() => handleViewDetails(child)} className="text-[9px] font-bold tracking-widest uppercase border border-gray-300 px-3 py-1.5 hover:bg-black hover:text-white hover:border-black transition-all whitespace-nowrap">
+                        VIEW DETAILS
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Pagination */}

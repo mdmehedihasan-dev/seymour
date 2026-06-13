@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { ExternalLink, TrendingUp, TrendingDown, Loader2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export default function ParentDashboard() {
+  const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
 
@@ -51,7 +53,7 @@ export default function ParentDashboard() {
       setLoading(true);
       try {
         await new Promise((resolve) => setTimeout(resolve, 1500));
-        
+
         setData({
           stats: [
             { title: 'TOTAL USERS', value: '1,284', trend: '+12%', trendLabel: 'FROM LAST MONTH', isPositive: true },
@@ -111,7 +113,7 @@ export default function ParentDashboard() {
   return (
     <div className="min-h-screen p-8 bg-white font-sans text-[#111]">
       <div className="mx-auto max-w-7xl animate-in fade-in zoom-in duration-500">
-        
+
         <div className="flex justify-between items-end mb-10">
           <div>
             <p className="text-[9px] font-bold text-gray-500 tracking-[0.2em] uppercase mb-1.5">
@@ -120,7 +122,7 @@ export default function ParentDashboard() {
             <h1 className="text-3xl font-bold tracking-tight">Dashboard Overview</h1>
           </div>
           <div className="flex gap-3">
-            <button 
+            <button
               onClick={handleGenerateReport}
               disabled={isGenerating || !data}
               className="bg-gray-200 hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 transition-colors flex items-center gap-2 disabled:opacity-50"
@@ -128,7 +130,7 @@ export default function ParentDashboard() {
               {isGenerating ? <Loader2 size={14} className="animate-spin" /> : null}
               {isGenerating ? "GENERATING..." : "GENERATE REPORT"}
             </button>
-            <button 
+            <button
               onClick={handleSystemScan}
               disabled={isScanning || !data}
               className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 transition-colors flex items-center gap-2 disabled:opacity-50"
@@ -139,7 +141,7 @@ export default function ParentDashboard() {
           </div>
         </div>
 
-        <div className="grid grid-cols-4 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6 mb-8">
           {data.stats.map((stat, i) => (
             <div key={i} className="bg-[#f4f4f4] p-6 flex flex-col justify-between h-32 hover:shadow-sm transition-all duration-300">
               <h3 className="text-[9px] font-bold text-gray-500 tracking-widest uppercase">{stat.title}</h3>
@@ -158,7 +160,7 @@ export default function ParentDashboard() {
           ))}
         </div>
 
-        <div className="flex gap-6 mb-8 h-[360px]">
+        <div className="flex flex-col xl:flex-row gap-6 mb-8 h-auto xl:h-[360px]">
           <div className="flex-1 bg-[#f4f4f4] p-8 flex flex-col group">
             <div className="flex justify-between items-start mb-8">
               <div>
@@ -172,8 +174,8 @@ export default function ParentDashboard() {
             </div>
             <div className="flex-1 flex items-end gap-1.5 mt-auto">
               {data.userGrowthBars.map((h, i) => (
-                <div 
-                  key={i} 
+                <div
+                  key={i}
                   className={`flex-1 transition-all duration-500 hover:opacity-80 ${i < 3 ? 'bg-[#e0e0e0]' : 'bg-black'}`}
                   style={{ height: `${h}%` }}
                 ></div>
@@ -181,7 +183,7 @@ export default function ParentDashboard() {
             </div>
           </div>
 
-          <div className="w-[350px] bg-black p-8 text-white flex flex-col justify-between">
+          <div className="w-full xl:w-[350px] bg-black p-8 text-white flex flex-col justify-between">
             <h2 className="text-sm text-gray-300 font-medium">Activity Trend Graph</h2>
             <div className="space-y-6 mt-6">
               <div className="flex justify-between items-end border-b border-[#222] pb-2">
@@ -210,8 +212,8 @@ export default function ParentDashboard() {
             <span className="text-[9px] font-bold text-gray-500 tracking-widest uppercase">LAST 24 HOURS</span>
           </div>
 
-          <div className="min-h-[350px]">
-            <table className="w-full text-left border-collapse">
+          <div className="min-h-[350px] overflow-x-auto w-full">
+            <table className="w-full text-left border-collapse min-w-[600px]">
               <thead>
                 <tr className="border-b border-gray-200">
                   <th className="pb-3 text-[9px] font-bold text-gray-500 tracking-widest uppercase w-[15%]">TIMESTAMP</th>
@@ -243,7 +245,10 @@ export default function ParentDashboard() {
                       )}
                     </td>
                     <td className="py-5 align-top text-right">
-                      <button className="text-gray-400 hover:text-black transition-colors inline-block">
+                      <button 
+                        onClick={() => navigate('/notifications')}
+                        className="text-gray-400 hover:text-black transition-colors inline-block"
+                      >
                         <ExternalLink size={14} />
                       </button>
                     </td>
@@ -258,29 +263,28 @@ export default function ParentDashboard() {
               Showing {currentActivityList.length} of {data.totalEvents.toLocaleString()} events
             </span>
             <div className="flex gap-1.5">
-              <button 
+              <button
                 onClick={handlePrevPage}
                 disabled={currentPage === 1}
                 className="w-6 h-6 flex items-center justify-center bg-gray-200 text-gray-500 hover:bg-gray-300 transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 &lt;
               </button>
-              
+
               {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
                 <button
                   key={page}
                   onClick={() => handlePageClick(page)}
-                  className={`w-6 h-6 flex items-center justify-center transition-colors text-[10px] font-bold ${
-                    currentPage === page 
-                      ? 'bg-black text-white' 
+                  className={`w-6 h-6 flex items-center justify-center transition-colors text-[10px] font-bold ${currentPage === page
+                      ? 'bg-black text-white'
                       : 'bg-gray-200 text-black hover:bg-gray-300'
-                  }`}
+                    }`}
                 >
                   {page}
                 </button>
               ))}
 
-              <button 
+              <button
                 onClick={handleNextPage}
                 disabled={currentPage === totalPages}
                 className="w-6 h-6 flex items-center justify-center bg-gray-200 text-gray-500 hover:bg-gray-300 transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed"

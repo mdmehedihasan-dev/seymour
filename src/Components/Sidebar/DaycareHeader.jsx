@@ -1,14 +1,17 @@
 import React from "react";
-import { Search, Bell, ChevronDown } from "lucide-react";
+import { Search, Bell, ChevronDown, Menu } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-const DaycareHeader = () => {
+const DaycareHeader = ({ showDrawer }) => {
   const navigate = useNavigate();
   return (
-    <div className="h-[72px] flex items-center justify-between px-8 bg-white border-b border-gray-100 font-sans">
+    <div className="h-[72px] flex items-center justify-between px-4 md:px-8 bg-white border-b border-gray-100 font-sans">
       
-      {/* Left: Search Box */}
-      <div className="flex-1 max-w-[500px]">
+      {/* Left: Mobile Menu & Search Box */}
+      <div className="flex items-center flex-1 max-w-[500px] gap-3">
+        <button onClick={showDrawer} className="lg:hidden text-[#64748b] hover:text-[#0f172a] transition-colors flex-shrink-0">
+          <Menu size={24} strokeWidth={2} />
+        </button>
         <div className="relative flex items-center w-full">
           <Search className="absolute left-4 text-[#94a3b8]" size={18} strokeWidth={2} />
           <input 
@@ -37,7 +40,7 @@ const DaycareHeader = () => {
             AD
           </div>
           {/* Name/Role */}
-          <div className="flex flex-col pr-1">
+          <div className="flex-col pr-1 hidden sm:flex">
             <span className="text-[13px] font-bold text-[#1e293b] leading-tight">Admin User</span>
             <span className="text-[11px] text-[#64748b]">Super Admin</span>
           </div>
