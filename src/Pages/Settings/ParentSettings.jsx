@@ -99,31 +99,34 @@ const ParentSettings = () => {
   }
 
   return (
-    <div className="min-h-screen p-12 bg-[#fafafa] font-sans text-[#111]">
+    <div className="min-h-screen p-6 md:p-12 bg-[#fafafa] font-sans text-[#111]">
       <div className="mx-auto max-w-6xl animate-in fade-in zoom-in duration-500">
 
         {/* Header Section */}
-        <div className="mb-12">
+        <div className="mb-8 md:mb-12">
           <p className="text-[9px] font-bold text-gray-500 tracking-[0.2em] uppercase mb-2">SYSTEM MANAGEMENT</p>
-          <h1 className="text-4xl font-light tracking-tight">Settings</h1>
+          <h1 className="text-3xl md:text-4xl font-light tracking-tight">Settings</h1>
         </div>
 
-        <div className="flex gap-16">
+        <div className="flex flex-col md:flex-row gap-8 md:gap-16">
           {/* Left Navigation */}
-          <div className="w-56 flex-shrink-0">
-            <nav className="flex flex-col relative before:content-[''] before:absolute before:left-0 before:top-0 before:bottom-0 before:w-px before:bg-gray-200 pl-4">
+          <div className="w-full md:w-56 flex-shrink-0 overflow-x-auto hide-scrollbar">
+            <nav className="flex flex-row md:flex-col relative md:before:content-[''] md:before:absolute md:before:left-0 md:before:top-0 md:before:bottom-0 md:before:w-px md:before:bg-gray-200 md:pl-4 border-b md:border-b-0 border-gray-200 md:border-transparent pb-1 md:pb-0 gap-6 md:gap-0">
               {tabs.map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
-                  className={`text-left py-3 text-[13px] transition-all relative ${activeTab === tab
+                  className={`text-left py-2 md:py-3 text-[13px] transition-all relative whitespace-nowrap ${activeTab === tab
                     ? 'font-bold text-black'
                     : 'font-medium text-gray-500 hover:text-black'
                     }`}
                 >
                   {/* Active Indicator Line */}
                   {activeTab === tab && (
-                    <div className="absolute -left-4 top-1/2 -translate-y-1/2 w-[3px] h-6 bg-black"></div>
+                    <>
+                      <div className="hidden md:block absolute -left-4 top-1/2 -translate-y-1/2 w-[3px] h-6 bg-black"></div>
+                      <div className="md:hidden absolute left-0 right-0 -bottom-[5px] h-[2px] bg-black"></div>
+                    </>
                   )}
                   {tab}
                 </button>
@@ -137,8 +140,8 @@ const ParentSettings = () => {
             {activeTab === 'Parent Profile' && (
               <>
                 {/* Parent Profile Section */}
-                <div className="mb-16 animate-in fade-in duration-300">
-                  <div className="flex justify-between items-end border-b border-gray-300 pb-3 mb-8">
+                <div className="mb-12 md:mb-16 animate-in fade-in duration-300">
+                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end border-b border-gray-300 pb-3 mb-8 gap-2 sm:gap-0">
                     <h2 className="text-xl font-bold tracking-tight">Parent Profile Information</h2>
                     <span className="text-[9px] font-mono text-gray-500 tracking-widest uppercase">
                       UID: {data.uid}
@@ -149,8 +152,8 @@ const ParentSettings = () => {
                     <label className="block text-[9px] font-bold text-gray-500 tracking-[0.1em] uppercase mb-3">
                       PROFILE PICTURE
                     </label>
-                    <div className="flex items-center gap-6">
-                      <div className="w-20 h-20 bg-[#e8e8e8] border border-gray-200 overflow-hidden flex items-center justify-center shadow-sm">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+                      <div className="w-20 h-20 bg-[#e8e8e8] border border-gray-200 overflow-hidden flex items-center justify-center shadow-sm shrink-0">
                         {profileImage ? (
                           <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
                         ) : (
@@ -171,8 +174,8 @@ const ParentSettings = () => {
                     </div>
                   </div>
 
-                  <div className="flex gap-6 mb-8">
-                    <div className="flex-1">
+                  <div className="flex flex-col sm:flex-row gap-4 sm:gap-6 mb-8">
+                    <div className="flex-1 w-full">
                       <label className="block text-[9px] font-bold text-gray-500 tracking-[0.1em] uppercase mb-3">
                         FULL PARENT NAME
                       </label>
@@ -208,11 +211,11 @@ const ParentSettings = () => {
                     ></textarea>
                   </div>
 
-                  <div className="flex justify-end">
+                  <div className="flex justify-start sm:justify-end">
                     <button
                       onClick={handleUpdateProfile}
                       disabled={isSaving}
-                      className="bg-black hover:bg-gray-800 text-white text-[11px] font-bold px-8 py-3.5 transition-colors tracking-wide disabled:bg-gray-500 flex items-center justify-center min-w-[160px]"
+                      className="w-full sm:w-auto bg-black hover:bg-gray-800 text-white text-[11px] font-bold px-8 py-3.5 transition-colors tracking-wide disabled:bg-gray-500 flex items-center justify-center min-w-[160px]"
                     >
                       {isSaving ? <Loader2 className="animate-spin" size={16} /> : 'Update Profile'}
                     </button>
@@ -241,10 +244,10 @@ const ParentSettings = () => {
                     </div>
 
                     {/* Auto-Archive Reports Toggle */}
-                    <div className="flex justify-between items-center pb-8 border-b border-gray-200 mb-6">
+                    <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center pb-8 border-b border-gray-200 mb-6 gap-4 sm:gap-0">
                       <div>
                         <h3 className="text-[12px] font-bold text-black mb-1">Auto-Archive Reports</h3>
-                        <div className="flex items-center gap-2">
+                        <div className="flex flex-wrap items-center gap-2">
                           <p className="text-[11px] text-gray-600">Automatically move</p>
                           {autoArchive ? (
                             <select 
@@ -264,7 +267,7 @@ const ParentSettings = () => {
                       </div>
                       <button
                         onClick={() => setAutoArchive(!autoArchive)}
-                        className={`w-11 h-6 relative flex items-center px-1 border transition-colors duration-300 ${autoArchive ? 'bg-black border-black' : 'bg-[#e8e8e8] border-gray-300'}`}
+                        className={`w-11 h-6 relative flex items-center px-1 border transition-colors duration-300 shrink-0 ${autoArchive ? 'bg-black border-black' : 'bg-[#e8e8e8] border-gray-300'}`}
                       >
                         <div className={`w-4 h-4 bg-white transition-transform duration-300 shadow-sm ${autoArchive ? 'translate-x-5' : 'translate-x-0'}`}></div>
                       </button>
@@ -280,7 +283,7 @@ const ParentSettings = () => {
                 <div className="mb-16 animate-in fade-in duration-300 delay-200">
                   <div className="h-1 w-full bg-black mb-8 mt-12"></div>
 
-                  <div className="bg-[#f4f4f4] p-8 flex justify-between items-center shadow-sm">
+                  <div className="bg-[#f4f4f4] p-6 md:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center shadow-sm gap-4 sm:gap-0">
                     <div>
                       <h3 className="text-[10px] font-bold tracking-[0.1em] uppercase text-black mb-1.5">SESSION MANAGEMENT</h3>
                       <p className="text-[11px] text-gray-600">End your current administrative session and lock the terminal.</p>
@@ -290,7 +293,7 @@ const ParentSettings = () => {
                         localStorage.removeItem('user');
                         navigate('/sign-in');
                       }}
-                      className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-[0.15em] uppercase px-6 py-3 flex items-center gap-2 transition-colors"
+                      className="w-full sm:w-auto justify-center bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-[0.15em] uppercase px-6 py-3 flex items-center gap-2 transition-colors shrink-0"
                     >
                       <LogOut size={14} />
                       LOGOUT
@@ -341,36 +344,36 @@ const ParentSettings = () => {
                   </button>
                 </div>
 
-                <div className="bg-[#f4f4f4] p-8 shadow-sm mb-12">
-                  <div className="flex justify-between items-center mb-6">
+                <div className="bg-[#f4f4f4] p-6 md:p-8 shadow-sm mb-12">
+                  <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center mb-6 gap-4 sm:gap-0">
                     <div>
                       <h3 className="text-[12px] font-bold text-black mb-1 uppercase tracking-wider">Two-Factor Authentication (2FA)</h3>
                       <p className="text-[11px] text-gray-600">Require an extra security code when logging in.</p>
                     </div>
                     <button
                       onClick={() => setTwoFactorEnabled(!twoFactorEnabled)}
-                      className={`w-11 h-6 relative flex items-center px-1 border transition-colors duration-300 ${twoFactorEnabled ? 'bg-black border-black' : 'bg-[#e8e8e8] border-gray-300'}`}
+                      className={`w-11 h-6 relative flex items-center px-1 border transition-colors duration-300 shrink-0 ${twoFactorEnabled ? 'bg-black border-black' : 'bg-[#e8e8e8] border-gray-300'}`}
                     >
                       <div className={`w-4 h-4 bg-white transition-transform duration-300 shadow-sm ${twoFactorEnabled ? 'translate-x-5' : 'translate-x-0'}`}></div>
                     </button>
                   </div>
                 </div>
 
-                <div className="bg-[#f4f4f4] p-8 shadow-sm">
+                <div className="bg-[#f4f4f4] p-6 md:p-8 shadow-sm">
                   <h3 className="text-[12px] font-bold text-black mb-6 uppercase tracking-wider">Active Sessions</h3>
-                  <div className="flex justify-between items-center pb-4 border-b border-gray-200 mb-4">
+                  <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center pb-4 border-b border-gray-200 mb-4 gap-2 sm:gap-0">
                     <div>
                       <p className="text-[12px] font-bold text-black">Windows PC - Chrome</p>
                       <p className="text-[10px] text-gray-500">IP: {data.ipAddress} &bull; Current Session</p>
                     </div>
-                    <span className="text-[9px] font-bold text-green-600 bg-green-100 px-2 py-1 uppercase tracking-widest">Active</span>
+                    <span className="text-[9px] font-bold text-green-600 bg-green-100 px-2 py-1 uppercase tracking-widest shrink-0">Active</span>
                   </div>
-                  <div className="flex justify-between items-center pb-4 mb-4">
+                  <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center pb-4 mb-4 gap-2 sm:gap-0">
                     <div>
                       <p className="text-[12px] font-bold text-gray-600">iPhone 14 - Safari</p>
                       <p className="text-[10px] text-gray-500">IP: 192.168.1.108 &bull; Last seen 2 hours ago</p>
                     </div>
-                    <button className="text-[10px] font-bold text-red-500 hover:text-red-700 transition-colors uppercase tracking-widest border-b border-red-500 pb-0.5">Revoke</button>
+                    <button className="text-[10px] font-bold text-red-500 hover:text-red-700 transition-colors uppercase tracking-widest border-b border-red-500 pb-0.5 shrink-0">Revoke</button>
                   </div>
                   <button className="text-[10px] font-bold text-black border-b border-black pb-0.5 hover:text-gray-600 transition-colors tracking-widest uppercase mt-4">
                     Revoke All Other Sessions
@@ -386,43 +389,43 @@ const ParentSettings = () => {
                   <h2 className="text-xl font-bold tracking-tight">Global Alerts & Notifications</h2>
                 </div>
 
-                <div className="bg-[#f4f4f4] p-8 shadow-sm mb-12">
+                <div className="bg-[#f4f4f4] p-6 md:p-8 shadow-sm mb-12">
                   <h3 className="text-[12px] font-bold text-black mb-6 uppercase tracking-wider">Notification Channels</h3>
 
-                  <div className="flex justify-between items-center pb-6 border-b border-gray-200 mb-6">
+                  <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center pb-6 border-b border-gray-200 mb-6 gap-4 sm:gap-0">
                     <div>
                       <p className="text-[12px] font-bold text-black mb-1">Email Notifications</p>
                       <p className="text-[11px] text-gray-600">Receive alerts directly to {parentEmail || data.email}</p>
                     </div>
                     <button
                       onClick={() => setEmailAlerts(!emailAlerts)}
-                      className={`w-11 h-6 relative flex items-center px-1 border transition-colors duration-300 ${emailAlerts ? 'bg-black border-black' : 'bg-[#e8e8e8] border-gray-300'}`}
+                      className={`w-11 h-6 relative flex items-center px-1 border transition-colors duration-300 shrink-0 ${emailAlerts ? 'bg-black border-black' : 'bg-[#e8e8e8] border-gray-300'}`}
                     >
                       <div className={`w-4 h-4 bg-white transition-transform duration-300 shadow-sm ${emailAlerts ? 'translate-x-5' : 'translate-x-0'}`}></div>
                     </button>
                   </div>
 
-                  <div className="flex justify-between items-center pb-6 border-b border-gray-200 mb-6">
+                  <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center pb-6 border-b border-gray-200 mb-6 gap-4 sm:gap-0">
                     <div>
                       <p className="text-[12px] font-bold text-black mb-1">Push Notifications</p>
                       <p className="text-[11px] text-gray-600">Receive alerts on your active devices.</p>
                     </div>
                     <button
                       onClick={() => setPushAlerts(!pushAlerts)}
-                      className={`w-11 h-6 relative flex items-center px-1 border transition-colors duration-300 ${pushAlerts ? 'bg-black border-black' : 'bg-[#e8e8e8] border-gray-300'}`}
+                      className={`w-11 h-6 relative flex items-center px-1 border transition-colors duration-300 shrink-0 ${pushAlerts ? 'bg-black border-black' : 'bg-[#e8e8e8] border-gray-300'}`}
                     >
                       <div className={`w-4 h-4 bg-white transition-transform duration-300 shadow-sm ${pushAlerts ? 'translate-x-5' : 'translate-x-0'}`}></div>
                     </button>
                   </div>
 
-                  <div className="flex justify-between items-center">
+                  <div className="flex flex-col sm:flex-row sm:justify-between items-start sm:items-center gap-4 sm:gap-0">
                     <div>
                       <p className="text-[12px] font-bold text-black mb-1">Weekly Digest</p>
                       <p className="text-[11px] text-gray-600">Get a weekly summary of all monitoring activity.</p>
                     </div>
                     <button
                       onClick={() => setWeeklyDigest(!weeklyDigest)}
-                      className={`w-11 h-6 relative flex items-center px-1 border transition-colors duration-300 ${weeklyDigest ? 'bg-black border-black' : 'bg-[#e8e8e8] border-gray-300'}`}
+                      className={`w-11 h-6 relative flex items-center px-1 border transition-colors duration-300 shrink-0 ${weeklyDigest ? 'bg-black border-black' : 'bg-[#e8e8e8] border-gray-300'}`}
                     >
                       <div className={`w-4 h-4 bg-white transition-transform duration-300 shadow-sm ${weeklyDigest ? 'translate-x-5' : 'translate-x-0'}`}></div>
                     </button>

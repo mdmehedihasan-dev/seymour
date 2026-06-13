@@ -12,7 +12,7 @@ const ParentNotifications = () => {
       setLoading(true);
       try {
         await new Promise(resolve => setTimeout(resolve, 1000));
-        
+
         setNotifications([
           { id: 1, type: 'alert', title: 'HIGH SEVERITY ALERT', message: 'Unusual activity detected in Care Circle #44.', time: '10:42 AM', date: 'Today', read: false },
           { id: 2, type: 'system', title: 'SYSTEM UPDATE', message: 'Monthly security patch applied successfully.', time: '08:15 AM', date: 'Today', read: false },
@@ -51,7 +51,7 @@ const ParentNotifications = () => {
   const totalPages = Math.ceil(notifications.length / itemsPerPage) || 1;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentItems = notifications.slice(startIndex, startIndex + itemsPerPage);
-  
+
   const unreadCount = notifications.filter(n => !n.read).length;
 
   const getIcon = (type) => {
@@ -66,24 +66,24 @@ const ParentNotifications = () => {
   return (
     <div className="min-h-screen p-8 bg-[#fdfdfd] font-sans text-[#111]">
       <div className="mx-auto max-w-5xl animate-in fade-in zoom-in duration-500">
-        
+
         {/* Header */}
-        <div className="flex justify-between items-end mb-10 border-b border-gray-200 pb-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-10 border-b border-gray-200 pb-8">
           <div>
             <p className="text-[10px] font-bold text-gray-500 tracking-[0.2em] uppercase mb-2">SYSTEM ALERTS</p>
-            <h1 className="text-5xl font-black tracking-tighter uppercase flex items-center gap-4">
+            <h1 className="text-2xl sm:text-4xl font-black tracking-tighter uppercase flex items-center gap-4">
               Notifications
               {unreadCount > 0 && (
-                <span className="bg-black text-white text-[14px] font-bold px-3 py-1 tracking-widest align-middle">
+                <span className="bg-black text-white text-[12px] sm:text-[14px] font-bold px-3 py-1 tracking-widest align-middle rounded-full">
                   {unreadCount} NEW
                 </span>
               )}
             </h1>
           </div>
-          <button 
+          <button
             onClick={markAllAsRead}
             disabled={unreadCount === 0}
-            className="bg-[#e8e8e8] hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors disabled:opacity-50"
+            className="w-full md:w-auto bg-[#e8e8e8] hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors disabled:opacity-50"
           >
             MARK ALL AS READ
           </button>
@@ -92,30 +92,30 @@ const ParentNotifications = () => {
         {/* Notifications List */}
         <div className="flex flex-col min-h-[500px]">
           {currentItems.map((notification) => (
-            <div 
-              key={notification.id} 
-              className={`p-6 flex items-start gap-6 border-b border-gray-100 transition-colors group ${notification.read ? 'bg-white hover:bg-gray-50' : 'bg-[#f4f4f4] border-l-4 border-black hover:bg-[#e8e8e8]'}`}
+            <div
+              key={notification.id}
+              className={`p-4 sm:p-6 flex items-start gap-4 sm:gap-6 border-b border-gray-100 transition-colors group relative ${notification.read ? 'bg-white hover:bg-gray-50' : 'bg-[#f4f4f4] border-l-4 border-black hover:bg-[#e8e8e8]'}`}
             >
-              <div className="mt-1 bg-white p-2 shadow-sm border border-gray-100">
+              <div className="mt-1 bg-white p-2 shadow-sm border border-gray-100 shrink-0">
                 {getIcon(notification.type)}
               </div>
-              <div className="flex-1">
-                <div className="flex justify-between items-start mb-1">
-                  <h3 className={`text-[12px] tracking-widest uppercase ${notification.read ? 'text-gray-600 font-bold' : 'text-black font-black'}`}>
+              <div className="flex-1 min-w-0">
+                <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-1 pr-8 lg:pr-0">
+                  <h3 className={`text-[12px] tracking-widest uppercase mb-1 sm:mb-0 ${notification.read ? 'text-gray-600 font-bold' : 'text-black font-black'}`}>
                     {notification.title}
                   </h3>
-                  <span className="text-[10px] text-gray-400 font-bold tracking-widest uppercase">
+                  <span className="text-[9px] sm:text-[10px] text-gray-400 font-bold tracking-widest uppercase shrink-0">
                     {notification.date} &bull; {notification.time}
                   </span>
                 </div>
-                <p className={`text-[14px] leading-relaxed mt-1 ${notification.read ? 'text-gray-500' : 'text-gray-800'}`}>
+                <p className={`text-[13px] sm:text-[14px] leading-relaxed mt-1 ${notification.read ? 'text-gray-500' : 'text-gray-800'}`}>
                   {notification.message}
                 </p>
               </div>
               {!notification.read && (
-                <button 
+                <button
                   onClick={() => markAsRead(notification.id)}
-                  className="opacity-0 group-hover:opacity-100 transition-opacity p-2 text-gray-400 hover:text-black hover:bg-gray-200"
+                  className="absolute right-4 top-4 lg:relative lg:right-auto lg:top-auto opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity p-2 text-gray-400 hover:text-black hover:bg-gray-200"
                   title="Mark as read"
                 >
                   <Check size={16} strokeWidth={3} />
@@ -126,37 +126,36 @@ const ParentNotifications = () => {
         </div>
 
         {/* Pagination */}
-        <div className="bg-[#f4f4f4] px-6 py-4 flex justify-between items-center mt-6">
-          <span className="text-[9px] font-bold text-gray-500 tracking-widest uppercase">
+        <div className="bg-[#f4f4f4] px-4 md:px-6 py-4 flex flex-col md:flex-row gap-4 justify-between items-center mt-6">
+          <span className="text-[9px] font-bold text-gray-500 tracking-widest uppercase text-center md:text-left">
             SHOWING {notifications.length > 0 ? startIndex + 1 : 0}-{Math.min(startIndex + itemsPerPage, notifications.length)} OF {notifications.length} EVENTS
           </span>
-          <div className="flex gap-1.5">
-            <button 
+          <div className="flex flex-wrap justify-center gap-1.5">
+            <button
               onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
-              className="w-8 h-8 flex items-center justify-center bg-white text-gray-500 hover:bg-gray-100 transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e8e8e8]"
+              className="w-8 h-8 flex items-center justify-center bg-white text-gray-500 hover:bg-gray-100 transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e8e8e8] shrink-0"
             >
               &lt;
             </button>
-            
+
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
-                className={`w-8 h-8 flex items-center justify-center transition-colors text-[10px] font-bold border border-[#e8e8e8] ${
-                  currentPage === page 
-                    ? 'bg-black text-white border-black' 
-                    : 'bg-white text-gray-500 hover:bg-gray-100'
-                }`}
+                className={`w-8 h-8 flex items-center justify-center transition-colors text-[10px] font-bold border border-[#e8e8e8] shrink-0 ${currentPage === page
+                  ? 'bg-black text-white border-black'
+                  : 'bg-white text-gray-500 hover:bg-gray-100'
+                  }`}
               >
                 {page}
               </button>
             ))}
 
-            <button 
+            <button
               onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
               disabled={currentPage === totalPages || totalPages === 0}
-              className="w-8 h-8 flex items-center justify-center bg-white text-gray-500 hover:bg-gray-100 transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e8e8e8]"
+              className="w-8 h-8 flex items-center justify-center bg-white text-gray-500 hover:bg-gray-100 transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e8e8e8] shrink-0"
             >
               &gt;
             </button>
