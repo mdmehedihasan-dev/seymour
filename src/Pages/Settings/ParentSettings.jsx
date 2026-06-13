@@ -9,11 +9,21 @@ const ParentSettings = () => {
   const [activeTab, setActiveTab] = useState('Parent Profile');
   const [darkMode, setDarkMode] = useState(true);
   const [autoArchive, setAutoArchive] = useState(false);
+  const [archiveDays, setArchiveDays] = useState('30');
 
   // Form State
   const [parentName, setParentName] = useState('');
   const [parentEmail, setParentEmail] = useState('');
   const [signature, setSignature] = useState('');
+  const [profileImage, setProfileImage] = useState(null);
+
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file);
+      setProfileImage(imageUrl);
+    }
+  };
 
   // Security State
   const [currentPassword, setCurrentPassword] = useState('');
@@ -135,6 +145,32 @@ const ParentSettings = () => {
                     </span>
                   </div>
 
+                  <div className="mb-8">
+                    <label className="block text-[9px] font-bold text-gray-500 tracking-[0.1em] uppercase mb-3">
+                      PROFILE PICTURE
+                    </label>
+                    <div className="flex items-center gap-6">
+                      <div className="w-20 h-20 bg-[#e8e8e8] border border-gray-200 overflow-hidden flex items-center justify-center shadow-sm">
+                        {profileImage ? (
+                          <img src={profileImage} alt="Profile" className="w-full h-full object-cover" />
+                        ) : (
+                          <span className="text-[10px] font-bold text-gray-400 tracking-widest">NONE</span>
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          className="block w-full text-[11px] text-gray-500 file:mr-4 file:py-2.5 file:px-6 file:border-0 file:text-[10px] file:font-bold file:tracking-widest file:uppercase file:bg-black file:text-white hover:file:bg-gray-800 file:cursor-pointer transition-colors"
+                        />
+                        <p className="text-[9px] text-gray-400 mt-2 uppercase tracking-wide">
+                          Recommended size: 256x256px. Max 2MB. JPG or PNG.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="flex gap-6 mb-8">
                     <div className="flex-1">
                       <label className="block text-[9px] font-bold text-gray-500 tracking-[0.1em] uppercase mb-3">
@@ -208,7 +244,23 @@ const ParentSettings = () => {
                     <div className="flex justify-between items-center pb-8 border-b border-gray-200 mb-6">
                       <div>
                         <h3 className="text-[12px] font-bold text-black mb-1">Auto-Archive Reports</h3>
-                        <p className="text-[11px] text-gray-600">Automatically move 30-day old reports to deep storage.</p>
+                        <div className="flex items-center gap-2">
+                          <p className="text-[11px] text-gray-600">Automatically move</p>
+                          {autoArchive ? (
+                            <select 
+                              value={archiveDays}
+                              onChange={(e) => setArchiveDays(e.target.value)}
+                              className="text-[11px] font-bold text-black bg-white border border-gray-300 px-2 py-0.5 outline-none focus:border-black cursor-pointer"
+                            >
+                              <option value="30">30-day</option>
+                              <option value="60">60-day</option>
+                              <option value="90">90-day</option>
+                            </select>
+                          ) : (
+                            <span className="text-[11px] text-gray-600">30-day</span>
+                          )}
+                          <p className="text-[11px] text-gray-600">old reports to deep storage.</p>
+                        </div>
                       </div>
                       <button
                         onClick={() => setAutoArchive(!autoArchive)}

@@ -33,7 +33,7 @@ const ParentHeader = () => {
           <Bell size={18} strokeWidth={2} />
         </button>
 
-        <div className="w-8 h-8 rounded-sm overflow-hidden bg-[#1e293b] cursor-pointer shadow-sm">
+        <div onClick={() => navigate('/settings')} className="w-8 h-8 rounded-sm overflow-hidden bg-[#1e293b] cursor-pointer shadow-sm hover:opacity-80 transition-opacity">
           <img src={adminImage} alt="Admin Profile" className="w-full h-full object-cover" />
         </div>
       </div>
