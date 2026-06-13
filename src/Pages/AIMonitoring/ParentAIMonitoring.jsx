@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Loader2, CheckCircle2 } from 'lucide-react';
+import { Loader2, CheckCircle2, X, AlertTriangle } from 'lucide-react';
 
 const ParentAIMonitoring = () => {
   const [loading, setLoading] = useState(true);
@@ -10,6 +10,22 @@ const ParentAIMonitoring = () => {
   const [statusFilter, setStatusFilter] = useState('Unresolved'); // All, Unresolved, Resolved
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedFlag, setSelectedFlag] = useState(null);
+
+  const [isArchiveModalOpen, setIsArchiveModalOpen] = useState(false);
+  const [selectedArchiveFlag, setSelectedArchiveFlag] = useState(null);
+
+  const handleReviewClick = (flag) => {
+    setSelectedFlag(flag);
+    setIsModalOpen(true);
+  };
+
+  const handleArchiveClick = (flag) => {
+    setSelectedArchiveFlag(flag);
+    setIsArchiveModalOpen(true);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -244,11 +260,11 @@ const ParentAIMonitoring = () => {
                   </div>
                   <div className="w-[8%] flex justify-end">
                     {flag.status === 'UNRESOLVED' ? (
-                      <button className="text-[11px] font-bold text-black border-b border-black pb-0.5 hover:text-gray-600 transition-colors">
+                      <button onClick={() => handleReviewClick(flag)} className="text-[11px] font-bold text-black border-b border-black pb-0.5 hover:text-gray-600 transition-colors">
                         Review
                       </button>
                     ) : (
-                      <button className="text-[11px] font-bold text-gray-400 border-b border-gray-400 pb-0.5 hover:text-black transition-colors">
+                      <button onClick={() => handleArchiveClick(flag)} className="text-[11px] font-bold text-gray-400 border-b border-gray-400 pb-0.5 hover:text-black transition-colors">
                         Archive
                       </button>
                     )}
@@ -300,6 +316,106 @@ const ParentAIMonitoring = () => {
             </button>
           </div>
         </div>
+
+        {/* Review Modal */}
+        {isModalOpen && selectedFlag && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 animate-in fade-in duration-200">
+            <div className="bg-white w-full max-w-lg shadow-2xl animate-in zoom-in-95 duration-200 border-t-4 border-black">
+              <div className="p-6">
+                <div className="flex justify-between items-start mb-6">
+                  <div>
+                    <h2 className="text-2xl font-black uppercase tracking-tighter mb-1">Review Flag</h2>
+                    <p className="text-[10px] font-bold tracking-widest text-gray-500 uppercase">
+                      ID: #{selectedFlag.id} &bull; {selectedFlag.childName}
+                    </p>
+                  </div>
+                  <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-black transition-colors">
+                    <X size={20} />
+                  </button>
+                </div>
+                
+                <div className="space-y-6">
+                  <div className="bg-[#f4f4f4] p-4 flex gap-4 items-start">
+                    {selectedFlag.severity === 'HIGH' && <AlertTriangle size={20} className="text-red-600 mt-1 flex-shrink-0" />}
+                    <div>
+                      <div className="flex items-center gap-3 mb-2">
+                        <span className="bg-[#e8e8e8] text-black text-[9px] font-bold px-2 py-1 tracking-widest uppercase">
+                          {selectedFlag.domain}
+                        </span>
+                        <span className={`text-[10px] font-bold tracking-widest uppercase ${
+                          selectedFlag.severity === 'HIGH' ? 'text-red-600' : 
+                          selectedFlag.severity === 'MEDIUM' ? 'text-gray-800' : 'text-gray-400'
+                        }`}>
+                          {selectedFlag.severity} SEVERITY
+                        </span>
+                      </div>
+                      <p className="text-[13px] text-gray-700 leading-relaxed font-medium">
+                        {selectedFlag.description}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <p className="text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-3">ACTION REQUIRED</p>
+                    <textarea 
+                      placeholder="Enter review notes or resolution details..." 
+                      className="w-full h-24 border border-gray-300 p-3 text-sm focus:outline-none focus:border-black transition-colors resize-none"
+                    ></textarea>
+                  </div>
+                </div>
+                
+                <div className="flex justify-between items-center mt-8">
+                  <button onClick={() => setIsModalOpen(false)} className="text-[10px] font-bold tracking-widest uppercase text-gray-500 hover:text-black transition-colors">
+                    CANCEL
+                  </button>
+                  <div className="flex gap-3">
+                    <button className="bg-[#e8e8e8] hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors">
+                      ESCALATE
+                    </button>
+                    <button className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors" onClick={() => setIsModalOpen(false)}>
+                      MARK RESOLVED
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Archive Modal */}
+        {isArchiveModalOpen && selectedArchiveFlag && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 animate-in fade-in duration-200">
+            <div className="bg-white w-full max-w-sm shadow-2xl animate-in zoom-in-95 duration-200 border-t-4 border-gray-400">
+              <div className="p-6">
+                <div className="flex justify-between items-start mb-4">
+                  <div>
+                    <h2 className="text-xl font-black uppercase tracking-tighter mb-1">Archive Flag</h2>
+                    <p className="text-[10px] font-bold tracking-widest text-gray-500 uppercase">
+                      ID: #{selectedArchiveFlag.id}
+                    </p>
+                  </div>
+                  <button onClick={() => setIsArchiveModalOpen(false)} className="text-gray-400 hover:text-black transition-colors">
+                    <X size={20} />
+                  </button>
+                </div>
+                
+                <p className="text-sm text-gray-600 mb-6 leading-relaxed">
+                  Are you sure you want to archive this resolved flag for <span className="font-bold text-black">{selectedArchiveFlag.childName}</span>? 
+                  This will remove it from the active view.
+                </p>
+                
+                <div className="flex justify-end items-center gap-3">
+                  <button onClick={() => setIsArchiveModalOpen(false)} className="text-[10px] font-bold tracking-widest uppercase text-gray-500 hover:text-black transition-colors px-4 py-2">
+                    CANCEL
+                  </button>
+                  <button className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-6 py-2.5 transition-colors" onClick={() => setIsArchiveModalOpen(false)}>
+                    CONFIRM ARCHIVE
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
       </div>
     </div>
