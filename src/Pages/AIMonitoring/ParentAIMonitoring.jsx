@@ -145,19 +145,19 @@ const ParentAIMonitoring = () => {
   const currentFlags = filteredFlags.slice(startIndex, endIndex);
 
   return (
-    <div className="min-h-screen p-8 bg-[#fdfdfd] font-sans text-[#111]">
+    <div className="min-h-screen p-4 md:p-8 bg-[#fdfdfd] font-sans text-[#111]">
       <div className="mx-auto max-w-7xl animate-in fade-in zoom-in duration-500">
         
         {/* Top Header Split */}
-        <div className="flex gap-6 mb-8 h-[220px]">
+        <div className="flex flex-col xl:flex-row gap-6 mb-8 xl:h-[220px]">
           {/* Left Stats Panel */}
-          <div className="flex-1 bg-[#f4f4f4] p-10 flex flex-col justify-between">
+          <div className="flex-1 bg-[#f4f4f4] p-6 md:p-10 flex flex-col justify-between min-h-[220px]">
             <div>
               <p className="text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-3">REAL-TIME ANALYSIS</p>
-              <h1 className="text-5xl font-light tracking-tight">AI Monitoring</h1>
+              <h1 className="text-4xl md:text-5xl font-light tracking-tight">AI Monitoring</h1>
             </div>
             
-            <div className="flex gap-16 mt-auto">
+            <div className="flex flex-wrap gap-6 md:gap-16 mt-8 md:mt-auto">
               <div>
                 <p className="text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-1">TOTAL FLAGS</p>
                 <div className="text-3xl font-bold tracking-tight">{data.stats.totalFlags}</div>
@@ -174,7 +174,7 @@ const ParentAIMonitoring = () => {
           </div>
 
           {/* Right Status Panel */}
-          <div className="w-[400px] bg-black p-10 flex flex-col relative overflow-hidden">
+          <div className="w-full xl:w-[400px] bg-black p-6 md:p-10 flex flex-col relative overflow-hidden min-h-[160px] xl:min-h-0">
             <h2 className="text-white text-xl font-medium tracking-tight mb-4 relative z-10">System Status</h2>
             <p className="text-gray-400 text-sm leading-relaxed pr-8 relative z-10">
               Neural processing active. Precision tracking at 98.4%.
@@ -186,17 +186,17 @@ const ParentAIMonitoring = () => {
         </div>
 
         {/* Filters Section */}
-        <div className="bg-[#f4f4f4] px-8 py-6 flex justify-between items-end mb-8">
-          <div className="flex gap-16">
+        <div className="bg-[#f4f4f4] px-4 md:px-8 py-6 flex flex-col xl:flex-row justify-between items-start xl:items-end gap-6 mb-8">
+          <div className="flex flex-col md:flex-row gap-6 md:gap-16 w-full xl:w-auto">
             {/* Severity Filter */}
-            <div>
+            <div className="w-full md:w-auto">
               <p className="text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-3">SEVERITY LEVEL</p>
-              <div className="flex bg-[#e8e8e8] p-1 gap-1 text-[10px] font-bold">
+              <div className="flex flex-wrap bg-[#e8e8e8] p-1 gap-1 text-[10px] font-bold">
                 {['All', 'High', 'Medium', 'Low'].map(level => (
                   <button 
                     key={level}
                     onClick={() => setSeverityFilter(level)}
-                    className={`px-6 py-2 transition-colors ${severityFilter === level ? 'bg-black text-white' : 'hover:bg-gray-200 text-gray-600'}`}
+                    className={`flex-1 md:flex-none px-4 md:px-6 py-2 transition-colors ${severityFilter === level ? 'bg-black text-white' : 'hover:bg-gray-200 text-gray-600'}`}
                   >
                     {level}
                   </button>
@@ -205,14 +205,14 @@ const ParentAIMonitoring = () => {
             </div>
 
             {/* Status Filter */}
-            <div>
+            <div className="w-full md:w-auto">
               <p className="text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-3">STATUS</p>
-              <div className="flex bg-[#e8e8e8] p-1 gap-1 text-[10px] font-bold">
+              <div className="flex flex-wrap bg-[#e8e8e8] p-1 gap-1 text-[10px] font-bold">
                 {['All', 'Unresolved', 'Resolved'].map(status => (
                   <button 
                     key={status}
                     onClick={() => setStatusFilter(status)}
-                    className={`px-6 py-2 transition-colors ${statusFilter === status ? 'bg-black text-white' : 'hover:bg-gray-200 text-gray-600'}`}
+                    className={`flex-1 md:flex-none px-4 md:px-6 py-2 transition-colors ${statusFilter === status ? 'bg-black text-white' : 'hover:bg-gray-200 text-gray-600'}`}
                   >
                     {status}
                   </button>
@@ -221,7 +221,7 @@ const ParentAIMonitoring = () => {
             </div>
           </div>
 
-          <button onClick={handleExportLog} disabled={!data} className="bg-[#e8e8e8] hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors h-[40px] flex items-center justify-center disabled:opacity-50">
+          <button onClick={handleExportLog} disabled={!data} className="w-full xl:w-auto bg-[#e8e8e8] hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors h-[40px] flex items-center justify-center disabled:opacity-50">
             EXPORT LOG
           </button>
         </div>
@@ -229,7 +229,7 @@ const ParentAIMonitoring = () => {
         {/* Table Section */}
         <div className="w-full mb-8">
           {/* Table Headers */}
-          <div className="bg-[#e8e8e8] px-8 py-4 flex items-center mb-4">
+          <div className="hidden lg:flex bg-[#e8e8e8] px-8 py-4 items-center mb-4">
             <div className="w-[20%] text-[9px] font-bold text-gray-500 tracking-widest uppercase">CHILD NAME</div>
             <div className="w-[15%] text-[9px] font-bold text-gray-500 tracking-widest uppercase">DOMAIN</div>
             <div className="w-[10%] text-[9px] font-bold text-gray-500 tracking-widest uppercase">SEVERITY</div>
@@ -242,17 +242,34 @@ const ParentAIMonitoring = () => {
           <div className="flex flex-col gap-4 min-h-[400px]">
             {currentFlags.length > 0 ? (
               currentFlags.map((flag) => (
-                <div key={flag.id} className="bg-[#fbfbfb] px-8 py-6 flex flex-row items-center hover:bg-[#f4f4f4] transition-colors border border-transparent hover:border-gray-200">
-                  <div className="w-[20%] flex items-center gap-4">
-                    <div className="w-8 h-8 bg-[#e8e8e8]"></div>
-                    <span className="text-[12px] font-bold leading-tight w-24">{flag.childName}</span>
+                <div key={flag.id} className="bg-[#fbfbfb] p-6 lg:px-8 lg:py-6 flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-0 hover:bg-[#f4f4f4] transition-colors border border-transparent hover:border-gray-200">
+                  
+                  {/* Mobile Top Row: Name & Severity */}
+                  <div className="w-full lg:w-[20%] flex items-center justify-between lg:justify-start gap-4">
+                    <div className="flex items-center gap-4">
+                      <div className="w-8 h-8 bg-[#e8e8e8] flex-shrink-0"></div>
+                      <span className="text-[12px] font-bold leading-tight w-24">{flag.childName}</span>
+                    </div>
+                    <div className="lg:hidden">
+                      <span className={`text-[10px] font-bold tracking-widest uppercase ${
+                        flag.severity === 'HIGH' ? 'text-red-600' : 
+                        flag.severity === 'MEDIUM' ? 'text-gray-800' : 'text-gray-400'
+                      }`}>
+                        {flag.severity}
+                      </span>
+                    </div>
                   </div>
-                  <div className="w-[15%]">
+
+                  {/* Domain */}
+                  <div className="w-full lg:w-[15%] flex justify-between lg:block items-center">
+                    <span className="lg:hidden text-[9px] font-bold text-gray-500 tracking-widest uppercase">DOMAIN</span>
                     <span className="bg-[#e8e8e8] text-black text-[9px] font-bold px-2 py-1 tracking-widest uppercase">
                       {flag.domain}
                     </span>
                   </div>
-                  <div className="w-[10%]">
+
+                  {/* Severity (Desktop) */}
+                  <div className="hidden lg:block lg:w-[10%]">
                     <span className={`text-[10px] font-bold tracking-widest uppercase ${
                       flag.severity === 'HIGH' ? 'text-red-600' : 
                       flag.severity === 'MEDIUM' ? 'text-gray-800' : 'text-gray-400'
@@ -260,33 +277,44 @@ const ParentAIMonitoring = () => {
                       {flag.severity}
                     </span>
                   </div>
-                  <div className="w-[35%] text-[12px] text-gray-600 leading-relaxed pr-8">
+
+                  {/* Description */}
+                  <div className="w-full lg:w-[35%] text-[12px] text-gray-600 leading-relaxed lg:pr-8">
+                    <span className="lg:hidden block text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-1">DESCRIPTION</span>
                     {flag.description}
                   </div>
-                  <div className="w-[12%] flex items-center gap-2">
-                    {flag.status === 'UNRESOLVED' ? (
-                      <>
-                        <div className="w-1.5 h-1.5 bg-red-600"></div>
-                        <span className="text-[10px] font-bold tracking-widest uppercase text-black">UNRESOLVED</span>
-                      </>
-                    ) : (
-                      <>
-                        <CheckCircle2 size={12} className="text-gray-400" />
-                        <span className="text-[10px] font-bold tracking-widest uppercase text-gray-400">RESOLVED</span>
-                      </>
-                    )}
+
+                  {/* Status */}
+                  <div className="w-full lg:w-[12%] flex items-center justify-between lg:justify-start gap-2 border-t border-gray-100 lg:border-0 pt-4 lg:pt-0 mt-2 lg:mt-0">
+                    <span className="lg:hidden text-[9px] font-bold text-gray-500 tracking-widest uppercase">STATUS</span>
+                    <div className="flex items-center gap-2">
+                      {flag.status === 'UNRESOLVED' ? (
+                        <>
+                          <div className="w-1.5 h-1.5 bg-red-600 flex-shrink-0"></div>
+                          <span className="text-[10px] font-bold tracking-widest uppercase text-black">UNRESOLVED</span>
+                        </>
+                      ) : (
+                        <>
+                          <CheckCircle2 size={12} className="text-gray-400 flex-shrink-0" />
+                          <span className="text-[10px] font-bold tracking-widest uppercase text-gray-400">RESOLVED</span>
+                        </>
+                      )}
+                    </div>
                   </div>
-                  <div className="w-[8%] flex justify-end">
+
+                  {/* Action */}
+                  <div className="w-full lg:w-[8%] flex lg:justify-end mt-2 lg:mt-0">
                     {flag.status === 'UNRESOLVED' ? (
-                      <button onClick={() => handleReviewClick(flag)} className="text-[11px] font-bold text-black border-b border-black pb-0.5 hover:text-gray-600 transition-colors">
+                      <button onClick={() => handleReviewClick(flag)} className="w-full lg:w-auto text-[11px] font-bold text-black border lg:border-b border-black lg:border-t-0 lg:border-l-0 lg:border-r-0 pb-0.5 lg:pb-0.5 py-2 lg:py-0 hover:text-gray-600 transition-colors uppercase tracking-widest">
                         Review
                       </button>
                     ) : (
-                      <button onClick={() => handleArchiveClick(flag)} className="text-[11px] font-bold text-gray-400 border-b border-gray-400 pb-0.5 hover:text-black transition-colors">
+                      <button onClick={() => handleArchiveClick(flag)} className="w-full lg:w-auto text-[11px] font-bold text-gray-400 border lg:border-b border-gray-400 lg:border-t-0 lg:border-l-0 lg:border-r-0 pb-0.5 lg:pb-0.5 py-2 lg:py-0 hover:text-black transition-colors uppercase tracking-widest">
                         Archive
                       </button>
                     )}
                   </div>
+
                 </div>
               ))
             ) : (
@@ -298,8 +326,8 @@ const ParentAIMonitoring = () => {
         </div>
 
         {/* Pagination Footer */}
-        <div className="flex justify-between items-center py-4 px-2">
-          <span className="text-[9px] font-bold text-gray-500 tracking-widest uppercase">
+        <div className="flex flex-col md:flex-row justify-between items-center py-4 px-2 gap-4">
+          <span className="text-[9px] font-bold text-gray-500 tracking-widest uppercase text-center md:text-left">
             SHOWING {totalItems > 0 ? startIndex + 1 : 0}-{Math.min(endIndex, totalItems)} OF {totalItems} FLAGS
           </span>
           <div className="flex gap-1.5">

@@ -145,84 +145,87 @@ const ParentReports = () => {
   };
 
   return (
-    <div className="min-h-screen p-8 bg-[#fdfdfd] font-sans text-[#111]">
+    <div className="min-h-screen p-4 md:p-8 bg-[#fdfdfd] font-sans text-[#111]">
       <div className="mx-auto max-w-7xl animate-in fade-in zoom-in duration-500">
         
         {/* Header */}
-        <div className="flex justify-between items-end mb-10">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8 md:mb-10 gap-6">
           <div>
             <p className="text-[10px] font-bold text-gray-500 tracking-[0.2em] uppercase mb-2">OPERATIONAL INTELLIGENCE</p>
-            <h1 className="text-6xl font-black tracking-tighter uppercase">Reports</h1>
+            <h1 className="text-4xl md:text-6xl font-black tracking-tighter uppercase">Reports</h1>
           </div>
-          <div className="flex gap-3 mb-2">
-            <button onClick={handleFilterToggle} disabled={!data} className="bg-[#e8e8e8] hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors disabled:opacity-50">
+          <div className="flex flex-wrap gap-3 mb-0 md:mb-2 w-full md:w-auto">
+            <button onClick={handleFilterToggle} disabled={!data} className="flex-1 md:flex-none bg-[#e8e8e8] hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors disabled:opacity-50 whitespace-nowrap">
               FILTER VIEW: {filterStatus}
             </button>
-            <button onClick={() => setIsGenerateModalOpen(true)} disabled={!data} className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors disabled:opacity-50">
+            <button onClick={() => setIsGenerateModalOpen(true)} disabled={!data} className="flex-1 md:flex-none bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors disabled:opacity-50 whitespace-nowrap">
               GENERATE NEW REPORT
             </button>
           </div>
         </div>
 
         {/* Stats Section */}
-        <div className="grid grid-cols-3 gap-6 mb-10">
-          <div className="bg-[#f4f4f4] p-10 flex flex-col justify-between h-48">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 mb-10">
+          <div className="bg-[#f4f4f4] p-8 md:p-10 flex flex-col justify-between h-auto min-h-[192px]">
             <h3 className="text-[9px] font-bold text-gray-400 tracking-[0.15em] uppercase">TOTAL GENERATED</h3>
             <div className="text-6xl font-light tracking-tight">{data.stats.totalGenerated}</div>
           </div>
-          <div className="bg-[#f4f4f4] p-10 flex flex-col justify-between h-48">
+          <div className="bg-[#f4f4f4] p-8 md:p-10 flex flex-col justify-between h-auto min-h-[192px]">
             <h3 className="text-[9px] font-bold text-gray-400 tracking-[0.15em] uppercase">ACTIVE MONITORING NODES</h3>
             <div className="text-6xl font-light tracking-tight">{data.stats.activeNodes}</div>
           </div>
-          <div className="bg-black p-10 flex flex-col justify-between h-48 text-white">
+          <div className="bg-black p-8 md:p-10 flex flex-col justify-between h-auto min-h-[192px] text-white">
             <h3 className="text-[9px] font-bold text-[#555] tracking-[0.15em] uppercase">ANOMALIES DETECTED</h3>
             <div className="text-6xl font-light tracking-tight">{data.stats.anomaliesDetected}</div>
           </div>
         </div>
 
         {/* Table Section */}
-        <div className="w-full">
-          {/* Table Headers */}
-          <div className="bg-[#e8e8e8] px-8 py-5 flex items-center">
-            <div className="w-[30%] text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">CHILD NAME</div>
-            <div className="w-[20%] text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">DATE</div>
-            <div className="w-[40%] text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">DOMAINS INCLUDED</div>
-            <div className="w-[10%] text-right text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">ACTIONS</div>
+        <div className="w-full overflow-x-auto">
+          <div className="min-w-[800px]">
+            {/* Table Headers */}
+            <div className="bg-[#e8e8e8] px-8 py-5 flex items-center">
+              <div className="w-[30%] text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">CHILD NAME</div>
+              <div className="w-[20%] text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">DATE</div>
+              <div className="w-[40%] text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">DOMAINS INCLUDED</div>
+              <div className="w-[10%] text-right text-[10px] font-bold text-gray-500 tracking-[0.1em] uppercase">ACTIONS</div>
+            </div>
+            
+            {/* Table Rows */}
+            <div className="flex flex-col min-h-[400px]">
+              {currentReports.map((report) => (
+                <div key={report.id} className="bg-white px-8 py-7 flex items-center border-b border-[#f4f4f4] hover:bg-[#fafafa] transition-colors">
+                  <div className="w-[30%] flex items-center gap-4">
+                    <div className={`w-1.5 h-1.5 flex-shrink-0 ${report.status === 'active' ? 'bg-black' : 'bg-gray-400'}`}></div>
+                    <span className="text-[13px] font-bold">{report.name}</span>
+                  </div>
+                  <div className="w-[20%] text-[13px] text-gray-500">
+                    {report.date}
+                  </div>
+                  <div className="w-[40%] flex gap-2 flex-wrap">
+                    {report.domains.map((domain, idx) => (
+                      <span 
+                        key={idx} 
+                        className="bg-[#e8e8e8] text-black text-[9px] font-bold px-2 py-1.5 tracking-widest uppercase"
+                      >
+                        {domain}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="w-[10%] flex justify-end">
+                    <button onClick={() => handleDownload(report)} className="text-[10px] font-bold text-black border-b border-black pb-0.5 hover:text-gray-600 hover:border-gray-600 transition-colors tracking-widest uppercase whitespace-nowrap">
+                      DOWNLOAD
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-          
-          {/* Table Rows */}
-          <div className="flex flex-col min-h-[400px]">
-            {currentReports.map((report) => (
-              <div key={report.id} className="bg-white px-8 py-7 flex items-center border-b border-[#f4f4f4] hover:bg-[#fafafa] transition-colors">
-                <div className="w-[30%] flex items-center gap-4">
-                  <div className={`w-1.5 h-1.5 ${report.status === 'active' ? 'bg-black' : 'bg-gray-400'}`}></div>
-                  <span className="text-[13px] font-bold">{report.name}</span>
-                </div>
-                <div className="w-[20%] text-[13px] text-gray-500">
-                  {report.date}
-                </div>
-                <div className="w-[40%] flex gap-2">
-                  {report.domains.map((domain, idx) => (
-                    <span 
-                      key={idx} 
-                      className="bg-[#e8e8e8] text-black text-[9px] font-bold px-2 py-1.5 tracking-widest uppercase"
-                    >
-                      {domain}
-                    </span>
-                  ))}
-                </div>
-                <div className="w-[10%] flex justify-end">
-                  <button onClick={() => handleDownload(report)} className="text-[10px] font-bold text-black border-b border-black pb-0.5 hover:text-gray-600 hover:border-gray-600 transition-colors tracking-widest uppercase">
-                    DOWNLOAD
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
+        </div>
 
           {/* Footer Section */}
-          <div className="mt-8 flex justify-between items-center py-4">
-            <div className="flex gap-8 text-[10px] font-bold tracking-widest uppercase">
+          <div className="mt-8 flex flex-col md:flex-row justify-between items-start md:items-center py-4 gap-6">
+            <div className="flex flex-wrap gap-4 md:gap-8 text-[10px] font-bold tracking-widest uppercase">
               <span className="text-gray-400">
                 SYSTEM STATUS: <span className="text-gray-700">{data.systemStatus}</span>
               </span>
@@ -263,7 +266,6 @@ const ParentReports = () => {
               </button>
             </div>
           </div>
-        </div>
 
         {/* Generate Report Modal */}
         {isGenerateModalOpen && (

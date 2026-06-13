@@ -200,49 +200,65 @@ const ParentChildren = () => {
           </div>
 
           {/* Responsive Table Wrapper */}
-          <div className="overflow-x-auto">
-            <div className="min-w-[800px]">
-              {/* Table Headers */}
-              <div className="px-8 py-4 flex items-center border-b border-[#e8e8e8] bg-[#fbfbfb]">
-                <div className="w-[30%] text-[9px] font-bold text-gray-500 tracking-widest uppercase">CHILD NAME</div>
-                <div className="w-[15%] text-[9px] font-bold text-gray-500 tracking-widest uppercase">AGE</div>
-                <div className="w-[25%] text-[9px] font-bold text-gray-500 tracking-widest uppercase">PARENT NAME</div>
-                <div className="w-[15%] text-[9px] font-bold text-gray-500 tracking-widest uppercase">CARE CIRCLES</div>
-                <div className="w-[15%] text-right text-[9px] font-bold text-gray-500 tracking-widest uppercase">ACTIONS</div>
-              </div>
+          <div className="w-full">
+            {/* Table Headers */}
+            <div className="hidden lg:flex px-8 py-4 items-center border-b border-[#e8e8e8] bg-[#fbfbfb]">
+              <div className="w-[30%] text-[9px] font-bold text-gray-500 tracking-widest uppercase">CHILD NAME</div>
+              <div className="w-[15%] text-[9px] font-bold text-gray-500 tracking-widest uppercase">AGE</div>
+              <div className="w-[25%] text-[9px] font-bold text-gray-500 tracking-widest uppercase">PARENT NAME</div>
+              <div className="w-[15%] text-[9px] font-bold text-gray-500 tracking-widest uppercase">CARE CIRCLES</div>
+              <div className="w-[15%] text-right text-[9px] font-bold text-gray-500 tracking-widest uppercase">ACTIONS</div>
+            </div>
 
-              {/* Table Rows */}
-              <div className="flex flex-col min-h-[300px]">
-                {currentEntries.map((child, i) => (
-                  <div key={i} className="px-8 py-5 flex items-center border-b border-[#e8e8e8] last:border-0 hover:bg-[#fafafa] transition-colors">
-                    <div className="w-[30%] flex items-center gap-4">
-                      <div className="w-9 h-9 bg-[#e8e8e8] flex items-center justify-center text-[11px] font-bold tracking-wider shrink-0">
-                        {child.initials}
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-[13px] font-bold">{child.name}</span>
-                        <span className="text-[9px] text-gray-500 mt-0.5 tracking-wider">ID: {child.id}</span>
-                      </div>
+            {/* Table Rows */}
+            <div className="flex flex-col min-h-[300px]">
+              {currentEntries.map((child, i) => (
+                <div key={i} className="p-6 lg:px-8 lg:py-5 flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-0 border-b border-[#e8e8e8] last:border-0 hover:bg-[#fafafa] transition-colors">
+                  
+                  {/* Name and ID */}
+                  <div className="w-full lg:w-[30%] flex items-center gap-4">
+                    <div className="w-9 h-9 bg-[#e8e8e8] flex items-center justify-center text-[11px] font-bold tracking-wider shrink-0">
+                      {child.initials}
                     </div>
-                    <div className="w-[15%] text-[13px] text-gray-600 font-medium">
-                      {child.age}
-                    </div>
-                    <div className="w-[25%] text-[13px] text-gray-600">
-                      {child.parent}
-                    </div>
-                    <div className="w-[15%]">
-                      <span className="bg-[#f4f4f4] text-black text-[9px] font-bold px-2 py-1 tracking-widest uppercase border border-gray-200 whitespace-nowrap">
-                        {child.circles} Circles
-                      </span>
-                    </div>
-                    <div className="w-[15%] flex justify-end">
-                      <button onClick={() => handleViewDetails(child)} className="text-[9px] font-bold tracking-widest uppercase border border-gray-300 px-3 py-1.5 hover:bg-black hover:text-white hover:border-black transition-all whitespace-nowrap">
-                        VIEW DETAILS
-                      </button>
+                    <div className="flex flex-col">
+                      <span className="text-[13px] font-bold">{child.name}</span>
+                      <span className="text-[9px] text-gray-500 mt-0.5 tracking-wider">ID: {child.id}</span>
                     </div>
                   </div>
-                ))}
-              </div>
+
+                  {/* Age */}
+                  <div className="w-full lg:w-[15%] flex justify-between lg:block items-center">
+                    <span className="lg:hidden text-[9px] font-bold text-gray-500 tracking-widest uppercase">AGE</span>
+                    <span className="text-[13px] text-gray-600 font-medium">
+                      {child.age}
+                    </span>
+                  </div>
+
+                  {/* Parent Name */}
+                  <div className="w-full lg:w-[25%] flex justify-between lg:block items-center">
+                    <span className="lg:hidden text-[9px] font-bold text-gray-500 tracking-widest uppercase">PARENT NAME</span>
+                    <span className="text-[13px] text-gray-600">
+                      {child.parent}
+                    </span>
+                  </div>
+
+                  {/* Care Circles */}
+                  <div className="w-full lg:w-[15%] flex justify-between lg:block items-center">
+                    <span className="lg:hidden text-[9px] font-bold text-gray-500 tracking-widest uppercase">CARE CIRCLES</span>
+                    <span className="bg-[#f4f4f4] text-black text-[9px] font-bold px-2 py-1 tracking-widest uppercase border border-gray-200 whitespace-nowrap">
+                      {child.circles} Circles
+                    </span>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="w-full lg:w-[15%] flex lg:justify-end mt-2 lg:mt-0 pt-4 lg:pt-0 border-t border-gray-100 lg:border-0">
+                    <button onClick={() => handleViewDetails(child)} className="w-full lg:w-auto text-[9px] font-bold tracking-widest uppercase border border-gray-300 px-3 py-2.5 lg:py-1.5 hover:bg-black hover:text-white hover:border-black transition-all whitespace-nowrap">
+                      VIEW DETAILS
+                    </button>
+                  </div>
+
+                </div>
+              ))}
             </div>
           </div>
 
@@ -286,17 +302,17 @@ const ParentChildren = () => {
         </div>
 
         {/* Bottom Section */}
-        <div className="flex gap-6">
+        <div className="flex flex-col xl:flex-row gap-6">
           {/* Quick Actions */}
-          <div className="w-[60%] bg-[#f4f4f4] p-10 flex flex-col justify-between relative overflow-hidden">
+          <div className="w-full xl:w-[60%] bg-[#f4f4f4] p-6 md:p-10 flex flex-col justify-between relative overflow-hidden">
             {/* Background design element */}
             <div className="absolute -bottom-16 -right-16 text-gray-200/50">
               <Shield size={250} strokeWidth={1} />
             </div>
             
             <div className="relative z-10">
-              <h2 className="text-xl font-medium tracking-tight mb-8">QUICK ACTIONS</h2>
-              <div className="flex gap-6">
+              <h2 className="text-xl font-medium tracking-tight mb-6 md:mb-8">QUICK ACTIONS</h2>
+              <div className="flex flex-col sm:flex-row gap-4 md:gap-6">
                 <div className="flex-1 bg-white p-6 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
                   <Shield size={18} className="mb-4 text-black" />
                   <h3 className="text-[11px] font-bold mb-2">Audit Safety Logs</h3>
@@ -316,8 +332,8 @@ const ParentChildren = () => {
           </div>
 
           {/* Right Stack */}
-          <div className="w-[40%] flex flex-col gap-6">
-            <div className="bg-black text-white p-8 flex-1 flex flex-col justify-center">
+          <div className="w-full xl:w-[40%] flex flex-col gap-6">
+            <div className="bg-black text-white p-6 md:p-8 flex-1 flex flex-col justify-center">
               <h3 className="text-[9px] font-bold tracking-widest uppercase mb-6 text-gray-400">REGISTRY HEALTH</h3>
               <div className="w-full bg-[#333] h-1 mb-6">
                 <div className="bg-white h-1" style={{ width: `${data.registryHealth}%` }}></div>
@@ -327,7 +343,7 @@ const ParentChildren = () => {
               </p>
             </div>
             
-            <div className="bg-[#e8e8e8] p-8 flex-1 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-gray-300 transition-colors">
+            <div className="bg-[#e8e8e8] p-6 md:p-8 flex-1 flex flex-col items-center justify-center text-center cursor-pointer hover:bg-gray-300 transition-colors">
               <QrCode size={24} className="mb-4" />
               <h3 className="text-[11px] font-bold tracking-widest uppercase mb-2">GENERATE BATCH ID</h3>
               <p className="text-[10px] text-gray-500">
