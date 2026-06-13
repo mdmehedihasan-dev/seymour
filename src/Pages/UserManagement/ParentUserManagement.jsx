@@ -15,6 +15,53 @@ const ParentUserManagement = () => {
   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
   const [viewingUser, setViewingUser] = useState(null);
 
+  // Create Modal State
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [newUserFormData, setNewUserFormData] = useState({ name: '', email: '', role: 'PARENT' });
+
+  const handleExportCSV = () => {
+    if (!data) return;
+    const headers = ["ID", "Name", "Email", "Role", "Status"];
+    const csvContent = [
+      headers.join(","),
+      ...data.users.map(u => `${u.id},"${u.name}","${u.email}",${u.role},${u.status}`)
+    ].join("\n");
+    
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", "user_directory.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleCreateUserSubmit = (e) => {
+    e.preventDefault();
+    if (!newUserFormData.name || !newUserFormData.email) return;
+
+    const initials = newUserFormData.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+    
+    const newUser = {
+      id: data.users.length > 0 ? Math.max(...data.users.map(u => u.id)) + 1 : 1,
+      initials: initials,
+      name: newUserFormData.name,
+      email: newUserFormData.email,
+      role: newUserFormData.role,
+      status: 'ACTIVE'
+    };
+
+    setData(prev => ({
+      ...prev,
+      totalUsers: prev.totalUsers + 1,
+      users: [newUser, ...prev.users]
+    }));
+    
+    setNewUserFormData({ name: '', email: '', role: 'PARENT' });
+    setIsCreateModalOpen(false);
+  };
+
   const handleViewClick = (user) => {
     setViewingUser(user);
     setIsViewModalOpen(true);
@@ -109,10 +156,10 @@ const ParentUserManagement = () => {
             </p>
           </div>
           <div className="flex gap-3">
-            <button className="bg-gray-200 hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 transition-colors">
+            <button onClick={handleExportCSV} disabled={!data} className="bg-gray-200 hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 transition-colors disabled:opacity-50">
               EXPORT CSV
             </button>
-            <button className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 transition-colors">
+            <button onClick={() => setIsCreateModalOpen(true)} disabled={!data} className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 transition-colors disabled:opacity-50">
               CREATE NEW USER
             </button>
           </div>
@@ -318,6 +365,69 @@ const ParentUserManagement = () => {
                   CLOSE
                 </button>
               </div>
+            </div>
+          </div>
+        )}
+        {/* Create Modal */}
+        {isCreateModalOpen && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 animate-in fade-in duration-200">
+            <div className="bg-white w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-200">
+              <div className="bg-black text-white p-4 flex justify-between items-center">
+                <h2 className="text-[11px] font-bold tracking-widest uppercase">Create New User</h2>
+                <button onClick={() => setIsCreateModalOpen(false)} className="text-gray-400 hover:text-white transition-colors">
+                  <X size={16} />
+                </button>
+              </div>
+              <form onSubmit={handleCreateUserSubmit}>
+                <div className="p-6 space-y-5">
+                  <div>
+                    <label className="block text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-2">Full Name</label>
+                    <input 
+                      type="text" 
+                      required 
+                      value={newUserFormData.name}
+                      onChange={(e) => setNewUserFormData({...newUserFormData, name: e.target.value})}
+                      className="w-full px-4 py-2.5 bg-[#f8fafc] border-none text-[13px] focus:outline-none focus:ring-1 focus:ring-gray-300 transition-shadow"
+                      placeholder="e.g. Jane Doe"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-2">Email Address</label>
+                    <input 
+                      type="email" 
+                      required 
+                      value={newUserFormData.email}
+                      onChange={(e) => setNewUserFormData({...newUserFormData, email: e.target.value})}
+                      className="w-full px-4 py-2.5 bg-[#f8fafc] border-none text-[13px] focus:outline-none focus:ring-1 focus:ring-gray-300 transition-shadow"
+                      placeholder="e.g. jane@example.com"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-2">Assign Role</label>
+                    <div className="relative">
+                      <select 
+                        value={newUserFormData.role}
+                        onChange={(e) => setNewUserFormData({...newUserFormData, role: e.target.value})}
+                        className="w-full px-4 py-2.5 bg-[#f8fafc] border-none text-[13px] appearance-none focus:outline-none focus:ring-1 focus:ring-gray-300 transition-shadow cursor-pointer"
+                      >
+                        <option value="PARENT">Parent</option>
+                        <option value="PROVIDER">Provider</option>
+                        <option value="SITTER">Sitter</option>
+                        <option value="FAMILY">Family</option>
+                      </select>
+                      <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" size={14} />
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-[#f4f4f4] p-4 flex justify-end gap-3">
+                  <button type="button" onClick={() => setIsCreateModalOpen(false)} className="bg-gray-200 hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 transition-colors">
+                    CANCEL
+                  </button>
+                  <button type="submit" className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 transition-colors">
+                    CREATE
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
         )}
