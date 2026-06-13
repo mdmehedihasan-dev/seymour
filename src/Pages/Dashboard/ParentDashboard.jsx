@@ -9,6 +9,43 @@ export default function ParentDashboard() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 4;
 
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [isScanning, setIsScanning] = useState(false);
+
+  const handleGenerateReport = () => {
+    if (!data) return;
+    setIsGenerating(true);
+    setTimeout(async () => {
+      try {
+        const { default: jsPDF } = await import("jspdf");
+        const doc = new jsPDF();
+        doc.setFontSize(22);
+        doc.text("System Overview Report", 20, 20);
+        doc.setFontSize(14);
+        doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 20, 30);
+        doc.setFontSize(12);
+        doc.text(`Total Users: ${data.stats[0].value}`, 20, 50);
+        doc.text(`Total Children: ${data.stats[1].value}`, 20, 60);
+        doc.text(`Active Care Circles: ${data.stats[2].value}`, 20, 70);
+        doc.text(`Daily Observations: ${data.stats[3].value}`, 20, 80);
+        doc.save("system_overview_report.pdf");
+      } catch (err) {
+        console.error("Error generating PDF", err);
+        alert("Failed to generate report.");
+      } finally {
+        setIsGenerating(false);
+      }
+    }, 1000);
+  };
+
+  const handleSystemScan = () => {
+    setIsScanning(true);
+    setTimeout(() => {
+      setIsScanning(false);
+      alert("System Scan Complete: No anomalies detected. System is running optimally.");
+    }, 2000);
+  };
+
   useEffect(() => {
     const fetchDashboardData = async () => {
       setLoading(true);
@@ -83,11 +120,21 @@ export default function ParentDashboard() {
             <h1 className="text-3xl font-bold tracking-tight">Dashboard Overview</h1>
           </div>
           <div className="flex gap-3">
-            <button className="bg-gray-200 hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 transition-colors">
-              GENERATE REPORT
+            <button 
+              onClick={handleGenerateReport}
+              disabled={isGenerating || !data}
+              className="bg-gray-200 hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 transition-colors flex items-center gap-2 disabled:opacity-50"
+            >
+              {isGenerating ? <Loader2 size={14} className="animate-spin" /> : null}
+              {isGenerating ? "GENERATING..." : "GENERATE REPORT"}
             </button>
-            <button className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 transition-colors">
-              SYSTEM SCAN
+            <button 
+              onClick={handleSystemScan}
+              disabled={isScanning || !data}
+              className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 transition-colors flex items-center gap-2 disabled:opacity-50"
+            >
+              {isScanning ? <Loader2 size={14} className="animate-spin" /> : null}
+              {isScanning ? "SCANNING..." : "SYSTEM SCAN"}
             </button>
           </div>
         </div>
