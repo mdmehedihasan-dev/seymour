@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutGrid,
   Users,
@@ -7,10 +7,17 @@ import {
   Brain,
   BarChart2,
   Settings,
+  LogOut
 } from "lucide-react";
 
 const ParentSidebar = ({ closeDrawer }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    navigate('/sign-in');
+  };
 
   const menuItems = [
     { icon: LayoutGrid, label: "Dashboard", Link: "/" },
@@ -65,16 +72,25 @@ const ParentSidebar = ({ closeDrawer }) => {
 
       {/* Footer */}
       <div className="p-6 mt-auto">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-[#d4d4d4]"></div>
-          <div className="flex flex-col">
-            <span className="text-[10px] font-bold text-[#111] uppercase tracking-wide leading-tight">
-              KIDPORT ADMIN
-            </span>
-            <span className="text-[9px] text-gray-500 italic mt-0.5">
-              v2.4.0-stable
-            </span>
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 bg-[#d4d4d4]"></div>
+            <div className="flex flex-col">
+              <span className="text-[10px] font-bold text-[#111] uppercase tracking-wide leading-tight">
+                KIDPORT ADMIN
+              </span>
+              <span className="text-[9px] text-gray-500 italic mt-0.5">
+                v2.4.0-stable
+              </span>
+            </div>
           </div>
+          <button 
+            onClick={handleLogout}
+            className="text-gray-500 hover:text-[#111] transition-colors p-2 hover:bg-[#e8e8e8] rounded-md"
+            title="Log Out"
+          >
+            <LogOut size={16} strokeWidth={2} />
+          </button>
         </div>
       </div>
     </div>

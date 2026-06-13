@@ -319,22 +319,22 @@ const DaycareChildren = () => {
           <span className="text-[13px] font-medium text-[#64748b] pl-2">
             Showing {currentChildren.length > 0 ? startIndex + 1 : 0} to {endIndex} of {displayTotal} children
           </span>
-          <div className="flex items-center gap-2">
+          <div className="flex gap-1.5">
             <button
               onClick={() => setPage(prev => Math.max(prev - 1, 1))}
               disabled={page === 1}
-              className="px-4 py-1.5 text-[13px] font-semibold text-[#475569] bg-white border border-transparent rounded-full hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-8 h-8 flex items-center justify-center bg-white text-[#64748b] hover:bg-[#f1f5f9] transition-colors text-[13px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e2e8f0] rounded-lg"
             >
-              Previous
+              &lt;
             </button>
 
             {Array.from({ length: 3 }, (_, i) => i + 1).map((p) => (
               <button
                 key={p}
                 onClick={() => setPage(p)}
-                className={`w-[34px] h-[34px] rounded-full text-[13px] font-bold flex items-center justify-center transition-colors ${page === p
-                  ? 'bg-[#06b6d4] text-white shadow-md'
-                  : 'bg-white text-[#475569] hover:bg-gray-50'
+                className={`w-8 h-8 flex items-center justify-center transition-colors text-[13px] font-bold rounded-lg border ${page === p
+                  ? 'bg-[#06b6d4] text-white border-[#06b6d4] shadow-sm'
+                  : 'bg-white text-[#64748b] hover:bg-[#f1f5f9] border-[#e2e8f0]'
                   }`}
               >
                 {p}
@@ -344,9 +344,9 @@ const DaycareChildren = () => {
             <button
               onClick={() => setPage(prev => Math.min(prev + 1, totalPages))}
               disabled={page === totalPages || totalPages === 0}
-              className="px-4 py-1.5 text-[13px] font-semibold text-[#475569] bg-white border border-transparent rounded-full hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-8 h-8 flex items-center justify-center bg-white text-[#64748b] hover:bg-[#f1f5f9] transition-colors text-[13px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e2e8f0] rounded-lg"
             >
-              Next
+              &gt;
             </button>
           </div>
         </div>

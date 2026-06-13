@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
   LayoutGrid,
   Users,
@@ -7,11 +7,18 @@ import {
   Brain,
   BarChart2,
   Settings,
-  Eye
+  Eye,
+  LogOut
 } from "lucide-react";
 
 const DaycareSidebar = ({ closeDrawer }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem('user');
+    navigate('/sign-in');
+  };
 
   const dashboardMenuItems = [
     { icon: LayoutGrid, label: "Dashboard", Link: "/" },
@@ -64,6 +71,17 @@ const DaycareSidebar = ({ closeDrawer }) => {
             </Link>
           );
         })}
+      </div>
+
+      {/* Logout Button */}
+      <div className="p-4 border-t border-gray-100 mt-auto">
+        <button 
+          onClick={handleLogout}
+          className="flex items-center gap-3.5 px-4 py-3 rounded-full w-full text-red-500 hover:bg-red-50 font-medium transition-colors"
+        >
+          <LogOut size={18} strokeWidth={1.5} />
+          <span className="text-[13px]">Log Out</span>
+        </button>
       </div>
     </div>
   );

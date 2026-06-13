@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { ChevronDown, Loader2, Search, Filter, Mail, Phone, Calendar, Edit, MoreVertical, UserCheck, UserX, X } from 'lucide-react';
+import { ChevronDown, Loader2, Search, Filter, Mail, Phone, Calendar, Edit, MoreVertical, UserCheck, UserX, X, AlertTriangle } from 'lucide-react';
 
 const DaycareUserManagement = () => {
   const [loading, setLoading] = useState(true);
@@ -14,6 +14,31 @@ const DaycareUserManagement = () => {
   // Edit Modal State
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
+
+  // Delete Modal State
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [userToDelete, setUserToDelete] = useState(null);
+
+  const handleDeleteConfirm = () => {
+    if (userToDelete) {
+      setData(prev => ({
+        ...prev,
+        dashStats: {
+          ...prev.dashStats,
+          total: (parseInt(prev.dashStats.total.replace(/,/g, '')) - 1).toLocaleString(),
+          active: userToDelete.status === 'Active' 
+            ? (parseInt(prev.dashStats.active.replace(/,/g, '')) - 1).toLocaleString() 
+            : prev.dashStats.active,
+          inactive: userToDelete.status === 'Inactive' 
+            ? (parseInt(prev.dashStats.inactive.replace(/,/g, '')) - 1).toLocaleString() 
+            : prev.dashStats.inactive
+        },
+        dashUsers: prev.dashUsers.filter(u => u.id !== userToDelete.id)
+      }));
+      setDeleteModalOpen(false);
+      setUserToDelete(null);
+    }
+  };
 
   const handleEditClick = (user) => {
     setEditingUser(user);
@@ -256,7 +281,15 @@ const DaycareUserManagement = () => {
                   {/* Actions Column */}
                   <div className="col-span-1 flex items-center justify-end gap-3 pr-2 text-[#94a3b8]">
                     <button onClick={() => handleEditClick(user)} className="hover:text-[#06b6d4] transition-colors"><Edit size={16} /></button>
-                    <button className="hover:text-[#1e293b] transition-colors"><MoreVertical size={16} /></button>
+                    <button 
+                      onClick={() => {
+                        setUserToDelete(user);
+                        setDeleteModalOpen(true);
+                      }}
+                      className="hover:text-[#1e293b] transition-colors"
+                    >
+                      <MoreVertical size={16} />
+                    </button>
                   </div>
 
                 </div>
@@ -273,22 +306,22 @@ const DaycareUserManagement = () => {
             <span className="text-[12px] text-[#64748b]">
               Showing {dashTotalItems > 0 ? dashStartIndex + 1 : 0} to {Math.min(dashEndIndex, dashTotalItems)} of {dashTotalItems} users
             </span>
-            <div className="flex items-center gap-2">
+            <div className="flex gap-1.5">
               <button
                 onClick={() => setDashPage(prev => Math.max(prev - 1, 1))}
                 disabled={dashPage === 1}
-                className="px-4 py-1.5 text-[13px] font-medium text-[#64748b] bg-white border border-gray-200 rounded-full hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-8 h-8 flex items-center justify-center bg-white text-[#64748b] hover:bg-[#f1f5f9] transition-colors text-[13px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e2e8f0] rounded-lg"
               >
-                Previous
+                &lt;
               </button>
 
               {Array.from({ length: dashTotalPages }, (_, i) => i + 1).map((page) => (
                 <button
                   key={page}
                   onClick={() => setDashPage(page)}
-                  className={`w-8 h-8 rounded-full text-[13px] font-medium flex items-center justify-center transition-colors ${dashPage === page
-                    ? 'bg-[#06b6d4] text-white'
-                    : 'bg-white border border-gray-200 text-[#475569] hover:bg-gray-50'
+                  className={`w-8 h-8 flex items-center justify-center transition-colors text-[13px] font-bold rounded-lg border ${dashPage === page
+                    ? 'bg-[#06b6d4] text-white border-[#06b6d4] shadow-sm'
+                    : 'bg-white text-[#64748b] hover:bg-[#f1f5f9] border-[#e2e8f0]'
                     }`}
                 >
                   {page}
@@ -298,9 +331,9 @@ const DaycareUserManagement = () => {
               <button
                 onClick={() => setDashPage(prev => Math.min(prev + 1, dashTotalPages))}
                 disabled={dashPage === dashTotalPages || dashTotalPages === 0}
-                className="px-4 py-1.5 text-[13px] font-medium text-[#64748b] bg-white border border-gray-200 rounded-full hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-8 h-8 flex items-center justify-center bg-white text-[#64748b] hover:bg-[#f1f5f9] transition-colors text-[13px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e2e8f0] rounded-lg"
               >
-                Next
+                &gt;
               </button>
             </div>
           </div>
@@ -351,6 +384,63 @@ const DaycareUserManagement = () => {
             <div className="p-4 border-t border-gray-100 flex items-center justify-end gap-3 bg-gray-50">
               <button onClick={() => setIsEditModalOpen(false)} className="px-4 py-2 text-[13px] font-medium text-[#475569] hover:text-[#1e293b] transition-colors">Cancel</button>
               <button onClick={() => setIsEditModalOpen(false)} className="px-4 py-2 text-[13px] font-medium text-white bg-[#06b6d4] hover:bg-[#0891b2] rounded-lg transition-colors">Save Changes</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteModalOpen && userToDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0f172a]/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+          <div className="bg-white w-full max-w-md rounded-2xl shadow-xl animate-in zoom-in-95 duration-200 border border-[#e2e8f0]">
+            <div className="p-6">
+              <div className="flex justify-between items-start mb-6">
+                <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-500">
+                  <AlertTriangle size={24} strokeWidth={2} />
+                </div>
+                <button 
+                  onClick={() => {
+                    setDeleteModalOpen(false);
+                    setUserToDelete(null);
+                  }} 
+                  className="text-[#94a3b8] hover:text-[#0f172a] transition-colors"
+                >
+                  <X size={20} />
+                </button>
+              </div>
+              
+              <h2 className="text-xl font-bold text-[#0f172a] mb-2">Delete User Profile?</h2>
+              <p className="text-[#64748b] text-[14px] leading-relaxed mb-6">
+                Are you sure you want to delete <strong className="text-[#0f172a]">{userToDelete.name}</strong> from the system? This action cannot be undone and will revoke all access.
+              </p>
+
+              <div className="bg-[#f8fafc] p-4 rounded-xl border border-[#e2e8f0] mb-8 flex items-center gap-4">
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-[14px] shadow-sm ${userToDelete.color}`}>
+                  {userToDelete.initials}
+                </div>
+                <div>
+                  <h3 className="text-[14px] font-bold text-[#0f172a]">{userToDelete.name}</h3>
+                  <p className="text-[12px] text-[#64748b]">Role: {userToDelete.role}</p>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3">
+                <button 
+                  onClick={() => {
+                    setDeleteModalOpen(false);
+                    setUserToDelete(null);
+                  }} 
+                  className="px-5 py-2.5 text-[13px] font-semibold text-[#64748b] hover:text-[#0f172a] hover:bg-[#f8fafc] border border-transparent hover:border-[#e2e8f0] rounded-xl transition-all"
+                >
+                  Cancel
+                </button>
+                <button 
+                  onClick={handleDeleteConfirm}
+                  className="px-5 py-2.5 text-[13px] font-semibold text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors shadow-sm"
+                >
+                  Delete User
+                </button>
+              </div>
             </div>
           </div>
         </div>

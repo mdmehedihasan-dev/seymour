@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
   FileText, Calendar, Download, BarChart2, TrendingUp, 
-  FileCheck, FileDigit, BarChart3, Loader2, DownloadCloud
+  FileCheck, FileDigit, BarChart3, Loader2, DownloadCloud, X
 } from 'lucide-react';
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
@@ -10,6 +10,7 @@ import {
 
 const DaycareReports = () => {
   const [loading, setLoading] = useState(true);
+  const [isGenerateModalOpen, setIsGenerateModalOpen] = useState(false);
 
   useEffect(() => {
     // Simulate loading
@@ -160,7 +161,10 @@ const DaycareReports = () => {
         {/* Available Reports */}
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-[18px] font-bold text-[#0f172a]">Available Reports</h2>
-          <button className="bg-[#06b6d4] hover:bg-[#0891b2] text-white px-5 py-2.5 rounded-full text-[13px] font-semibold transition-colors">
+          <button 
+            onClick={() => setIsGenerateModalOpen(true)}
+            className="bg-[#06b6d4] hover:bg-[#0891b2] text-white px-5 py-2.5 rounded-full text-[13px] font-semibold transition-colors"
+          >
             Generate New Report
           </button>
         </div>
@@ -250,6 +254,79 @@ const DaycareReports = () => {
         </div>
 
       </div>
+
+      {/* Generate Report Modal */}
+      {isGenerateModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#0f172a]/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+          <div className="bg-white w-full max-w-lg rounded-2xl shadow-xl animate-in zoom-in-95 duration-200 overflow-hidden">
+            <div className="p-5 border-b border-gray-100 flex items-center justify-between">
+              <h2 className="text-[16px] font-bold text-[#0f172a] flex items-center gap-2">
+                <FileText size={18} className="text-[#06b6d4]" />
+                Generate New Report
+              </h2>
+              <button 
+                onClick={() => setIsGenerateModalOpen(false)} 
+                className="text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div className="p-6 space-y-5">
+              <div>
+                <label className="block text-[13px] font-medium text-[#475569] mb-1.5">Report Type</label>
+                <select className="w-full bg-[#f8fafc] border border-gray-200 text-[#1e293b] text-[13px] font-medium rounded-xl px-4 py-3 outline-none focus:border-[#06b6d4] focus:ring-1 focus:ring-[#06b6d4] transition-all appearance-none">
+                  <option value="monthly_platform">Monthly Platform Report</option>
+                  <option value="user_growth">User Growth Analytics</option>
+                  <option value="observations">Observations Summary</option>
+                  <option value="ai_performance">AI Performance Report</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[13px] font-medium text-[#475569] mb-1.5">Date Range</label>
+                <div className="flex gap-4">
+                  <input type="date" className="flex-1 bg-[#f8fafc] border border-gray-200 text-[#1e293b] text-[13px] font-medium rounded-xl px-4 py-3 outline-none focus:border-[#06b6d4] focus:ring-1 focus:ring-[#06b6d4] transition-all" />
+                  <div className="flex items-center text-gray-400">to</div>
+                  <input type="date" className="flex-1 bg-[#f8fafc] border border-gray-200 text-[#1e293b] text-[13px] font-medium rounded-xl px-4 py-3 outline-none focus:border-[#06b6d4] focus:ring-1 focus:ring-[#06b6d4] transition-all" />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[13px] font-medium text-[#475569] mb-1.5">Format</label>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="radio" name="format" value="pdf" defaultChecked className="text-[#06b6d4] focus:ring-[#06b6d4]" />
+                    <span className="text-[13px] font-medium text-[#1e293b]">PDF Document</span>
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input type="radio" name="format" value="excel" className="text-[#06b6d4] focus:ring-[#06b6d4]" />
+                    <span className="text-[13px] font-medium text-[#1e293b]">Excel Spreadsheet</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div className="p-5 border-t border-gray-100 bg-[#f8fafc] flex justify-end gap-3">
+              <button 
+                onClick={() => setIsGenerateModalOpen(false)} 
+                className="px-5 py-2.5 text-[13px] font-semibold text-[#64748b] hover:text-[#0f172a] hover:bg-gray-100 rounded-full transition-colors"
+              >
+                Cancel
+              </button>
+              <button 
+                onClick={() => {
+                  setIsGenerateModalOpen(false);
+                  setTimeout(() => alert("Report generation started! You will be notified when it's ready."), 300);
+                }}
+                className="px-5 py-2.5 text-[13px] font-semibold text-white bg-[#06b6d4] hover:bg-[#0891b2] rounded-full shadow-sm transition-colors"
+              >
+                Generate Report
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
