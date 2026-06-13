@@ -29,15 +29,14 @@ const RecentActivity = () => {
   return (
     <div className="bg-[#131B2F] rounded-2xl p-6 border border-[#1E293B] shadow-sm">
       <h3 className="text-white text-[15px] font-bold mb-6">Recent Activity</h3>
-      
+
       <div className="flex flex-col gap-6">
         {activities.map(activity => (
           <div key={activity.id} className="flex items-center gap-4">
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${
-              activity.type === 'success' ? 'bg-[#064E3B]' : 
-              activity.type === 'renewed' ? 'bg-[#1E3A8A]' : 
-              'bg-[#7F1D1D]'
-            }`}>
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${activity.type === 'success' ? 'bg-[#064E3B]' :
+                activity.type === 'renewed' ? 'bg-[#1E3A8A]' :
+                  'bg-[#7F1D1D]'
+              }`}>
               {activity.icon}
             </div>
             <div>

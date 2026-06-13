@@ -27,7 +27,7 @@ const DaycareHeader = () => {
       {/* Right side: Icons and Profile */}
       <div className="flex items-center gap-6 ml-auto">
         {/* Notification Bell */}
-        <button className="relative text-[#64748b] hover:text-[#0f172a] transition-colors focus:outline-none mt-1">
+        <button onClick={() => navigate('/daycare-notifications')} className="relative text-[#64748b] hover:text-[#0f172a] transition-colors focus:outline-none mt-1">
           <Bell size={22} strokeWidth={1.5} />
           <span className="absolute -top-0.5 right-0 w-2.5 h-2.5 bg-[#f87171] rounded-full border-2 border-white"></span>
         </button>
