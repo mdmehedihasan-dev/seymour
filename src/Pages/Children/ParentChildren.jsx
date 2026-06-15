@@ -302,7 +302,7 @@ const ParentChildren = () => {
               <button 
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
-                className="w-8 h-8 flex items-center justify-center border border-[#e2e8f0] text-[#64748b] hover:bg-[#f1f5f9] text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="w-8 h-8 rounded-lg flex items-center justify-center border border-[#e2e8f0] text-[#64748b] hover:bg-[#f1f5f9] text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 &lt;
               </button>
@@ -311,10 +311,10 @@ const ParentChildren = () => {
                 <button
                   key={page}
                   onClick={() => setCurrentPage(page)}
-                  className={`w-8 h-8 flex items-center justify-center border transition-colors text-[10px] font-bold ${
+                  className={`w-8 h-8 rounded-lg flex items-center justify-center border transition-colors text-[10px] font-bold ${
                     currentPage === page 
-                      ? 'bg-black text-white border-black' 
-                      : 'bg-white text-gray-500 border-[#e2e8f0] hover:bg-gray-50'
+                      ? 'bg-[#06b6d4] text-white border-[#06b6d4] shadow-sm' 
+                      : 'bg-white text-[#64748b] border-[#e2e8f0] hover:bg-[#f1f5f9]'
                   }`}
                 >
                   {page}
@@ -324,7 +324,7 @@ const ParentChildren = () => {
               <button 
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
-                className="w-8 h-8 flex items-center justify-center border border-[#e2e8f0] text-[#64748b] hover:bg-[#f1f5f9] text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                className="w-8 h-8 rounded-lg flex items-center justify-center border border-[#e2e8f0] text-[#64748b] hover:bg-[#f1f5f9] text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               >
                 &gt;
               </button>

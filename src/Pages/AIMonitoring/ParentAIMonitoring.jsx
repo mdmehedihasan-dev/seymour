@@ -334,7 +334,7 @@ const ParentAIMonitoring = () => {
             <button 
               onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
-              className="w-8 h-8 flex items-center justify-center bg-white text-[#64748b] hover:bg-[#f1f5f9] transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e2e8f0]"
+              className="w-8 h-8 rounded-lg flex items-center justify-center bg-white text-[#64748b] hover:bg-[#f1f5f9] transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e2e8f0]"
             >
               &lt;
             </button>
@@ -343,10 +343,10 @@ const ParentAIMonitoring = () => {
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
-                className={`w-8 h-8 flex items-center justify-center transition-colors text-[10px] font-bold border border-[#e2e8f0] ${
+                className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors text-[10px] font-bold border ${
                   currentPage === page 
-                    ? 'bg-black text-white border-black' 
-                    : 'bg-white text-[#64748b] hover:bg-[#f1f5f9]'
+                    ? 'bg-[#06b6d4] text-white border-[#06b6d4] shadow-sm' 
+                    : 'bg-white text-[#64748b] border-[#e2e8f0] hover:bg-[#f1f5f9]'
                 }`}
               >
                 {page}
@@ -356,7 +356,7 @@ const ParentAIMonitoring = () => {
             <button 
               onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
               disabled={currentPage === totalPages || totalPages === 0}
-              className="w-8 h-8 flex items-center justify-center bg-white text-[#64748b] hover:bg-[#f1f5f9] transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e2e8f0]"
+              className="w-8 h-8 rounded-lg flex items-center justify-center bg-white text-[#64748b] hover:bg-[#f1f5f9] transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e2e8f0]"
             >
               &gt;
             </button>
