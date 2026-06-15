@@ -111,21 +111,21 @@ export default function ParentDashboard() {
   const handlePageClick = (page) => { setCurrentPage(page); };
 
   return (
-    <div className="min-h-screen p-8 bg-white font-sans text-[#111]">
+    <div className="min-h-screen p-8 bg-[#f8fafc] font-sans text-[#1e293b]">
       <div className="mx-auto max-w-7xl animate-in fade-in zoom-in duration-500">
 
         <div className="flex justify-between items-end mb-10">
           <div>
-            <p className="text-[9px] font-bold text-gray-500 tracking-[0.2em] uppercase mb-1.5">
+            <p className="text-[9px] font-bold text-[#64748b] tracking-[0.2em] uppercase mb-1.5">
               SYSTEM OVERVIEW
             </p>
-            <h1 className="text-3xl font-bold tracking-tight">Dashboard Overview</h1>
+            <h1 className="text-3xl font-bold tracking-tight text-[#1e293b]">Dashboard Overview</h1>
           </div>
           <div className="flex gap-3">
             <button
               onClick={handleGenerateReport}
               disabled={isGenerating || !data}
-              className="bg-gray-200 hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 transition-colors flex items-center gap-2 disabled:opacity-50"
+              className="bg-white border border-[#e2e8f0] hover:bg-[#f8fafc] text-[#1e293b] text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 rounded-lg shadow-sm transition-colors flex items-center gap-2 disabled:opacity-50"
             >
               {isGenerating ? <Loader2 size={14} className="animate-spin" /> : null}
               {isGenerating ? "GENERATING..." : "GENERATE REPORT"}
@@ -133,7 +133,7 @@ export default function ParentDashboard() {
             <button
               onClick={handleSystemScan}
               disabled={isScanning || !data}
-              className="bg-black hover:bg-gray-800 text-white text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 transition-colors flex items-center gap-2 disabled:opacity-50"
+              className="bg-[#06b6d4] hover:bg-[#0891b2] text-white text-[10px] font-bold tracking-wider uppercase px-5 py-2.5 rounded-lg shadow-sm transition-colors flex items-center gap-2 disabled:opacity-50"
             >
               {isScanning ? <Loader2 size={14} className="animate-spin" /> : null}
               {isScanning ? "SCANNING..." : "SYSTEM SCAN"}
@@ -143,16 +143,16 @@ export default function ParentDashboard() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6 mb-8">
           {data.stats.map((stat, i) => (
-            <div key={i} className="bg-[#f4f4f4] p-6 flex flex-col justify-between h-32 hover:shadow-sm transition-all duration-300">
-              <h3 className="text-[9px] font-bold text-gray-500 tracking-widest uppercase">{stat.title}</h3>
-              <div className="text-4xl font-light tracking-tight">{stat.value}</div>
+            <div key={i} className="bg-white rounded-xl border border-gray-100 shadow-sm p-6 flex flex-col justify-between h-32 hover:shadow-md transition-all duration-300">
+              <h3 className="text-[9px] font-bold text-[#64748b] tracking-widest uppercase">{stat.title}</h3>
+              <div className="text-4xl font-light tracking-tight text-[#1e293b]">{stat.value}</div>
               <div className="flex items-center gap-1.5 mt-2">
                 {stat.isPositive ? (
-                  <TrendingUp size={10} className="text-black" strokeWidth={3} />
+                  <TrendingUp size={10} className="text-[#06b6d4]" strokeWidth={3} />
                 ) : (
-                  <TrendingDown size={10} className="text-black" strokeWidth={3} />
+                  <TrendingDown size={10} className="text-[#06b6d4]" strokeWidth={3} />
                 )}
-                <span className="text-[8px] font-bold text-black tracking-wider uppercase">
+                <span className="text-[8px] font-bold text-[#1e293b] tracking-wider uppercase">
                   {stat.trend} {stat.trendLabel}
                 </span>
               </div>
@@ -161,60 +161,60 @@ export default function ParentDashboard() {
         </div>
 
         <div className="flex flex-col xl:flex-row gap-6 mb-8 h-auto xl:h-[360px]">
-          <div className="flex-1 bg-[#f4f4f4] p-8 flex flex-col group">
+          <div className="flex-1 bg-white rounded-xl border border-gray-100 shadow-sm p-8 flex flex-col group">
             <div className="flex justify-between items-start mb-8">
               <div>
-                <h2 className="text-lg font-bold">User Growth Graph</h2>
-                <p className="text-xs text-gray-500 mt-1">Historical data over the last 30 days</p>
+                <h2 className="text-lg font-bold text-[#1e293b]">User Growth Graph</h2>
+                <p className="text-xs text-[#64748b] mt-1">Historical data over the last 30 days</p>
               </div>
               <div className="flex items-center gap-2">
-                <div className="w-2.5 h-2.5 bg-black"></div>
-                <span className="text-[9px] font-bold tracking-widest uppercase">ACTIVE</span>
+                <div className="w-2.5 h-2.5 bg-[#fcd34d] rounded-sm"></div>
+                <span className="text-[9px] font-bold tracking-widest uppercase text-[#1e293b]">ACTIVE</span>
               </div>
             </div>
             <div className="flex-1 flex items-end gap-1.5 mt-auto">
               {data.userGrowthBars.map((h, i) => (
                 <div
                   key={i}
-                  className={`flex-1 transition-all duration-500 hover:opacity-80 ${i < 3 ? 'bg-[#e0e0e0]' : 'bg-black'}`}
+                  className={`flex-1 transition-all duration-500 hover:opacity-80 rounded-t-sm ${i < 3 ? 'bg-[#e2e8f0]' : 'bg-[#fcd34d]'}`}
                   style={{ height: `${h}%` }}
                 ></div>
               ))}
             </div>
           </div>
 
-          <div className="w-full xl:w-[350px] bg-black p-8 text-white flex flex-col justify-between">
-            <h2 className="text-sm text-gray-300 font-medium">Activity Trend Graph</h2>
+          <div className="w-full xl:w-[350px] bg-white rounded-xl border border-gray-100 shadow-sm p-8 text-[#1e293b] flex flex-col justify-between">
+            <h2 className="text-sm text-[#64748b] font-bold tracking-widest uppercase">Activity Trend Graph</h2>
             <div className="space-y-6 mt-6">
-              <div className="flex justify-between items-end border-b border-[#222] pb-2">
-                <span className="text-[11px] text-gray-500">Peak Usage</span>
+              <div className="flex justify-between items-end border-b border-gray-100 pb-2">
+                <span className="text-[11px] text-[#64748b]">Peak Usage</span>
                 <span className="text-xl font-bold">{data.activityTrend.peakUsage}</span>
               </div>
-              <div className="flex justify-between items-end border-b border-[#222] pb-2">
-                <span className="text-[11px] text-gray-500">Low Usage</span>
+              <div className="flex justify-between items-end border-b border-gray-100 pb-2">
+                <span className="text-[11px] text-[#64748b]">Low Usage</span>
                 <span className="text-xl font-bold">{data.activityTrend.lowUsage}</span>
               </div>
-              <div className="flex justify-between items-end border-b border-[#222] pb-2">
-                <span className="text-[11px] text-gray-500">Avg Duration</span>
+              <div className="flex justify-between items-end border-b border-gray-100 pb-2">
+                <span className="text-[11px] text-[#64748b]">Avg Duration</span>
                 <span className="text-xl font-bold">{data.activityTrend.avgDuration}</span>
               </div>
             </div>
-            <div className="mt-8 bg-[#1f1f1f] h-14 flex items-center justify-center relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#2a2a2a] to-transparent w-1/2 animate-[shimmer_2s_infinite]"></div>
-              <span className="text-[9px] font-bold text-gray-500 tracking-[0.3em] uppercase relative z-10">PROCESSING...</span>
+            <div className="mt-8 bg-[#f8fafc] h-14 rounded-lg flex items-center justify-center relative overflow-hidden border border-[#e2e8f0]">
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#e2e8f0] to-transparent w-1/2 animate-[shimmer_2s_infinite]"></div>
+              <span className="text-[9px] font-bold text-[#64748b] tracking-[0.3em] uppercase relative z-10">PROCESSING...</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-[#f4f4f4] p-8">
-          <div className="flex justify-between items-end mb-8">
-            <h2 className="text-lg font-bold">Recent Activity List</h2>
-            <span className="text-[9px] font-bold text-gray-500 tracking-widest uppercase">LAST 24 HOURS</span>
+        <div className="bg-white rounded-xl border border-gray-100 shadow-sm p-8">
+          <div className="flex justify-between items-end mb-8 border-b border-gray-100 pb-4">
+            <h2 className="text-lg font-bold text-[#1e293b]">Recent Activity List</h2>
+            <span className="text-[9px] font-bold text-[#64748b] tracking-widest uppercase">LAST 24 HOURS</span>
           </div>
 
           <div className="min-h-[350px] w-full">
             {/* Desktop Header */}
-            <div className="hidden lg:grid grid-cols-12 gap-4 border-b border-gray-200 pb-3 text-[9px] font-bold text-gray-500 tracking-widest uppercase">
+            <div className="hidden lg:grid grid-cols-12 gap-4 border-b border-gray-100 pb-3 text-[9px] font-bold text-[#64748b] tracking-widest uppercase">
               <div className="col-span-2">TIMESTAMP</div>
               <div className="col-span-3">USER / ACTOR</div>
               <div className="col-span-4">ACTION DETAILS</div>
@@ -222,23 +222,23 @@ export default function ParentDashboard() {
               <div className="col-span-1 text-right pr-2">VIEW</div>
             </div>
 
-            <div className="divide-y divide-gray-200/60">
+            <div className="divide-y divide-gray-100">
               {currentActivityList.map((item) => (
-                <div key={item.id} className="flex flex-col lg:grid lg:grid-cols-12 gap-4 lg:gap-4 py-4 hover:bg-gray-50 transition-colors border-b border-gray-200/60 last:border-0">
+                <div key={item.id} className="flex flex-col lg:grid lg:grid-cols-12 gap-4 lg:gap-4 py-4 hover:bg-[#f8fafc] transition-colors last:border-0">
                   
                   {/* Timestamp */}
                   <div className="w-full lg:col-span-2 flex justify-between lg:block">
-                    <span className="lg:hidden text-[9px] font-bold text-gray-500 tracking-widest uppercase">Timestamp</span>
+                    <span className="lg:hidden text-[9px] font-bold text-[#64748b] tracking-widest uppercase">Timestamp</span>
                     <div className="text-right lg:text-left">
-                      <div className="text-[11px] text-gray-500">{item.timestamp[0]}</div>
-                      <div className="text-[11px] text-gray-500">{item.timestamp[1]}</div>
+                      <div className="text-[11px] text-[#64748b]">{item.timestamp[0]}</div>
+                      <div className="text-[11px] text-[#64748b]">{item.timestamp[1]}</div>
                     </div>
                   </div>
 
                   {/* User / Actor */}
                   <div className="w-full lg:col-span-3 flex justify-between lg:block">
-                    <span className="lg:hidden text-[9px] font-bold text-gray-500 tracking-widest uppercase">User / Actor</span>
-                    <div className="text-right lg:text-left font-bold text-[13px] leading-tight">
+                    <span className="lg:hidden text-[9px] font-bold text-[#64748b] tracking-widest uppercase">User / Actor</span>
+                    <div className="text-right lg:text-left font-bold text-[13px] leading-tight text-[#1e293b]">
                       <div>{item.user[0]}</div>
                       <div>{item.user[1]}</div>
                     </div>
@@ -246,31 +246,31 @@ export default function ParentDashboard() {
 
                   {/* Action Details */}
                   <div className="w-full lg:col-span-4">
-                    <span className="lg:hidden text-[9px] font-bold text-gray-500 tracking-widest uppercase mb-1 block">Action Details</span>
-                    <div className="text-[13px] text-gray-700 lg:pr-8">
+                    <span className="lg:hidden text-[9px] font-bold text-[#64748b] tracking-widest uppercase mb-1 block">Action Details</span>
+                    <div className="text-[13px] text-[#475569] lg:pr-8">
                       {item.action}
                     </div>
                   </div>
 
                   {/* Risk Level */}
                   <div className="w-full lg:col-span-2 flex justify-between lg:block items-center">
-                    <span className="lg:hidden text-[9px] font-bold text-gray-500 tracking-widest uppercase">Risk Level</span>
+                    <span className="lg:hidden text-[9px] font-bold text-[#64748b] tracking-widest uppercase">Risk Level</span>
                     <div>
                       {item.risk === 'LOW' ? (
-                        <span className="bg-[#e0e0e0] text-black text-[9px] font-bold px-2 py-1 tracking-wider uppercase">LOW</span>
+                        <span className="bg-[#f1f5f9] text-[#64748b] rounded-md text-[9px] font-bold px-2 py-1 tracking-wider uppercase border border-gray-100">LOW</span>
                       ) : (
-                        <span className="bg-black text-white text-[9px] font-bold px-2 py-1 tracking-wider uppercase">MEDIUM</span>
+                        <span className="bg-orange-50 text-orange-600 rounded-md text-[9px] font-bold px-2 py-1 tracking-wider uppercase border border-orange-100">MEDIUM</span>
                       )}
                     </div>
                   </div>
 
                   {/* View */}
-                  <div className="w-full lg:col-span-1 flex justify-end lg:block items-center pt-2 lg:pt-0 border-t border-gray-200/60 lg:border-0 mt-2 lg:mt-0">
+                  <div className="w-full lg:col-span-1 flex justify-end lg:block items-center pt-2 lg:pt-0 border-t border-gray-100 lg:border-0 mt-2 lg:mt-0">
                     <button 
                       onClick={() => navigate('/notifications')}
-                      className="text-gray-400 hover:text-black transition-colors inline-flex items-center gap-2 lg:block lg:float-right lg:pr-2"
+                      className="text-[#94a3b8] hover:text-[#06b6d4] transition-colors inline-flex items-center gap-2 lg:block lg:float-right lg:pr-2"
                     >
-                      <span className="lg:hidden text-[11px] font-bold text-gray-500 uppercase tracking-widest">View Details</span>
+                      <span className="lg:hidden text-[11px] font-bold text-[#64748b] uppercase tracking-widest">View Details</span>
                       <ExternalLink size={14} />
                     </button>
                   </div>
@@ -280,15 +280,15 @@ export default function ParentDashboard() {
             </div>
           </div>
 
-          <div className="flex justify-between items-center mt-8">
-            <span className="text-[10px] text-gray-500 font-medium">
+          <div className="flex justify-between items-center mt-8 border-t border-gray-100 pt-4">
+            <span className="text-[10px] text-[#64748b] font-medium">
               Showing {currentActivityList.length} of {data.totalEvents.toLocaleString()} events
             </span>
             <div className="flex gap-1.5">
               <button
                 onClick={handlePrevPage}
                 disabled={currentPage === 1}
-                className="w-6 h-6 flex items-center justify-center bg-gray-200 text-gray-500 hover:bg-gray-300 transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-8 h-8 rounded-lg border border-[#e2e8f0] flex items-center justify-center bg-white text-[#64748b] hover:bg-[#f1f5f9] transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 &lt;
               </button>
@@ -297,9 +297,9 @@ export default function ParentDashboard() {
                 <button
                   key={page}
                   onClick={() => handlePageClick(page)}
-                  className={`w-6 h-6 flex items-center justify-center transition-colors text-[10px] font-bold ${currentPage === page
-                      ? 'bg-black text-white'
-                      : 'bg-gray-200 text-black hover:bg-gray-300'
+                  className={`w-8 h-8 rounded-lg border flex items-center justify-center transition-colors text-[10px] font-bold ${currentPage === page
+                      ? 'bg-[#06b6d4] text-white border-[#06b6d4] shadow-sm'
+                      : 'bg-white text-[#64748b] hover:bg-[#f1f5f9] border-[#e2e8f0]'
                     }`}
                 >
                   {page}
@@ -309,7 +309,7 @@ export default function ParentDashboard() {
               <button
                 onClick={handleNextPage}
                 disabled={currentPage === totalPages}
-                className="w-6 h-6 flex items-center justify-center bg-gray-200 text-gray-500 hover:bg-gray-300 transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-8 h-8 rounded-lg border border-[#e2e8f0] flex items-center justify-center bg-white text-[#64748b] hover:bg-[#f1f5f9] transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 &gt;
               </button>

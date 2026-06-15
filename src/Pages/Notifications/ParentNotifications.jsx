@@ -64,17 +64,17 @@ const ParentNotifications = () => {
   };
 
   return (
-    <div className="min-h-screen p-8 bg-[#fdfdfd] font-sans text-[#111]">
+    <div className="min-h-screen p-8 bg-[#f8fafc] font-sans text-[#1e293b]">
       <div className="mx-auto max-w-5xl animate-in fade-in zoom-in duration-500">
 
         {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-10 border-b border-gray-200 pb-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-10 border-b border-[#e2e8f0] pb-8">
           <div>
-            <p className="text-[10px] font-bold text-gray-500 tracking-[0.2em] uppercase mb-2">SYSTEM ALERTS</p>
-            <h1 className="text-2xl sm:text-4xl font-black tracking-tighter uppercase flex items-center gap-4">
+            <p className="text-[10px] font-bold text-[#64748b] tracking-[0.2em] uppercase mb-2">SYSTEM ALERTS</p>
+            <h1 className="text-2xl sm:text-4xl font-black tracking-tighter uppercase flex items-center gap-4 text-[#1e293b]">
               Notifications
               {unreadCount > 0 && (
-                <span className="bg-black text-white text-[12px] sm:text-[14px] font-bold px-3 py-1 tracking-widest align-middle rounded-full">
+                <span className="bg-[#06b6d4] text-white text-[12px] sm:text-[14px] font-bold px-3 py-1 tracking-widest align-middle rounded-full">
                   {unreadCount} NEW
                 </span>
               )}
@@ -83,39 +83,39 @@ const ParentNotifications = () => {
           <button
             onClick={markAllAsRead}
             disabled={unreadCount === 0}
-            className="w-full md:w-auto bg-[#e8e8e8] hover:bg-gray-300 text-black text-[10px] font-bold tracking-wider uppercase px-6 py-3 transition-colors disabled:opacity-50"
+            className="w-full md:w-auto bg-white border border-[#e2e8f0] hover:bg-[#f1f5f9] text-[#1e293b] text-[10px] font-bold tracking-wider uppercase px-6 py-3 rounded-lg shadow-sm transition-colors disabled:opacity-50"
           >
             MARK ALL AS READ
           </button>
         </div>
 
         {/* Notifications List */}
-        <div className="flex flex-col min-h-[500px]">
+        <div className="flex flex-col min-h-[500px] bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           {currentItems.map((notification) => (
             <div
               key={notification.id}
-              className={`p-4 sm:p-6 flex items-start gap-4 sm:gap-6 border-b border-gray-100 transition-colors group relative ${notification.read ? 'bg-white hover:bg-gray-50' : 'bg-[#f4f4f4] border-l-4 border-black hover:bg-[#e8e8e8]'}`}
+              className={`p-4 sm:p-6 flex items-start gap-4 sm:gap-6 border-b border-gray-100 transition-colors group relative last:border-0 ${notification.read ? 'bg-white hover:bg-[#f1f5f9]' : 'bg-[#f0fdfa] border-l-4 border-l-[#06b6d4] hover:bg-[#e0f2fe]'}`}
             >
-              <div className="mt-1 bg-white p-2 shadow-sm border border-gray-100 shrink-0">
+              <div className="mt-1 bg-white p-2 shadow-sm rounded-lg border border-gray-100 shrink-0">
                 {getIcon(notification.type)}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start mb-1 pr-8 lg:pr-0">
-                  <h3 className={`text-[12px] tracking-widest uppercase mb-1 sm:mb-0 ${notification.read ? 'text-gray-600 font-bold' : 'text-black font-black'}`}>
+                  <h3 className={`text-[12px] tracking-widest uppercase mb-1 sm:mb-0 ${notification.read ? 'text-[#64748b] font-bold' : 'text-[#1e293b] font-black'}`}>
                     {notification.title}
                   </h3>
-                  <span className="text-[9px] sm:text-[10px] text-gray-400 font-bold tracking-widest uppercase shrink-0">
+                  <span className="text-[9px] sm:text-[10px] text-[#94a3b8] font-bold tracking-widest uppercase shrink-0">
                     {notification.date} &bull; {notification.time}
                   </span>
                 </div>
-                <p className={`text-[13px] sm:text-[14px] leading-relaxed mt-1 ${notification.read ? 'text-gray-500' : 'text-gray-800'}`}>
+                <p className={`text-[13px] sm:text-[14px] leading-relaxed mt-1 ${notification.read ? 'text-[#64748b]' : 'text-[#334155]'}`}>
                   {notification.message}
                 </p>
               </div>
               {!notification.read && (
                 <button
                   onClick={() => markAsRead(notification.id)}
-                  className="absolute right-4 top-4 lg:relative lg:right-auto lg:top-auto opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity p-2 text-gray-400 hover:text-black hover:bg-gray-200"
+                  className="absolute right-4 top-4 lg:relative lg:right-auto lg:top-auto opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity p-2 text-[#94a3b8] hover:text-[#06b6d4] hover:bg-[#e0f2fe] rounded-lg"
                   title="Mark as read"
                 >
                   <Check size={16} strokeWidth={3} />
@@ -126,15 +126,15 @@ const ParentNotifications = () => {
         </div>
 
         {/* Pagination */}
-        <div className="bg-[#f4f4f4] px-4 md:px-6 py-4 flex flex-col md:flex-row gap-4 justify-between items-center mt-6">
-          <span className="text-[9px] font-bold text-gray-500 tracking-widest uppercase text-center md:text-left">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 px-4 md:px-6 py-4 flex flex-col md:flex-row gap-4 justify-between items-center mt-6">
+          <span className="text-[9px] font-bold text-[#64748b] tracking-widest uppercase text-center md:text-left">
             SHOWING {notifications.length > 0 ? startIndex + 1 : 0}-{Math.min(startIndex + itemsPerPage, notifications.length)} OF {notifications.length} EVENTS
           </span>
           <div className="flex flex-wrap justify-center gap-1.5">
             <button
               onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
               disabled={currentPage === 1}
-              className="w-8 h-8 flex items-center justify-center bg-white text-gray-500 hover:bg-gray-100 transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e8e8e8] shrink-0"
+              className="w-8 h-8 rounded-lg flex items-center justify-center bg-white text-[#64748b] hover:bg-[#f1f5f9] transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e2e8f0] shrink-0"
             >
               &lt;
             </button>
@@ -143,9 +143,9 @@ const ParentNotifications = () => {
               <button
                 key={page}
                 onClick={() => setCurrentPage(page)}
-                className={`w-8 h-8 flex items-center justify-center transition-colors text-[10px] font-bold border border-[#e8e8e8] shrink-0 ${currentPage === page
-                  ? 'bg-black text-white border-black'
-                  : 'bg-white text-gray-500 hover:bg-gray-100'
+                className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors text-[10px] font-bold border shrink-0 ${currentPage === page
+                  ? 'bg-[#06b6d4] text-white border-[#06b6d4] shadow-sm'
+                  : 'bg-white text-[#64748b] hover:bg-[#f1f5f9] border-[#e2e8f0]'
                   }`}
               >
                 {page}
@@ -155,7 +155,7 @@ const ParentNotifications = () => {
             <button
               onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
               disabled={currentPage === totalPages || totalPages === 0}
-              className="w-8 h-8 flex items-center justify-center bg-white text-gray-500 hover:bg-gray-100 transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e8e8e8] shrink-0"
+              className="w-8 h-8 rounded-lg flex items-center justify-center bg-white text-[#64748b] hover:bg-[#f1f5f9] transition-colors text-[10px] font-bold disabled:opacity-50 disabled:cursor-not-allowed border border-[#e2e8f0] shrink-0"
             >
               &gt;
             </button>

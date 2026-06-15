@@ -6,15 +6,15 @@ import adminImage from "../../assets/image/adminkickclick.jpg";
 const ParentHeader = ({ showDrawer }) => {
   const navigate = useNavigate();
   return (
-    <div className="h-16 flex items-center justify-between px-4 md:px-8 bg-[#fafafa] border-b border-gray-100 font-sans">
+    <div className="h-[72px] flex items-center justify-between px-4 md:px-8 bg-white border-b border-gray-100 font-sans">
 
       {/* Left side: Title & Hamburger */}
       <div className="flex items-center gap-3">
-        <button onClick={showDrawer} className="lg:hidden text-gray-500 hover:text-black transition-colors">
-          <Menu size={20} strokeWidth={2} />
+        <button onClick={showDrawer} className="lg:hidden text-[#64748b] hover:text-[#0f172a] transition-colors flex-shrink-0">
+          <Menu size={24} strokeWidth={2} />
         </button>
-        <h1 className="text-[13px] font-bold text-[#111] tracking-[0.15em] uppercase hidden sm:block">
-          KIDPORT ADMIN
+        <h1 className="text-[13px] font-bold text-[#1eb4cd] tracking-[0.15em] uppercase hidden sm:block">
+          KIDPORT PARENT ADMIN
         </h1>
       </div>
 
@@ -25,14 +25,14 @@ const ParentHeader = ({ showDrawer }) => {
           <input
             type="text"
             placeholder="Search..."
-            className="w-full h-10 pl-9 pr-4 text-[13px] text-gray-700 bg-white border-none shadow-sm placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-200 transition-shadow"
+            className="w-full h-[42px] pl-11 pr-4 text-[13px] text-gray-700 bg-[#f8fafc] border border-[#e2e8f0] rounded-full focus:outline-none focus:ring-1 focus:ring-gray-200 focus:bg-white transition-all placeholder:text-[#94a3b8]"
           />
         </div>
       </div>
 
       {/* Right side: Icons and Profile */}
       <div className="flex items-center gap-6">
-        <button onClick={() => navigate('/notifications')} className="text-gray-500 hover:text-black transition-colors focus:outline-none">
+        <button onClick={() => navigate('/notifications')} className="text-[#64748b] hover:text-[#0f172a] transition-colors focus:outline-none">
           <Bell size={18} strokeWidth={2} />
         </button>
 
